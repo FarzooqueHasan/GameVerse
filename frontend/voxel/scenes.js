@@ -95,6 +95,13 @@ export const SCENES = {
 
       { type: 'easterEgg', position: [10.5, 0.2, -4], params: [0x7fa7c9, 0.45], text: '🔑 Relic: Master Key',
         id: 'egg_2', isEasterEgg: true, easterEggName: 'AEROSS Master Key', easterEggPower: 'VIP Campus Access & +100 Rep' },
+
+      // ==================== EMERGENCY SCAVENGER HUNT TARGETS ====================
+      { type: 'scavengerItem', position: [-6.5, 0.2, 1], params: [0x00f0ff, 0.5], text: '🎙️ Target: Wireless Mic',
+        id: 'scav_1', isScavengerTarget: true, scavengerName: 'Missing Wireless Microphone' },
+
+      { type: 'person', position: [7.5, 0, 2], params: [1.7, 0x00f0ff, 0xe8b98a, 0x3a2e26], text: '🧑‍💻 Target: Divyam (VIP)',
+        id: 'scav_2', isScavengerTarget: true, scavengerName: 'Divyam (Missing Tech Lead)' },
     ],
   },
 
@@ -144,6 +151,10 @@ export const SCENES = {
 
       { type: 'easterEgg', position: [8.5, 0.2, -7.5], params: [0x8fb996, 0.45], text: '💾 Relic: Telemetry Chip',
         id: 'egg_4', isEasterEgg: true, easterEggName: 'CubeSat Telemetry Chip', easterEggPower: 'Genius Hint in Quiz' },
+
+      // Scavenger Hunt Target
+      { type: 'scavengerItem', position: [-5.5, 0.2, -3], params: [0xff007f, 0.5], text: '📽️ Target: Projector Lens',
+        id: 'scav_3', isScavengerTarget: true, scavengerName: 'Misplaced 4K Projector Lens' },
     ],
   },
 
@@ -180,6 +191,10 @@ export const SCENES = {
       // Easter Egg
       { type: 'easterEgg', position: [0, 0.9, -2], params: [0xffffff, 0.5], text: '🏆 Relic: Champion Trophy',
         id: 'egg_5', isEasterEgg: true, easterEggName: 'CelesteCon Trophy', easterEggPower: '+500 Rep Points & Champion Status' },
+
+      // Scavenger Hunt Target
+      { type: 'scavengerItem', position: [4.5, 0.2, -4], params: [0xffd166, 0.5], text: '📋 Target: Judge Rubrics',
+        id: 'scav_4', isScavengerTarget: true, scavengerName: 'Confidential Judge Rubric Sheets' },
     ],
   },
 };

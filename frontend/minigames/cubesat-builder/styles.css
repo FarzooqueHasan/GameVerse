@@ -1,17 +1,17 @@
 /* ISRO 3D CubeSat Builder Styling (Exact Reference Match - input_file_0.png) */
 
 :root {
-    --bg-dark: #0B132B;
-    --panel-bg: rgba(15, 23, 42, 0.92);
-    --border-color: rgba(255, 255, 255, 0.2);
-    --isro-saffron: #FF9933;
-    --isro-blue: #0284C7;
-    --cyan-accent: #00E5FF;
-    --green-badge: #15803D;
-    --red-badge: #B91C1C;
-    --navy-badge: #0A1128;
-    --text-main: #F8FAFC;
-    --text-muted: #94A3B8;
+    --bg-dark: #0c1024;
+    --panel-bg: rgba(16, 20, 45, 0.85);
+    --border-color: rgba(0, 240, 255, 0.3);
+    --isro-saffron: #ffd166;
+    --isro-blue: #00f0ff;
+    --cyan-accent: #00f0ff;
+    --green-badge: #06d6a0;
+    --red-badge: #ff007f;
+    --navy-badge: #0c1024;
+    --text-main: #e1e7fa;
+    --text-muted: #94a3b8;
 }
 
 * {

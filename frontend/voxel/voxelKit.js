@@ -385,6 +385,52 @@ export const Kit = {
     return g;
   },
 
+  scavengerItem(color = 0x00f0ff, size = 0.5, opts = {}) {
+    const g = new THREE.Group();
+    const mat = new THREE.MeshStandardMaterial({
+      color, roughness: 0.3, metalness: 0.7, emissive: 0x00f0ff, emissiveIntensity: 0.6,
+    });
+    // Create a glowing tech crate/beacon
+    const box = new THREE.Mesh(new THREE.BoxGeometry(size, size, size), mat);
+    box.position.y = size / 2;
+    box.castShadow = true;
+    g.add(box);
+
+    // Glowing warning beacon on top
+    const beacon = new THREE.Mesh(
+      new THREE.SphereGeometry(size * 0.3, 8, 8),
+      new THREE.MeshBasicMaterial({ color: 0xff007f })
+    );
+    beacon.position.y = size + 0.15;
+    g.add(beacon);
+
+    if (opts.text) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 300; canvas.height = 64;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = 'rgba(12, 16, 36, 0.85)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = '#00f0ff';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(2, 2, canvas.width - 4, canvas.height - 4);
+      ctx.fillStyle = '#00f0ff';
+      ctx.font = 'bold 22px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(opts.text, canvas.width / 2, canvas.height / 2);
+      const texture = new THREE.CanvasTexture(canvas);
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, depthTest: false }));
+      sprite.scale.set(1.5, 0.35, 1);
+      sprite.position.y = size + 0.8;
+      g.add(sprite);
+    }
+
+    if (opts.position) g.position.set(...opts.position);
+    if (opts.rotation) g.rotation.set(...opts.rotation);
+    if (opts.scale) g.scale.set(...opts.scale);
+    return g;
+  },
+
   // Simple stylized humanoid -- for NPCs (teachers, students, narrator).
   // opts.text (already supported by sceneComposer for every kit piece)
   // becomes a floating nameplate above the figure's head.

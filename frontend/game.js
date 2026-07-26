@@ -15,6 +15,8 @@ const GameState = {
   character: null,         // Allotted character object
   repPoints: 0,
   foundEggs: new Set(),
+  scavengerActive: false,
+  foundScavengerItems: new Set(),
   currentZone: 'celestecon_amphitheater',
   sceneData: null,         // { scene, camera, renderer }
   playerGroup: null,
@@ -617,6 +619,8 @@ function init3DWorld(zoneKey) {
   GameState.playerGroup.position.set(0, 0, 4);
   scene.add(GameState.playerGroup);
 
+  refreshScavengerVisibility();
+
   // Add 3D Teleport Portals to other zones
   const portalZones = [
     { key: 'celestecon_amphitheater', name: '🏛️ Portal: OAT Amphitheater', x: -10, z: -8, color: 0xffd166 },
@@ -749,10 +753,11 @@ function gameLoop() {
 
   scene.children.forEach(child => {
     if (child === GameState.playerGroup) return;
-    if (!child.userData || (!child.userData.interactName && !child.userData.isEasterEgg)) return;
+    if (!child.userData || (!child.userData.interactName && !child.userData.isEasterEgg && !child.userData.isScavengerTarget)) return;
 
-    // Skip already collected easter eggs
+    // Skip already collected easter eggs or inactive/collected scavenger items
     if (child.userData.isEasterEgg && GameState.foundEggs.has(child.userData.id)) return;
+    if (child.userData.isScavengerTarget && (!GameState.scavengerActive || GameState.foundScavengerItems.has(child.userData.id))) return;
 
     const dist = Math.hypot(child.position.x - GameState.playerPos.x, child.position.z - GameState.playerPos.z);
     if (dist < minDist) {
@@ -768,7 +773,9 @@ function gameLoop() {
       promptEl.classList.remove('hidden');
       const nameEl = document.getElementById('interact-target-name');
       if (nameEl) {
-        if (nearestTarget.userData.isEasterEgg) {
+        if (nearestTarget.userData.isScavengerTarget) {
+          nameEl.textContent = `Recover Scavenger Target: ${nearestTarget.userData.scavengerName || 'Missing Equipment'}`;
+        } else if (nearestTarget.userData.isEasterEgg) {
           nameEl.textContent = `Collect Secret Relic: ${nearestTarget.userData.easterEggName || 'Secret Item'}`;
         } else {
           nameEl.textContent = nearestTarget.userData.interactName || 'Interact';
@@ -786,6 +793,12 @@ function gameLoop() {
 // --- INTERACTION HANDLING ---
 function interactWithTarget(target) {
   if (!target || !target.userData) return;
+
+  // Handle Scavenger Hunt Target
+  if (target.userData.isScavengerTarget) {
+    collectScavengerTarget(target);
+    return;
+  }
 
   // Handle Easter Egg Collection
   if (target.userData.isEasterEgg) {
@@ -836,6 +849,71 @@ function collectEasterEgg(target) {
   }
 
   console.log(`[CelesteCon] Collected Relic: ${name} (${power})`);
+}
+
+window.startInWorldScavengerHunt = function() {
+  GameState.scavengerActive = true;
+  const banner = document.getElementById('scavenger-hud-banner');
+  if (banner) banner.classList.remove('hidden');
+  const countEl = document.getElementById('scav-count');
+  if (countEl) countEl.textContent = GameState.foundScavengerItems.size;
+
+  refreshScavengerVisibility();
+
+  // Show Toast
+  const toast = document.getElementById('toast-notify');
+  if (toast) {
+    document.getElementById('toast-title').textContent = `🚨 EMERGENCY SCAVENGER HUNT ACTIVE!`;
+    document.getElementById('toast-msg').textContent = `Explore OAT Amphitheater, Main Auditorium & Management Room to locate all 4 missing targets!`;
+    toast.classList.remove('hidden');
+    setTimeout(() => { toast.classList.add('hidden'); }, 6000);
+  }
+};
+
+function refreshScavengerVisibility() {
+  if (GameState.sceneData && GameState.sceneData.scene) {
+    GameState.sceneData.scene.children.forEach(child => {
+      if (child.userData && child.userData.isScavengerTarget) {
+        child.visible = GameState.scavengerActive && !GameState.foundScavengerItems.has(child.userData.id);
+      }
+    });
+  }
+}
+
+function collectScavengerTarget(target) {
+  if (!GameState.scavengerActive) return;
+  const id = target.userData.id || `scav_${Math.random()}`;
+  if (GameState.foundScavengerItems.has(id)) return;
+
+  GameState.foundScavengerItems.add(id);
+  const name = target.userData.scavengerName || "Missing Equipment";
+
+  // Hide or remove mesh
+  target.visible = false;
+  if (GameState.sceneData && GameState.sceneData.scene) {
+    GameState.sceneData.scene.remove(target);
+  }
+
+  // Update counter
+  const countEl = document.getElementById('scav-count');
+  if (countEl) countEl.textContent = GameState.foundScavengerItems.size;
+
+  // Show Toast
+  const toast = document.getElementById('toast-notify');
+  if (toast) {
+    document.getElementById('toast-title').textContent = `🔍 Recovered: ${name}!`;
+    document.getElementById('toast-msg').textContent = `Progress: ${GameState.foundScavengerItems.size} / 4 targets located across campus!`;
+    toast.classList.remove('hidden');
+    setTimeout(() => { toast.classList.add('hidden'); }, 5000);
+  }
+
+  // Check victory condition
+  if (GameState.foundScavengerItems.size >= 4) {
+    GameState.scavengerActive = false;
+    const banner = document.getElementById('scavenger-hud-banner');
+    if (banner) banner.classList.add('hidden');
+    window.onMinigameVictory('scavenger', 250, "Successfully recovered all missing equipment and key personnel across the campus locations!");
+  }
 }
 
 window.addCeleste = function(val) {

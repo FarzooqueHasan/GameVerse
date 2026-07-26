@@ -76,6 +76,12 @@ export function buildScene(container, layout) {
     if (obj.isEasterEgg) piece.userData.isEasterEgg = true;
     if (obj.easterEggName) piece.userData.easterEggName = obj.easterEggName;
     if (obj.easterEggPower) piece.userData.easterEggPower = obj.easterEggPower;
+    if (obj.isScavengerTarget) piece.userData.isScavengerTarget = true;
+    if (obj.scavengerName) piece.userData.scavengerName = obj.scavengerName;
+    // Hide scavenger target by default until scavenger hunt is activated!
+    if (obj.isScavengerTarget) {
+      piece.visible = window.GameState && window.GameState.scavengerActive ? true : false;
+    }
 
     scene.add(piece);
   });
@@ -109,13 +115,15 @@ export function buildScene(container, layout) {
     if (window.GameState && window.GameState.playerGroup) {
       const px = window.GameState.playerGroup.position.x;
       const pz = window.GameState.playerGroup.position.z;
-      // Smoothly interpolate camera towards player position
-      const targetCamX = camPos[0] + px * 0.6;
-      const targetCamZ = camPos[2] + (pz - 4) * 0.55;
-      camera.position.x += (targetCamX - camera.position.x) * 0.08;
-      camera.position.z += (targetCamZ - camera.position.z) * 0.08;
-      // Smooth lookAt tracking towards player and center
-      camera.lookAt(px * 0.4, lookAt[1], pz * 0.35);
+      // Player/User POV: Over-the-shoulder 3rd person tracking camera
+      const targetCamX = px * 0.95;
+      const targetCamY = Math.max(3.0, camPos[1] - 0.8);
+      const targetCamZ = pz + 5.2;
+      camera.position.x += (targetCamX - camera.position.x) * 0.12;
+      camera.position.y += (targetCamY - camera.position.y) * 0.12;
+      camera.position.z += (targetCamZ - camera.position.z) * 0.12;
+      // Look directly over player avatar towards forward campus action
+      camera.lookAt(px, lookAt[1], pz - 3.5);
     } else if (layout.idleDrift) {
       camera.position.x = camPos[0] + Math.sin(frame) * 0.3;
       camera.lookAt(...lookAt);
