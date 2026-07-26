@@ -8,6 +8,10 @@ export const SCENES = {
     camera: { position: [0, 4.5, 14], lookAt: [0, 1.0, -4], fov: 45 },
     light: { ambient: 0.75, sunColor: '#fdfaf0', sunIntensity: 0.65, sunPosition: [8, 15, 5] },
     idleDrift: false,
+    glbModel: './assets/models/oat_dps_rkpuram.glb',
+    glbScale: [1.5, 1.5, 1.5],
+    glbPosition: [0, -1, -6],
+    glbRotation: [0, Math.PI, 0],
     objects: [
       { type: 'patternedFloor', position: [0, 0, 3], params: [32, 30] },
 
@@ -86,10 +90,10 @@ export const SCENES = {
         id: 'booth_volatus', interactName: 'Volatus (UAV Challenge Booth)', dialogueKey: 'booth_volatus' },
 
       // ==================== COLLECTIBLE EASTER EGGS ====================
-      { type: 'easterEgg', position: [-10.5, 0.2, -4], params: [0xffd166, 0.45], text: '✨ Egg',
+      { type: 'easterEgg', position: [-10.5, 0.2, -4], params: [0xffd166, 0.45], text: '💎 Relic: Propeller',
         id: 'egg_1', isEasterEgg: true, easterEggName: 'Golden Propeller', easterEggPower: 'Instant Crisis Solver Ability' },
 
-      { type: 'easterEgg', position: [10.5, 0.2, -4], params: [0x7fa7c9, 0.45], text: '✨ Egg',
+      { type: 'easterEgg', position: [10.5, 0.2, -4], params: [0x7fa7c9, 0.45], text: '🔑 Relic: Master Key',
         id: 'egg_2', isEasterEgg: true, easterEggName: 'AEROSS Master Key', easterEggPower: 'VIP Campus Access & +100 Rep' },
     ],
   },
@@ -100,6 +104,10 @@ export const SCENES = {
     camera: { position: [0, 4.5, 11], lookAt: [0, 1.2, -4], fov: 45 },
     light: { ambient: 0.65, sunColor: '#fff2d9', sunIntensity: 0.9, sunPosition: [6, 10, 6] },
     idleDrift: false,
+    glbModel: './assets/models/school_OAT.glb',
+    glbScale: [1.2, 1.2, 1.2],
+    glbPosition: [0, -1, -5],
+    glbRotation: [0, 0, 0],
     objects: [
       { type: 'floor', position: [0, 0, 0], params: [24, 24, 0xc9b79c] },
       { type: 'wall', position: [0, 0, -10], params: [24, 6, 0.4, 0xe8ddcf] },
@@ -131,10 +139,10 @@ export const SCENES = {
         id: 'booth_dim3', interactName: 'Dimension III (3D Design Event)', dialogueKey: 'booth_dim3' },
 
       // Collectible Easter Eggs
-      { type: 'easterEgg', position: [-8.5, 0.2, -7.5], params: [0xd9776a, 0.45], text: '✨ Egg',
+      { type: 'easterEgg', position: [-8.5, 0.2, -7.5], params: [0xd9776a, 0.45], text: '🏷️ Relic: Space Patch',
         id: 'egg_3', isEasterEgg: true, easterEggName: 'Secret Space Patch', easterEggPower: 'Charisma Boost in Debates' },
 
-      { type: 'easterEgg', position: [8.5, 0.2, -7.5], params: [0x8fb996, 0.45], text: '✨ Egg',
+      { type: 'easterEgg', position: [8.5, 0.2, -7.5], params: [0x8fb996, 0.45], text: '💾 Relic: Telemetry Chip',
         id: 'egg_4', isEasterEgg: true, easterEggName: 'CubeSat Telemetry Chip', easterEggPower: 'Genius Hint in Quiz' },
     ],
   },
@@ -170,7 +178,7 @@ export const SCENES = {
         id: 'booth_pitch', interactName: 'Business Power Pitch Challenge', dialogueKey: 'booth_pitch' },
 
       // Easter Egg
-      { type: 'easterEgg', position: [0, 0.9, -2], params: [0xffffff, 0.5], text: '🏆 Trophy',
+      { type: 'easterEgg', position: [0, 0.9, -2], params: [0xffffff, 0.5], text: '🏆 Relic: Champion Trophy',
         id: 'egg_5', isEasterEgg: true, easterEggName: 'CelesteCon Trophy', easterEggPower: '+500 Rep Points & Champion Status' },
     ],
   },

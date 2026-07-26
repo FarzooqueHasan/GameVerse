@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AEROSS Crowd Control — Barricade & Flow Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #ffd166;
+      --cyan: #00f0ff;
+      --magenta: #ff007b;
+      --green: #00ff88;
+      --bg-dark: #070913;
+      --panel-bg: rgba(18, 24, 48, 0.85);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+    body {
+      background: var(--bg-dark);
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: var(--panel-bg);
+      border-bottom: 2px solid var(--gold);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+    .title-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    h1 {
+      font-size: 1.3rem;
+      color: var(--gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .badge-tag {
+      background: rgba(255, 209, 102, 0.2);
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+    .hud-stats {
+      display: flex;
+      gap: 20px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .stat-box {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 6px 14px;
+      text-align: center;
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      display: block;
+    }
+    .stat-val {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+    #score-val {
+      color: var(--green);
+    }
+    #main-container {
+      flex: 1;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at center, #111833 0%, #070913 80%);
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    .overlay-modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(7, 9, 19, 0.88);
+      backdrop-filter: blur(12px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+      transition: opacity 0.3s ease;
+    }
+    .overlay-modal.hidden {
+      opacity: 0;
+      pointer-events: none;
+      display: none !important;
+    }
+    .modal-card {
+      background: linear-gradient(145deg, #111833, #0c1024);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 520px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(255, 209, 102, 0.3);
+    }
+    .modal-card h2 {
+      font-size: 1.8rem;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .modal-card p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #e2e8f0;
+      margin-bottom: 20px;
+    }
+    .btn {
+      background: linear-gradient(135deg, var(--gold), #ff9f1c);
+      color: #070913;
+      border: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      padding: 12px 28px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 15px rgba(255, 209, 102, 0.5);
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255, 209, 102, 0.8);
+    }
+    .btn-cyan {
+      background: linear-gradient(135deg, var(--cyan), #0080ff);
+      color: #000;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+    }
+    .controls-hint {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.7);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: var(--cyan);
+      pointer-events: none;
+      z-index: 5;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title-area">
+      <span style="font-size: 1.8rem;">🚧</span>
+      <div>
+        <h1>AEROSS Crowd Control <span class="badge-tag">ORGANIZER POV</span></h1>
+      </div>
+    </div>
+    <div class="hud-stats">
+      <div class="stat-box">
+        <span class="stat-label">Flow Score</span>
+        <span class="stat-val" id="score-val">0 / 150</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">Participants Guided</span>
+        <span class="stat-val" id="count-val">0</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">Barricades Active</span>
+        <span class="stat-val" id="barrier-val">0</span>
+      </div>
+    </div>
+  </header>
+
+  <div id="main-container">
+    <canvas id="game-canvas"></canvas>
+    <div class="controls-hint">
+      🖱️ Click on grid squares to place Barricades 🚧 and redirect student flow!
+    </div>
+
+    <!-- Start Modal -->
+    <div id="modal-start" class="overlay-modal">
+      <div class="modal-card">
+        <h2>🚧 Event Logistics & Crowd Control</h2>
+        <p>Welcome, Organizer! Thousands of CelesteCon attendees are flooding into the campus plaza!</p>
+        <p>Participants are color-coded by their event:</p>
+        <p style="color: #00f0ff; font-weight: bold;">🔵 Blue Students ➡️ Volatus UAV Arena (Top Left)</p>
+        <p style="color: #ff007b; font-weight: bold;">🔴 Red Students ➡️ Quizzitch Hall (Top Right)</p>
+        <p style="color: #ffd166; font-weight: bold;">🟡 Gold Students ➡️ Dimension III CAD (Right)</p>
+        <p>Click on path nodes to drop Barricades 🚧 and guide at least 10 students safely to their destinations!</p>
+        <button class="btn btn-cyan" id="btn-start-game">🚨 Launch Crowd Logistics</button>
+      </div>
+    </div>
+
+    <!-- Victory Modal -->
+    <div id="modal-victory" class="overlay-modal hidden">
+      <div class="modal-card">
+        <h2>🏆 Master Organizer Certified!</h2>
+        <p>Incredible crowd control! You managed the student flow flawlessly without a single bottleneck or security incident!</p>
+        <p>The AEROSS executive team has awarded your logistics squad full honors!</p>
+        <button class="btn" id="btn-claim-reward">🎁 Claim Organizer Reward (+200 🪙 Celeste)</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('game-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    let width = window.innerWidth;
+    let height = window.innerHeight - 65;
+    canvas.width = width;
+    canvas.height = height;
+
+    window.addEventListener('resize', () => {
+      width = window.innerWidth;
+      height = window.innerHeight - 65;
+      canvas.width = width;
+      canvas.height = height;
+    });
+
+    let state = 'INIT';
+    let score = 0;
+    let guidedCount = 0;
+    const targetScore = 150;
+
+    // Grid System
+    const cols = 9;
+    const rows = 7;
+    let cellW = width / cols;
+    let cellH = height / rows;
+    
+    // Barricades map key: "x,y" => direction arrow or barrier
+    let barriers = {};
+    let participants = [];
+    let particles = [];
+    let spawnTimer = 0;
+
+    const destinations = {
+      blue: { x: 1, y: 0, color: '#00f0ff', name: '🔵 Volatus UAV' },
+      red: { x: 7, y: 0, color: '#ff007b', name: '🔴 Quizzitch' },
+      gold: { x: 8, y: 3, color: '#ffd166', name: '🟡 Dimension III' }
+    };
+
+    function initGame() {
+      score = 0;
+      guidedCount = 0;
+      barriers = {};
+      participants = [];
+      particles = [];
+      spawnTimer = 0;
+      updateHUD();
+      state = 'PLAYING';
+      requestAnimationFrame(gameLoop);
+    }
+
+    function updateHUD() {
+      document.getElementById('score-val').textContent = `${score} / ${targetScore}`;
+      document.getElementById('count-val').textContent = guidedCount;
+      document.getElementById('barrier-val').textContent = Object.keys(barriers).length;
+    }
+
+    canvas.addEventListener('click', (e) => {
+      if (state !== 'PLAYING') return;
+      const rect = canvas.getBoundingClientRect();
+      const x = Math.floor((e.clientX - rect.left) / (width / cols));
+      const y = Math.floor((e.clientY - rect.top) / (height / rows));
+      
+      // Don't place on entrance or destinations
+      if (y === rows - 1 && x === Math.floor(cols / 2)) return;
+      if (y === 0 && (x === 1 || x === 7)) return;
+      if (y === 3 && x === 8) return;
+
+      const key = `${x},${y}`;
+      if (!barriers[key]) {
+        barriers[key] = 'UP';
+        playSound(440, 0.1, 'sine');
+      } else if (barriers[key] === 'UP') {
+        barriers[key] = 'LEFT';
+        playSound(550, 0.1, 'sine');
+      } else if (barriers[key] === 'LEFT') {
+        barriers[key] = 'RIGHT';
+        playSound(660, 0.1, 'sine');
+      } else {
+        delete barriers[key];
+        playSound(330, 0.1, 'sawtooth');
+      }
+      updateHUD();
+    });
+
+    function spawnParticipant() {
+      const types = ['blue', 'red', 'gold'];
+      const type = types[Math.floor(Math.random() * types.length)];
+      participants.push({
+        x: Math.floor(cols / 2),
+        y: rows - 1,
+        px: Math.floor(cols / 2) + 0.5,
+        py: rows - 1 + 0.5,
+        type: type,
+        color: destinations[type].color,
+        dir: 'UP',
+        speed: 0.035
+      });
+    }
+
+    function createSparks(x, y, color, count = 20) {
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 6,
+          vy: (Math.random() - 0.5) * 6,
+          life: 1.0,
+          color: color
+        });
+      }
+    }
+
+    function gameLoop() {
+      cellW = width / cols;
+      cellH = height / rows;
+
+      ctx.fillStyle = '#070913';
+      ctx.fillRect(0, 0, width, height);
+
+      // Draw Grid & Paths
+      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x <= cols; x++) {
+        ctx.beginPath();
+        ctx.moveTo(x * cellW, 0);
+        ctx.lineTo(x * cellW, height);
+        ctx.stroke();
+      }
+      for (let y = 0; y <= rows; y++) {
+        ctx.beginPath();
+        ctx.moveTo(0, y * cellH);
+        ctx.lineTo(width, y * cellH);
+        ctx.stroke();
+      }
+
+      // Draw Destinations
+      for (let k in destinations) {
+        const d = destinations[k];
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillRect(d.x * cellW + 4, d.y * cellH + 4, cellW - 8, cellH - 8);
+        ctx.strokeStyle = d.color;
+        ctx.lineWidth = 3;
+        ctx.strokeRect(d.x * cellW + 4, d.y * cellH + 4, cellW - 8, cellH - 8);
+        
+        ctx.fillStyle = d.color;
+        ctx.font = 'bold 12px Outfit, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(d.name, (d.x + 0.5) * cellW, (d.y + 0.5) * cellH);
+      }
+
+      // Draw Entrance
+      const ex = Math.floor(cols / 2);
+      const ey = rows - 1;
+      ctx.fillStyle = 'rgba(0, 255, 136, 0.2)';
+      ctx.fillRect(ex * cellW + 4, ey * cellH + 4, cellW - 8, cellH - 8);
+      ctx.fillStyle = '#00ff88';
+      ctx.font = 'bold 12px Outfit, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('🏁 CAMPUS GATE', (ex + 0.5) * cellW, (ey + 0.5) * cellH);
+
+      // Draw Barricades / Arrows
+      for (let key in barriers) {
+        const [bx, by] = key.split(',').map(Number);
+        const dir = barriers[key];
+        const cx = (bx + 0.5) * cellW;
+        const cy = (by + 0.5) * cellH;
+
+        ctx.fillStyle = 'rgba(255, 209, 102, 0.15)';
+        ctx.fillRect(bx * cellW + 6, by * cellH + 6, cellW - 12, cellH - 12);
+        ctx.strokeStyle = '#ffd166';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(bx * cellW + 6, by * cellH + 6, cellW - 12, cellH - 12);
+
+        ctx.font = '24px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const arrow = dir === 'UP' ? '⬆️ 🚧' : (dir === 'LEFT' ? '⬅️ 🚧' : '➡️ 🚧');
+        ctx.fillText(arrow, cx, cy);
+      }
+
+      if (state === 'PLAYING') {
+        spawnTimer++;
+        if (spawnTimer > 65) {
+          spawnParticipant();
+          spawnTimer = 0;
+        }
+      }
+
+      // Update & Draw Participants
+      for (let i = participants.length - 1; i >= 0; i--) {
+        const p = participants[i];
+
+        // Move
+        if (p.dir === 'UP') p.py -= p.speed;
+        if (p.dir === 'DOWN') p.py += p.speed;
+        if (p.dir === 'LEFT') p.px -= p.speed;
+        if (p.dir === 'RIGHT') p.px += p.speed;
+
+        // Grid coordinates
+        const gx = Math.floor(p.px);
+        const gy = Math.floor(p.py);
+
+        // Check destination arrival
+        for (let k in destinations) {
+          const d = destinations[k];
+          if (gx === d.x && gy === d.y) {
+            if (p.type === k) {
+              score += 15;
+              guidedCount++;
+              createSparks(p.px * cellW, p.py * cellH, p.color, 30);
+              playSound(587.33, 0.2, 'triangle');
+            } else {
+              score = Math.max(0, score - 5);
+              createSparks(p.px * cellW, p.py * cellH, '#ff007b', 15);
+              playSound(220, 0.3, 'sawtooth');
+            }
+            updateHUD();
+            participants.splice(i, 1);
+            if (score >= targetScore && state === 'PLAYING') {
+              state = 'VICTORY';
+              document.getElementById('modal-victory').classList.remove('hidden');
+              playSound(880, 0.4, 'sine');
+            }
+            continue;
+          }
+        }
+
+        // Check barricade intersection
+        const key = `${gx},${gy}`;
+        if (barriers[key]) {
+          const bDir = barriers[key];
+          // Turn center align
+          if (Math.abs(p.px - (gx + 0.5)) < 0.1 && Math.abs(p.py - (gy + 0.5)) < 0.1) {
+            p.px = gx + 0.5;
+            p.py = gy + 0.5;
+            p.dir = bDir;
+          }
+        }
+
+        // Check boundaries
+        if (gx < 0 || gx >= cols || gy < 0 || gy >= rows) {
+          participants.splice(i, 1);
+          continue;
+        }
+
+        // Draw Participant
+        const cx = p.px * cellW;
+        const cy = p.py * cellH;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.font = '16px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🧑‍🚀', cx, cy);
+      }
+
+      // Draw Particles
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const pt = particles[i];
+        pt.x += pt.vx;
+        pt.y += pt.vy;
+        pt.life -= 0.03;
+        if (pt.life <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+        ctx.fillStyle = pt.color;
+        ctx.globalAlpha = pt.life;
+        ctx.fillRect(pt.x, pt.y, 5, 5);
+        ctx.globalAlpha = 1.0;
+      }
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    function playSound(freq, duration, type = 'sine') {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch(e) {}
+    }
+
+    document.getElementById('btn-start-game').addEventListener('click', () => {
+      document.getElementById('modal-start').classList.add('hidden');
+      initGame();
+    });
+
+    document.getElementById('btn-claim-reward').addEventListener('click', () => {
+      if (window.parent && typeof window.parent.onMinigameVictory === 'function') {
+        window.parent.onMinigameVictory('crowd_control', 200, "Successfully guided student cohorts to their event arenas!");
+      } else if (window.parent && typeof window.parent.addRepPoints === 'function') {
+        window.parent.addRepPoints(200);
+        if (window.parent.closeMinigame) window.parent.closeMinigame();
+      }
+    });
+  </script>
+</body>
+</html>

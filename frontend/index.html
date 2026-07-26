@@ -165,13 +165,17 @@
         </div>
 
         <div class="hud-right">
-          <button id="hud-finale-btn" class="glow-btn small-btn finale-btn" title="Conclude CelesteCon">🏆 AWARDS FINALE</button>
-          <div class="hud-stat" title="Reputation / Score">
-            <span>⭐ Rep:</span>
-            <strong id="hud-rep">0</strong>
+          <button id="hud-finale-btn" class="glow-btn small-btn finale-btn hidden" title="Conclude CelesteCon">🏆 AWARDS FINALE</button>
+          <div class="hud-stat" title="Certified Aerospace Events (Win challenges to advance!)">
+            <span>🚀 Certified:</span>
+            <strong id="hud-certified" style="color: #00f0ff; text-shadow: 0 0 8px rgba(0,240,255,0.6);">0 / 5</strong>
           </div>
-          <div class="hud-stat" title="Easter Eggs Found">
-            <span>🥚 Easter Eggs:</span>
+          <div class="hud-stat" title="Celeste Currency (Earned by winning minigames & challenges!)">
+            <span>🪙 Celeste:</span>
+            <strong id="hud-rep" style="color: #ffd166; text-shadow: 0 0 8px rgba(255,209,102,0.6);">0</strong>
+          </div>
+          <div class="hud-stat" title="Secret Relics Found">
+            <span>✨ Secret Relics:</span>
             <strong id="hud-eggs">0 / 5</strong>
           </div>
           <button id="help-controls-btn" class="icon-btn" title="Controls">ℹ️</button>
@@ -199,6 +203,29 @@
           <div class="toast-text">
             <strong id="toast-title">Easter Egg Discovered!</strong>
             <p id="toast-msg">You unlocked: Instant Crisis Solver ability!</p>
+          </div>
+        </div>
+
+        <!-- CelesteCon AI Narrator & Guide Widget (input_file_0 / narrator.png) -->
+        <div id="narrator-widget" class="narrator-widget">
+          <div class="narrator-avatar-box" id="narrator-toggle">
+            <img src="./assets/narrator.png" alt="CelesteCon Narrator" id="narrator-avatar-img" onerror="this.src='./assets/loading/cubesat-gameplay.png'" />
+            <span class="narrator-badge">GUIDE</span>
+          </div>
+          <div class="narrator-bubble" id="narrator-bubble">
+            <header class="narrator-bubble-header">
+              <span class="narrator-title">🎙️ Jatin — CelesteCon AI Narrator</span>
+              <button id="narrator-min-btn" class="narrator-close-btn" title="Minimize Guide">✕</button>
+            </header>
+            <div class="narrator-body">
+              <p id="narrator-text">Hey there, aerospace explorer! Welcome to CelesteCon by the AEROSS Club. I'm Jatin, your AI guide! Click any topic below to learn about our campus events, or ask for role advice!</p>
+            </div>
+            <footer class="narrator-footer">
+              <button class="n-topic-btn" data-topic="about">🌟 What is CelesteCon?</button>
+              <button class="n-topic-btn" data-topic="events">🚀 The 7 Events</button>
+              <button class="n-topic-btn" data-topic="role">💡 My Role Duty</button>
+              <button class="n-topic-btn" data-topic="eggs">✨ Easter Eggs</button>
+            </footer>
           </div>
         </div>
       </div>
@@ -250,8 +277,60 @@
           </div>
         </div>
         <footer class="modal-footer">
-          <span class="modal-hint">💡 Solve the challenge to earn +150 Rep Points and help the AEROSS team!</span>
+          <span class="modal-hint">💡 Solve the challenge to earn +150 🪙 Celeste and advance the CelesteCon storyline!</span>
           <button id="modal-complete-btn" class="glow-btn small-btn hidden">Claim Reward & Complete</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Judge Official Verdict Modal -->
+    <div id="judge-modal" class="modal hidden">
+      <div class="modal-content judge-content">
+        <header class="modal-header judge-header">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">⚖️</span>
+            <h3 id="judge-modal-title">Official Judge Verdict Rubric</h3>
+          </div>
+          <button id="judge-close-btn" class="modal-close">✕ Exit Courtroom</button>
+        </header>
+        <div class="modal-body pad-body">
+          <div id="judge-dispute-box" class="dispute-box">
+            <div class="dispute-event-tag" id="judge-event-tag">Event: Quizzitch</div>
+            <h4 id="judge-dispute-title" class="gold-text">Disputed Rule Application</h4>
+            <p id="judge-dispute-desc" class="modal-desc-text">Description of the dispute between two competing teams...</p>
+            <div class="verdict-options" id="judge-verdict-options"></div>
+          </div>
+        </div>
+        <footer class="modal-footer">
+          <span class="modal-hint">⚖️ Your ruling impacts tournament fairness and awards +150 🪙 Celeste!</span>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Organizer Crisis Management Modal -->
+    <div id="organizer-modal" class="modal hidden">
+      <div class="modal-content organizer-content">
+        <header class="modal-header organizer-header">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">🚨</span>
+            <h3 id="organizer-modal-title">Emergency Crisis Console</h3>
+          </div>
+          <button id="organizer-close-btn" class="modal-close">✕ Exit Console</button>
+        </header>
+        <div class="modal-body pad-body">
+          <div id="organizer-crisis-box" class="crisis-box">
+            <div class="crisis-level-tag" id="organizer-crisis-tag">Severity: HIGH EMERGENCY</div>
+            <h4 id="organizer-crisis-title" class="gold-text">Logistical System Failure</h4>
+            <p id="organizer-crisis-desc" class="modal-desc-text">Description of the technical crisis on campus...</p>
+            <div class="crisis-options" id="organizer-crisis-options"></div>
+          </div>
+        </div>
+        <footer class="modal-footer" style="flex-direction: column; gap: 8px;">
+          <span class="modal-hint">🚨 Resource allocation saves the event and boosts +200 🪙 Celeste!</span>
+          <div style="display: flex; gap: 10px; width: 100%; justify-content: center; margin-top: 6px; flex-wrap: wrap;">
+            <button id="btn-launch-crowd" class="btn-primary" style="background: linear-gradient(135deg, #00f0ff, #0080ff); color: #000; font-weight: 800; padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; box-shadow: 0 0 15px rgba(0,240,255,0.4); font-size: 0.95rem;">🚧 Launch Crowd Control Barricades</button>
+            <button id="btn-launch-scavenger" class="btn-primary" style="background: linear-gradient(135deg, #ffd166, #ff9f1c); color: #070913; font-weight: 800; padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; box-shadow: 0 0 15px rgba(255,209,102,0.4); font-size: 0.95rem;">🔍 Launch Emergency Scavenger Hunt</button>
+          </div>
         </footer>
       </div>
     </div>
@@ -292,7 +371,7 @@
           <div class="finale-stats-card">
             <div class="f-stat"><span>Character Played:</span> <strong id="f-stat-char">Siddharth</strong></div>
             <div class="f-stat"><span>Role Perspective:</span> <strong id="f-stat-role">Participant</strong></div>
-            <div class="f-stat"><span>Final Rep Score:</span> <strong id="f-stat-rep" class="gold-text">350</strong></div>
+            <div class="f-stat"><span>Final Celeste Earned:</span> <strong id="f-stat-rep" class="gold-text">350 🪙</strong></div>
             <div class="f-stat"><span>Secret Relics Found:</span> <strong id="f-stat-eggs">5 / 5</strong></div>
           </div>
 

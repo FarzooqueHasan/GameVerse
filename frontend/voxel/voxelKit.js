@@ -309,6 +309,10 @@ export const Kit = {
     return g;
   },
 
+  booth(width = 2.4, depth = 1.6, height = 2.2, color = 0x141b33, canopyColor = PALETTE.accentGold, opts = {}) {
+    return this.eventBooth(width, depth, height, color, canopyColor, opts);
+  },
+
   eventBooth(width = 2.4, depth = 1.6, height = 2.2, color = 0x141b33, canopyColor = PALETTE.accentGold, opts = {}) {
     const g = new THREE.Group();
     const table = new THREE.Mesh(new THREE.BoxGeometry(width, 0.9, depth), baseMaterial(color));

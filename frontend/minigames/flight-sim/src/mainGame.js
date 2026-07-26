@@ -171,6 +171,12 @@ export class MainGameHub {
 
     this.updateUI();
     this.showRewardToast(rewardCr, payload.score);
+
+    if (window.parent && typeof window.parent.onMinigameVictory === 'function' && payload.score > 0) {
+      window.parent.onMinigameVictory('flight', Math.min(rewardCr, 300), `Flight simulation completed with ${payload.score} PTS!`);
+    } else if (window.parent && typeof window.parent.onMinigameDefeat === 'function' && payload.score <= 0) {
+      window.parent.onMinigameDefeat('flight', 30, "Flight simulation ended without scoring points.");
+    }
   }
 
   showRewardToast(reward, score) {

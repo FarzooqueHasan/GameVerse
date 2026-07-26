@@ -83,107 +83,118 @@ const CHARACTERS = {
 // ==================== 10-QUESTION QUESTIONNAIRE ====================
 const QUESTIONNAIRE = [
   {
-    q: "When someone hands you a project with no instructions, you:",
+    q: "When someone hands you a complex aerospace project with no instructions, you:",
     options: [
-      { text: "Jump right in and start experimenting!", char: "Tarushi" },
+      { text: "Jump right in and start experimenting spontaneously!", char: "Tarushi" },
       { text: "Take a deep breath, map out a structure, and delegate tasks.", char: "Siddharth" },
       { text: "Sit quietly, analyze what needs to be done, and execute silently.", char: "Anant" },
       { text: "Organize a quick team huddle to brainstorm ideas together.", char: "Farzooque" },
+      { text: "Envision the overarching architectural roadmap and futuristic impact.", char: "Ryaan" },
     ]
   },
   {
-    q: "In a group project, what is your typical role?",
+    q: "In an AEROSS Club event team, what is your typical leadership style?",
     options: [
-      { text: "The creative engine who generates bold ideas.", char: "Tarushi" },
-      { text: "The leader who keeps everyone on track and organized.", char: "Siddharth" },
-      { text: "The reliable executor who gets the job done without fuss.", char: "Anant" },
-      { text: "The collaborator who ensures everyone's voice is heard.", char: "Farzooque" },
+      { text: "The creative dynamo generating boundless energy and bold concepts.", char: "Tarushi" },
+      { text: "The calm crisis manager keeping timelines and logistics organized.", char: "Siddharth" },
+      { text: "The reliable engineer delivering flawless technical hardware.", char: "Anant" },
+      { text: "The charismatic networker bringing diverse talents into harmony.", char: "Farzooque" },
+      { text: "The visionary strategist designing the big-picture challenge goals.", char: "Ryaan" },
     ]
   },
   {
-    q: "When faced with a sudden deadline, how do you react?",
+    q: "When faced with an unexpected technical failure 10 minutes before deadlines, you:",
     options: [
-      { text: "I work best under pressure—bring it on!", char: "Tarushi" },
-      { text: "I create a timeline and stick to it religiously.", char: "Siddharth" },
-      { text: "I focus quietly and get my part done ahead of time.", char: "Anant" },
-      { text: "I check in with teammates to see how we can support each other.", char: "Farzooque" },
+      { text: "Thrive on the adrenaline and pull off a miraculous creative pivot!", char: "Tarushi" },
+      { text: "Follow established protocols and systematically resolve the bottleneck.", char: "Siddharth" },
+      { text: "Focus intensely and debug the hardware/code without a single word.", char: "Anant" },
+      { text: "Rally the team's morale and coordinate peer-to-peer support.", char: "Farzooque" },
+      { text: "Re-evaluate the strategic parameters to preserve mission success.", char: "Ryaan" },
     ]
   },
   {
-    q: "What is your preferred working style for aerospace challenges?",
+    q: "What is your preferred working environment for space science challenges?",
     options: [
-      { text: "Fast-paced, dynamic, and full of high energy.", char: "Tarushi" },
-      { text: "Structured, methodical, and well-planned.", char: "Siddharth" },
-      { text: "Independent, focused, and low-key.", char: "Anant" },
-      { text: "Collaborative, communicative, and supportive.", char: "Farzooque" },
+      { text: "Fast-paced, high-voltage, and full of spontaneous innovation.", char: "Tarushi" },
+      { text: "Methodical, structured, and operating with clockwork precision.", char: "Siddharth" },
+      { text: "Independent, laser-focused, and equipped with top-tier tech.", char: "Anant" },
+      { text: "Collaborative, communicative, and buzzing with team spirit.", char: "Farzooque" },
+      { text: "Visionary, boundary-pushing, and inspired by grand space exploration.", char: "Ryaan" },
     ]
   },
   {
-    q: "When a disagreement arises in your team, how do you handle it?",
+    q: "When a disagreement over debate arguments or 3D designs arises, how do you resolve it?",
     options: [
-      { text: "I use humor and positive energy to defuse the situation.", char: "Farzooque" },
-      { text: "I step in, mediate, and find a logical, structured solution.", char: "Siddharth" },
-      { text: "I avoid the drama and focus purely on getting the work done.", char: "Anant" },
-      { text: "I propose a bold compromise that integrates both creative visions.", char: "Ryaan" },
+      { text: "Propose an exciting, out-of-the-box alternative that excites everyone.", char: "Tarushi" },
+      { text: "Step in as mediator and apply a logical, evidence-based rubric.", char: "Siddharth" },
+      { text: "Avoid the noise and focus purely on proving the concept via data.", char: "Anant" },
+      { text: "Use warmth, humor, and empathy to defuse tension immediately.", char: "Farzooque" },
+      { text: "Synthesize both viewpoints into a superior, unified grand design.", char: "Ryaan" },
     ]
   },
   {
-    q: "How do you handle critical feedback from judges on your work?",
+    q: "How do you respond when event judges provide tough critical feedback?",
     options: [
-      { text: "I take it in stride and use it to fuel my creative pivot.", char: "Tarushi" },
-      { text: "I analyze the metrics carefully and integrate them into my plan.", char: "Siddharth" },
-      { text: "I accept it quietly and make immediate, flawless adjustments.", char: "Anant" },
-      { text: "I discuss it with my peers to gain diverse perspectives.", char: "Farzooque" },
+      { text: "Embrace the critique and instantly spark a bold new iteration.", char: "Tarushi" },
+      { text: "Analyze the evaluation metrics and adjust the workflow systematically.", char: "Siddharth" },
+      { text: "Accept it quietly and execute flawless technical corrections.", char: "Anant" },
+      { text: "Discuss the feedback with teammates to share insights and learn.", char: "Farzooque" },
+      { text: "Incorporate the lessons into a longer-term strategic vision.", char: "Ryaan" },
     ]
   },
   {
-    q: "What motivates you the most when participating in CelesteCon?",
+    q: "What excites you the most about participating in CelesteCon?",
     options: [
-      { text: "The thrill of designing something brand new and futuristic.", char: "Ryaan" },
-      { text: "The satisfaction of executing a flawless project and winning.", char: "Siddharth" },
-      { text: "The pride in building robust, high-quality technical hardware.", char: "Anant" },
-      { text: "The joy of collaborating and celebrating with campus friends.", char: "Farzooque" },
+      { text: "The sheer joy of creative expression and unforgettable campus vibes.", char: "Tarushi" },
+      { text: "The satisfaction of executing a well-run, professional competition.", char: "Siddharth" },
+      { text: "The pride in mastering complex aerospace simulators and hardware.", char: "Anant" },
+      { text: "The chance to connect, celebrate, and build lifelong friendships.", char: "Farzooque" },
+      { text: "The opportunity to push student space research to new frontiers.", char: "Ryaan" },
     ]
   },
   {
-    q: "When learning a complex new aerospace skill (like orbital mechanics), you:",
+    q: "When learning orbital mechanics or drone flight physics, your approach is:",
     options: [
-      { text: "Dive into hands-on simulation and trial-and-error experimentation.", char: "Tarushi" },
-      { text: "Read the NASA technical documentation and build a step-by-step plan.", char: "Siddharth" },
-      { text: "Observe experts quietly and practice intensely on my own.", char: "Anant" },
-      { text: "Form a study circle and debate the physics concepts together.", char: "Ryaan" },
+      { text: "Hands-on trial-and-error simulation and fearless experimentation.", char: "Tarushi" },
+      { text: "Reading technical documentation and building a step-by-step model.", char: "Siddharth" },
+      { text: "Intense, solitary practice until muscle memory and calculation are exact.", char: "Anant" },
+      { text: "Forming interactive study groups and debating theories together.", char: "Farzooque" },
+      { text: "Studying the foundational principles to invent new aerospace concepts.", char: "Ryaan" },
     ]
   },
   {
-    q: "How do you prioritize when 3 events (Debate, Quiz, UAV) happen at once?",
+    q: "With 3 major events (Debate, Quizzitch, Volatus UAV) happening simultaneously, you:",
     options: [
-      { text: "Tackle the most exciting, high-stakes challenge first!", char: "Tarushi" },
-      { text: "Make an organized schedule and allocate exact time slots.", char: "Siddharth" },
-      { text: "Quietly solve the technical tasks one by one without stress.", char: "Anant" },
-      { text: "Analyze the overarching strategy to maximize total points.", char: "Ryaan" },
+      { text: "Dive straight into the most thrilling, high-energy event first!", char: "Tarushi" },
+      { text: "Create a precision master schedule to manage time slots flawlessly.", char: "Siddharth" },
+      { text: "Quietly complete your technical assignments one by one in the zone.", char: "Anant" },
+      { text: "Move between booths checking on friends and cheering them on.", char: "Farzooque" },
+      { text: "Analyze tournament scoring dynamics to optimize overall victory.", char: "Ryaan" },
     ]
   },
   {
-    q: "Describe your ideal campus festival environment:",
+    q: "In one sentence, what is your ultimate motto as an aerospace pioneer?",
     options: [
-      { text: "Energetic, vibrant, and full of spontaneous celebrations!", char: "Tarushi" },
-      { text: "Well-managed, on-schedule, and running with clockwork precision.", char: "Siddharth" },
-      { text: "Peaceful, focused, and equipped with top-tier technology.", char: "Anant" },
-      { text: "Visionary, inspiring, and pushing the boundaries of what a school club can do.", char: "Ryaan" },
+      { text: "'Let's make this epic, bold, and totally unforgettable!'", char: "Tarushi" },
+      { text: "'Trust the process. Structure and preparation conquer all crises.'", char: "Siddharth" },
+      { text: "'Actions and flawless results speak louder than any words.'", char: "Anant" },
+      { text: "'When our school community works together, we are unstoppable!'", char: "Farzooque" },
+      { text: "'The future of interplanetary exploration begins right here.'", char: "Ryaan" },
     ]
   }
 ];
 
-// ==================== DIALOGUE TREES & QUESTS ====================
 const DIALOGUES = {
   npc_vibha: {
     name: "Mrs. Vibha Arora (Teacher Coordinator)",
     avatar: "👩‍🏫",
     text: "Welcome to CelesteCon! As teacher coordinators, Mr. Sanchit and I are thrilled to see our AEROSS Club students leading such an ambitious aerospace festival.",
     choices: [
-      { text: "How can I help with event operations?", role: "Organizer", action: "crisis_cubesat" },
-      { text: "Where can I register for the aerospace competitions?", role: "Participant", action: "say", resp: "Check out the event booths around the plaza! You can compete in Quizzitch, Debate, UAVs, and more." },
-      { text: "Are the scoring rubrics ready for evaluation?", role: "Judge", action: "say", resp: "Yes! Please ensure fairness in your judging. These students have poured weeks into their 3D models and pitches." },
+      { text: "🚨 [Organizer Action] Inspect campus emergency protocols & logistics", role: "Organizer", action: "organizer_crisis", crisisKey: "crisis_general" },
+      { text: "🚧 [Organizer Challenge] Play Crowd Control: Barricade and Manage Student Flow!", role: "Organizer", action: "minigame_crowd" },
+      { text: "🔍 [Organizer Challenge] Play Scavenger Hunt: Find Missing Equipment and VIPs!", role: "Organizer", action: "minigame_scavenger" },
+      { text: "🚀 [Participant Action] Where can I register for the aerospace competitions?", role: "Participant", action: "say", resp: "Check out the event booths around the plaza! You can compete in Quizzitch, Debate, UAVs, and more." },
+      { text: "⚖️ [Judge Action] Review official scoring rubrics and ethical guidelines", role: "Judge", action: "judge_verdict", verdictKey: "verdict_general" },
       { text: "Goodbye, ma'am!", action: "close" }
     ]
   },
@@ -192,9 +203,11 @@ const DIALOGUES = {
     avatar: "👨‍🏫",
     text: "Ah, hello there! The UAV Volatus arena is experiencing some wind gusts today. We must ensure safety guidelines are strictly followed.",
     choices: [
-      { text: "I'll inspect the drone flight simulator stability!", role: "Organizer", action: "crisis_flight" },
-      { text: "I'm ready to pilot my UAV drone in the Volatus challenge!", role: "Participant", action: "crisis_flight" },
-      { text: "I will evaluate the aerodynamic control of the contestants.", role: "Judge", action: "say", resp: "Excellent. Pay close attention to how smoothly they handle simulated engine failures!" },
+      { text: "🚨 [Organizer Action] Deploy stabilizing nets around the flight arena", role: "Organizer", action: "organizer_crisis", crisisKey: "crisis_volatus" },
+      { text: "🚧 [Organizer Challenge] Play Crowd Control: Barricade and Manage Student Flow!", role: "Organizer", action: "minigame_crowd" },
+      { text: "🔍 [Organizer Challenge] Play Scavenger Hunt: Find Missing Equipment and VIPs!", role: "Organizer", action: "minigame_scavenger" },
+      { text: "🚀 [Participant Action] Let me jump into the drone cockpit simulator!", role: "Participant", action: "minigame_flight" },
+      { text: "⚖️ [Judge Action] Evaluate contestant aerodynamic recovery maneuvers", role: "Judge", action: "judge_verdict", verdictKey: "verdict_volatus" },
       { text: "Thank you, sir!", action: "close" }
     ]
   },
@@ -213,7 +226,12 @@ const DIALOGUES = {
     avatar: "🧑‍💻",
     text: "I've been working on my CubeSat orbital attitude determination system all night, but my telemetry wiring is throwing an error!",
     choices: [
-      { text: "[Help Divyam] Let me open the CubeSat Builder and fix your telemetry!", action: "minigame_cubesat" },
+      { text: "🚀 [Participant] Let me open the CubeSat Builder and fix your telemetry!", role: "Participant", action: "minigame_cubesat" },
+      { text: "🚨 [Organizer] Supply spare telemetry sensors from inventory!", role: "Organizer", action: "organizer_crisis", crisisKey: "crisis_cubesat" },
+      { text: "🚧 [Organizer Challenge] Play Crowd Control: Barricade and Manage Student Flow!", role: "Organizer", action: "minigame_crowd" },
+      { text: "🔍 [Organizer Challenge] Play Scavenger Hunt: Find Missing Equipment and VIPs!", role: "Organizer", action: "minigame_scavenger" },
+      { text: "⚖️ [Judge] Inspect whether third-party hardware modules are legal", role: "Judge", action: "judge_verdict", verdictKey: "verdict_cubesat" },
+      { text: "⚖️ [Judge Challenge] Play CubeStack: Verify & Stack Divyam's CubeSat Modules!", role: "Judge", action: "minigame_cubestack" },
       { text: "Good luck troubleshooting!", action: "close" }
     ]
   },
@@ -230,7 +248,9 @@ const DIALOGUES = {
     avatar: "👩‍⚖️",
     text: "We are debating space debris mitigation policies in 'In pursuit of dispute'. The arguments are super intense!",
     choices: [
-      { text: "[Test Skills] Give me a quick aerospace question!", action: "minigame_circuit" },
+      { text: "🚀 [Participant] Give me a quick aerospace question!", role: "Participant", action: "minigame_circuit" },
+      { text: "⚖️ [Judge] Rule on a disputed time limit violation in the semi-finals", role: "Judge", action: "judge_verdict", verdictKey: "verdict_debate" },
+      { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
       { text: "Keep up the great debate!", action: "close" }
     ]
   },
@@ -239,7 +259,9 @@ const DIALOGUES = {
     avatar: "🙋‍♀️",
     text: "Quizzitch is about to start! Do you know the difference between LEO, MEO, and Geostationary orbits?",
     choices: [
-      { text: "[Play Quiz] Let's test my aerospace knowledge right now!", action: "minigame_circuit" },
+      { text: "🚀 [Participant] Let's test my aerospace knowledge right now!", role: "Participant", action: "minigame_circuit" },
+      { text: "🚨 [Organizer] Resolve the buzzer malfunction on table 4!", role: "Organizer", action: "organizer_crisis", crisisKey: "crisis_quizzitch" },
+      { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
       { text: "I need to brush up on my physics first!", action: "close" }
     ]
   },
@@ -248,7 +270,8 @@ const DIALOGUES = {
     avatar: "🛩️",
     text: "My drone's PID controller needs tuning before the Volatus obstacle course. Want to run a flight sim test?",
     choices: [
-      { text: "[Launch Flight Sim] Let's jump into the cockpit simulator!", action: "minigame_flight" },
+      { text: "🚀 [Participant] Let's jump into the cockpit simulator!", role: "Participant", action: "minigame_flight" },
+      { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
       { text: "See you at the flight line!", action: "close" }
     ]
   },
@@ -266,9 +289,12 @@ const DIALOGUES = {
     avatar: "👔",
     text: "Welcome to the Management HQ. Organizing CelesteCon takes months of planning, but seeing our school community united around aerospace science makes every sleepless night worth it.",
     choices: [
-      { text: "We have an emergency circuit failure in the sound system!", role: "Organizer", action: "minigame_circuit" },
-      { text: "I'm ready to present my Business Power Pitch!", role: "Participant", action: "say", resp: "Awesome! Step up to the Power Pitch booth right here in the room and show us your space tech startup roadmap." },
-      { text: "I have finalized the evaluation scores for the top teams.", role: "Judge", action: "say", resp: "Thank you for your integrity and hard work. Let's get ready for the prize distribution!" },
+      { text: "🚨 [Organizer] We have an emergency circuit failure in the sound system!", role: "Organizer", action: "organizer_crisis", crisisKey: "crisis_sound" },
+      { text: "🚧 [Organizer Challenge] Play Crowd Control: Barricade and Manage Student Flow!", role: "Organizer", action: "minigame_crowd" },
+      { text: "🔍 [Organizer Challenge] Play Scavenger Hunt: Find Missing Equipment and VIPs!", role: "Organizer", action: "minigame_scavenger" },
+      { text: "🚀 [Participant] I'm ready to present my Business Power Pitch!", role: "Participant", action: "say", resp: "Awesome! Step up to the Power Pitch booth right here in the room and show us your space tech startup roadmap." },
+      { text: "⚖️ [Judge] I have finalized the evaluation scores for the top teams.", role: "Judge", action: "say", resp: "Thank you for your integrity and hard work. Let's get ready for the prize distribution!" },
+      { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
       { text: "🏆 [Grand Finale] Conclude CelesteCon & Attend the Awards Ceremony!", action: "finale" },
       { text: "Honor to meet you, President!", action: "close" }
     ]
@@ -278,8 +304,12 @@ const DIALOGUES = {
     avatar: "🗣️",
     text: "Welcome to the premier CelesteCon debate! Teams are currently arguing: 'Should private corporations have property rights over lunar resources?'",
     choices: [
-      { text: "[Participate] Enter the debate challenge & test your reasoning!", action: "minigame_circuit" },
-      { text: "[Judge] Evaluate the rebuttal arguments and score points.", role: "Judge", action: "say", resp: "You awarded +50 points to the affirmative team for solid international treaty citations!" },
+      { text: "🚀 [Participant] Enter the debate challenge & test your reasoning!", role: "Participant", action: "minigame_circuit" },
+      { text: "⚖️ [Judge] Rule on a dispute over unauthorized AI note-taking tools", role: "Judge", action: "judge_verdict", verdictKey: "verdict_debate" },
+      { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
+      { text: "🚨 [Organizer] Handle microphone feedback & podium scheduling clash", role: "Organizer", action: "organizer_crisis", crisisKey: "crisis_debate" },
+      { text: "🚧 [Organizer Challenge] Play Crowd Control: Barricade and Manage Student Flow!", role: "Organizer", action: "minigame_crowd" },
+      { text: "🔍 [Organizer Challenge] Play Scavenger Hunt: Find Missing Equipment and VIPs!", role: "Organizer", action: "minigame_scavenger" },
       { text: "Leave booth", action: "close" }
     ]
   },
@@ -288,7 +318,12 @@ const DIALOGUES = {
     avatar: "⚡",
     text: "Step right up to Quizzitch! Test your mastery over rocket propulsion, astronomy, and aviation history.",
     choices: [
-      { text: "[Take Challenge] Answer the aerospace brain teaser!", action: "minigame_circuit" },
+      { text: "🚀 [Participant] Answer the aerospace brain teaser challenge!", role: "Participant", action: "minigame_circuit" },
+      { text: "⚖️ [Judge] Determine if an ambiguous astrophysics answer should be awarded points", role: "Judge", action: "judge_verdict", verdictKey: "verdict_quizzitch" },
+      { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
+      { text: "🚨 [Organizer] Fix a blown fuse in the electronic buzzer display", role: "Organizer", action: "organizer_crisis", crisisKey: "crisis_quizzitch" },
+      { text: "🚧 [Organizer Challenge] Play Crowd Control: Barricade and Manage Student Flow!", role: "Organizer", action: "minigame_crowd" },
+      { text: "🔍 [Organizer Challenge] Play Scavenger Hunt: Find Missing Equipment and VIPs!", role: "Organizer", action: "minigame_scavenger" },
       { text: "Leave booth", action: "close" }
     ]
   },
@@ -297,7 +332,12 @@ const DIALOGUES = {
     avatar: "🚁",
     text: "Welcome to Volatus! Test your drone piloting reflexes and aerodynamic stability in our flight simulator.",
     choices: [
-      { text: "[Launch Simulator] Take control in the Flight Simulator!", action: "minigame_flight" },
+      { text: "🚀 [Participant] Take control in the Flight Simulator challenge!", role: "Participant", action: "minigame_flight" },
+      { text: "⚖️ [Judge] Inspect drone propeller dimensions against tournament regulations", role: "Judge", action: "judge_verdict", verdictKey: "verdict_volatus" },
+      { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
+      { text: "🚨 [Organizer] Establish safety netting and crowd control perimeter", role: "Organizer", action: "organizer_crisis", crisisKey: "crisis_volatus" },
+      { text: "🚧 [Organizer Challenge] Play Crowd Control: Barricade and Manage Student Flow!", role: "Organizer", action: "minigame_crowd" },
+      { text: "🔍 [Organizer Challenge] Play Scavenger Hunt: Find Missing Equipment and VIPs!", role: "Organizer", action: "minigame_scavenger" },
       { text: "Leave booth", action: "close" }
     ]
   },
@@ -306,7 +346,12 @@ const DIALOGUES = {
     avatar: "🎭",
     text: "A crowd gathers around the stage! Students are performing a hilarious educational skit about what happens when astronauts forget their wrenches in zero gravity.",
     choices: [
-      { text: "[Applaud & Watch] Cheer for the performers! (+25 Rep)", action: "rep", val: 25 },
+      { text: "🚀 [Participant] Perform an impromptu standup skit! (+35 Rep)", role: "Participant", action: "rep", val: 35 },
+      { text: "⚖️ [Judge] Score the performance on educational value and comedic timing", role: "Judge", action: "judge_verdict", verdictKey: "verdict_theatre" },
+      { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
+      { text: "🚨 [Organizer] Manage backstage prop transitions and lighting cues", role: "Organizer", action: "organizer_crisis", crisisKey: "crisis_theatre" },
+      { text: "🚧 [Organizer Challenge] Play Crowd Control: Barricade and Manage Student Flow!", role: "Organizer", action: "minigame_crowd" },
+      { text: "🔍 [Organizer Challenge] Play Scavenger Hunt: Find Missing Equipment and VIPs!", role: "Organizer", action: "minigame_scavenger" },
       { text: "Leave booth", action: "close" }
     ]
   },
@@ -315,7 +360,12 @@ const DIALOGUES = {
     avatar: "📐",
     text: "Examine the incredible 3D printed rover prototypes and orbital space station CAD assemblies created by school competitors.",
     choices: [
-      { text: "[Inspect Models] Review the structural integrity & design aesthetics! (+30 Rep)", action: "rep", val: 30 },
+      { text: "🚀 [Participant] Inspect CAD models & review structural integrity (+30 Rep)", role: "Participant", action: "rep", val: 30 },
+      { text: "⚖️ [Judge] Evaluate CAD structural tolerances and originality", role: "Judge", action: "judge_verdict", verdictKey: "verdict_dim3" },
+      { text: "⚖️ [Judge Challenge] Play CubeStack: Verify & Stack 3D Assembly Modules!", role: "Judge", action: "minigame_cubestack" },
+      { text: "🚨 [Organizer] Fix a jammed 3D filament extruder before judging begins", role: "Organizer", action: "organizer_crisis", crisisKey: "crisis_dim3" },
+      { text: "🚧 [Organizer Challenge] Play Crowd Control: Barricade and Manage Student Flow!", role: "Organizer", action: "minigame_crowd" },
+      { text: "🔍 [Organizer Challenge] Play Scavenger Hunt: Find Missing Equipment and VIPs!", role: "Organizer", action: "minigame_scavenger" },
       { text: "Leave booth", action: "close" }
     ]
   },
@@ -324,7 +374,12 @@ const DIALOGUES = {
     avatar: "🌐",
     text: "Competitors are designing a self-sustaining Martian colony for 10,000 inhabitants, handling life support, radiation shielding, and agriculture.",
     choices: [
-      { text: "[Contribute Idea] Suggest hydroponic algae farms for oxygen balance! (+40 Rep)", action: "rep", val: 40 },
+      { text: "🚀 [Participant] Suggest hydroponic algae farms for oxygen balance! (+40 Rep)", role: "Participant", action: "rep", val: 40 },
+      { text: "⚖️ [Judge] Rule on feasibility of proposed nuclear micro-reactors", role: "Judge", action: "judge_verdict", verdictKey: "verdict_settle" },
+      { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
+      { text: "🚨 [Organizer] Provide emergency backup power to the CAD projection screens", role: "Organizer", action: "organizer_crisis", crisisKey: "crisis_settle" },
+      { text: "🚧 [Organizer Challenge] Play Crowd Control: Barricade and Manage Student Flow!", role: "Organizer", action: "minigame_crowd" },
+      { text: "🔍 [Organizer Challenge] Play Scavenger Hunt: Find Missing Equipment and VIPs!", role: "Organizer", action: "minigame_scavenger" },
       { text: "Leave booth", action: "close" }
     ]
   },
@@ -333,7 +388,12 @@ const DIALOGUES = {
     avatar: "💼",
     text: "Student entrepreneurs are pitching commercial space tech startups to a panel of venture capitalists and industry judges.",
     choices: [
-      { text: "[Pitch / Evaluate] Analyze unit economics of reusable rocket boosters! (+45 Rep)", action: "rep", val: 45 },
+      { text: "🚀 [Participant] Analyze unit economics of reusable rocket boosters! (+45 Rep)", role: "Participant", action: "rep", val: 45 },
+      { text: "⚖️ [Judge] Evaluate startup ROI, patent defensibility, and market size", role: "Judge", action: "judge_verdict", verdictKey: "verdict_pitch" },
+      { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
+      { text: "🚨 [Organizer] Escort VIP guest judges from campus security to the boardroom", role: "Organizer", action: "organizer_crisis", crisisKey: "crisis_pitch" },
+      { text: "🚧 [Organizer Challenge] Play Crowd Control: Barricade and Manage Student Flow!", role: "Organizer", action: "minigame_crowd" },
+      { text: "🔍 [Organizer Challenge] Play Scavenger Hunt: Find Missing Equipment and VIPs!", role: "Organizer", action: "minigame_scavenger" },
       { text: "Leave booth", action: "close" }
     ]
   },
@@ -565,7 +625,7 @@ function init3DWorld(zoneKey) {
   ];
   portalZones.forEach(pz => {
     if (pz.key === zoneKey) return;
-    const portalGroup = Kit.booth(pz.color, pz.name, "🚪");
+    const portalGroup = Kit.eventBooth(2.2, 1.5, 2.4, 0x141b33, pz.color, { text: pz.name });
     portalGroup.position.set(pz.x, 0, pz.z);
     portalGroup.userData = { id: `portal_${pz.key}`, interactName: pz.name, dialogueKey: `portal_${pz.key}` };
     scene.add(portalGroup);
@@ -709,7 +769,7 @@ function gameLoop() {
       const nameEl = document.getElementById('interact-target-name');
       if (nameEl) {
         if (nearestTarget.userData.isEasterEgg) {
-          nameEl.textContent = `Collect Easter Egg: ${nearestTarget.userData.easterEggName || 'Secret Item'}`;
+          nameEl.textContent = `Collect Secret Relic: ${nearestTarget.userData.easterEggName || 'Secret Item'}`;
         } else {
           nameEl.textContent = nearestTarget.userData.interactName || 'Interact';
         }
@@ -755,7 +815,7 @@ function collectEasterEgg(target) {
 
   GameState.foundEggs.add(id);
   const name = target.userData.easterEggName || "Secret Aerospace Relic";
-  const power = target.userData.easterEggPower || "+100 Rep Points Booster";
+  const power = target.userData.easterEggPower || "+150 Celeste Booster";
 
   // Remove mesh from scene
   if (GameState.sceneData && GameState.sceneData.scene) {
@@ -763,30 +823,110 @@ function collectEasterEgg(target) {
   }
 
   // Update HUD
-  addRepPoints(100);
+  addCeleste(150);
   document.getElementById('hud-eggs').textContent = `${GameState.foundEggs.size} / 5`;
 
   // Show Toast
   const toast = document.getElementById('toast-notify');
   if (toast) {
-    document.getElementById('toast-title').textContent = `🥚 Easter Egg Discovered: ${name}!`;
-    document.getElementById('toast-msg').textContent = `Unlocked Perk: ${power} (+100 Rep Points)`;
+    document.getElementById('toast-title').textContent = `✨ Secret Relic Found: ${name}!`;
+    document.getElementById('toast-msg').textContent = `Unlocked Perk: ${power} (+150 🪙 Celeste)`;
     toast.classList.remove('hidden');
     setTimeout(() => { toast.classList.add('hidden'); }, 5000);
   }
 
-  console.log(`[CelesteCon] Collected Easter Egg: ${name} (${power})`);
+  console.log(`[CelesteCon] Collected Relic: ${name} (${power})`);
 }
 
-function addRepPoints(val) {
-  GameState.repPoints += val;
+window.addCeleste = function(val) {
+  GameState.repPoints = (GameState.repPoints || 0) + val;
+  GameState.celeste = GameState.repPoints;
   const repEl = document.getElementById('hud-rep');
   if (repEl) {
-    repEl.textContent = GameState.repPoints;
-    repEl.style.transform = 'scale(1.2)';
-    setTimeout(() => { repEl.style.transform = 'scale(1)'; }, 300);
+    repEl.textContent = `${GameState.celeste}`;
+    repEl.style.transform = 'scale(1.25)';
+    repEl.style.color = '#00f0ff';
+    setTimeout(() => { 
+      repEl.style.transform = 'scale(1)'; 
+      repEl.style.color = '#ffd166';
+    }, 400);
+  }
+  checkFestivalCompletion();
+};
+window.addRepPoints = window.addCeleste;
+
+function checkFestivalCompletion() {
+  const certEl = document.getElementById('hud-certified');
+  if (certEl && GameState.certifiedEvents) {
+    certEl.textContent = `${GameState.certifiedEvents.size} / 5`;
+  }
+  if ((GameState.certifiedEvents && GameState.certifiedEvents.size >= 4) || (GameState.celeste && GameState.celeste >= 800)) {
+    const finaleBtn = document.getElementById('hud-finale-btn');
+    if (finaleBtn && finaleBtn.classList.contains('hidden')) {
+      finaleBtn.classList.remove('hidden');
+      finaleBtn.style.animation = 'pulseGlow 1.5s infinite alternate';
+      window.triggerNarratorComment("🎉 INCREDIBLE! You have certified enough aerospace systems and earned massive Celeste currency! The Grand Finale & Awards Ceremony is now unlocked in the HUD top right!");
+    }
   }
 }
+
+window.onMinigameVictory = function(type, rewardCeleste, successMessage) {
+  console.log(`[CelesteCon] Minigame VICTORY: ${type}, +${rewardCeleste} Celeste`);
+  if (!GameState.certifiedEvents) GameState.certifiedEvents = new Set();
+  GameState.certifiedEvents.add(type);
+
+  addCeleste(rewardCeleste || 200);
+
+  const toast = document.getElementById('toast-notify');
+  if (toast) {
+    document.getElementById('toast-title').textContent = `🏆 AEROSPACE CHALLENGE CONQUERED!`;
+    document.getElementById('toast-msg').textContent = `${successMessage || 'System certified!'} (+${rewardCeleste || 200} 🪙 Celeste Earned!)`;
+    toast.classList.remove('hidden');
+    setTimeout(() => { toast.classList.add('hidden'); }, 6000);
+  }
+
+  if (typeof closeMinigame === 'function') closeMinigame();
+
+  const storyNarrations = {
+    cubesat: "🎙️ Jatin: Phenomenal space engineering! With the ISRO CubeSat payload certified and orbital telemetry locked in, our satellite link is 100% operational! Next: Visit the Volatus UAV Arena!",
+    flight: "🎙️ Jatin: Masterful piloting! You demonstrated elite UAV aerodynamics in the Volatus arena! The festival crowds are cheering your name!",
+    circuit: "🎙️ Jatin: Brilliance under pressure! You solved the aerospace circuit emergency and restored power to the stage! Next: Visit the Debate Booth or Quizzitch!",
+    cubestack: "🎙️ Jatin: Official Judge Certification granted! The cleanroom structural tower is certified safe for competition!",
+    crowd_control: "🎙️ Jatin: Masterful event logistics! You guided all student cohorts into their correct event halls without a single bottleneck!",
+    scavenger: "🎙️ Jatin: Crisis averted! All 4 missing pieces of equipment and key personnel have been safely recovered across campus!"
+  };
+  if (typeof window.triggerNarratorComment === 'function') {
+    window.triggerNarratorComment(storyNarrations[type] || `🎙️ Jatin: Outstanding victory in ${type}! You earned +${rewardCeleste} 🪙 Celeste! Keep exploring campus!`);
+  }
+};
+
+window.onMinigameDefeat = function(type, penaltyCeleste, failMessage) {
+  console.log(`[CelesteCon] Minigame DEFEAT: ${type}, -${penaltyCeleste} Celeste`);
+  
+  const penalty = penaltyCeleste || 30;
+  GameState.repPoints = Math.max(0, (GameState.repPoints || 0) - penalty);
+  GameState.celeste = GameState.repPoints;
+  const repEl = document.getElementById('hud-rep');
+  if (repEl) {
+    repEl.textContent = `${GameState.celeste}`;
+    repEl.style.color = '#ff3300';
+    setTimeout(() => { repEl.style.color = '#ffd166'; }, 600);
+  }
+
+  const toast = document.getElementById('toast-notify');
+  if (toast) {
+    document.getElementById('toast-title').textContent = `⚠️ ATTEMPT FAILED!`;
+    document.getElementById('toast-msg').textContent = `${failMessage || 'System instability detected.'} (-${penalty} 🪙 Celeste). Try again to certify this event!`;
+    toast.classList.remove('hidden');
+    setTimeout(() => { toast.classList.add('hidden'); }, 5000);
+  }
+
+  if (typeof closeMinigame === 'function') closeMinigame();
+
+  if (typeof window.triggerNarratorComment === 'function') {
+    window.triggerNarratorComment(`🎙️ Jatin: Don't give up! That test run didn't go as planned (${failMessage || 'circuit overload'}). Re-check your aerodynamics and try again to win those Celeste points!`);
+  }
+};
 
 // --- 2D VISUAL NOVEL DIALOGUE SYSTEM ---
 function openDialogue(diagData) {
@@ -850,6 +990,21 @@ function handleDialogueAction(choice, diagData) {
   } else if (choice.action === 'minigame_circuit') {
     closeDialogue();
     openMinigame('circuit');
+  } else if (choice.action === 'minigame_cubestack' || choice.action === 'judge_cubestack') {
+    closeDialogue();
+    openMinigame('cubestack');
+  } else if (choice.action === 'minigame_crowd' || choice.action === 'organizer_crowd') {
+    closeDialogue();
+    openMinigame('crowd_control');
+  } else if (choice.action === 'minigame_scavenger' || choice.action === 'organizer_scavenger') {
+    closeDialogue();
+    openMinigame('scavenger');
+  } else if (choice.action === 'judge_verdict') {
+    closeDialogue();
+    openJudgeModal(choice.verdictKey || 'verdict_general');
+  } else if (choice.action === 'organizer_crisis') {
+    closeDialogue();
+    openOrganizerModal(choice.crisisKey || 'crisis_general');
   } else if (choice.action === 'teleport') {
     closeDialogue();
     if (choice.targetZone) init3DWorld(choice.targetZone);
@@ -869,40 +1024,6 @@ function closeDialogue() {
 function initMinigameModal() {
   const closeBtn = document.getElementById('modal-close-btn');
   if (closeBtn) closeBtn.addEventListener('click', closeMinigame);
-
-  const completeBtn = document.getElementById('modal-complete-btn');
-  if (completeBtn) {
-    completeBtn.addEventListener('click', () => {
-      addRepPoints(150);
-      closeMinigame();
-      // Show reward toast
-      const toast = document.getElementById('toast-notify');
-      if (toast) {
-        document.getElementById('toast-title').textContent = `🎉 Crisis Solved / Minigame Conquered!`;
-        document.getElementById('toast-msg').textContent = `Awarded +150 Rep Points! The AEROSS team is grateful!`;
-        toast.classList.remove('hidden');
-        setTimeout(() => { toast.classList.add('hidden'); }, 5000);
-      }
-    });
-  }
-
-  // Wire up circuit buttons
-  const circBtns = document.querySelectorAll('.circuit-btn');
-  circBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const isCorrect = btn.getAttribute('data-correct') === 'true';
-      if (isCorrect) {
-        btn.classList.add('correct');
-        const completeBtn = document.getElementById('modal-complete-btn');
-        if (completeBtn) {
-          completeBtn.classList.remove('hidden');
-          completeBtn.textContent = '⚡ Calibration Successful! Claim +150 Rep Points';
-        }
-      } else {
-        btn.classList.add('wrong');
-      }
-    });
-  });
 }
 
 function openMinigame(type) {
@@ -914,9 +1035,9 @@ function openMinigame(type) {
   const completeBtn = document.getElementById('modal-complete-btn');
   if (!modal) return;
 
+  // Always hide external cheat/skip button to enforce Gamer POV completion inside the actual simulation!
   if (completeBtn) {
-    completeBtn.classList.remove('hidden');
-    completeBtn.textContent = 'Claim Reward & Complete Challenge (+150 Rep)';
+    completeBtn.classList.add('hidden');
   }
 
   if (type === 'cubesat') {
@@ -940,8 +1061,28 @@ function openMinigame(type) {
       iframe.classList.add('hidden');
     }
     if (builtin) builtin.classList.remove('hidden');
-    if (completeBtn) completeBtn.classList.add('hidden');
     loadDynamicCircuitChallenge();
+  } else if (type === 'cubestack') {
+    if (title) title.textContent = '🏗️ CubeStack — Judge Structural Verification & Assembly Tower';
+    if (iframe) {
+      iframe.src = './minigames/cubestack/index.html';
+      iframe.classList.remove('hidden');
+    }
+    if (builtin) builtin.classList.add('hidden');
+  } else if (type === 'crowd_control') {
+    if (title) title.textContent = '🚧 AEROSS Crowd Control — Event Barricade & Flow Manager';
+    if (iframe) {
+      iframe.src = './minigames/crowd-control/index.html';
+      iframe.classList.remove('hidden');
+    }
+    if (builtin) builtin.classList.add('hidden');
+  } else if (type === 'scavenger') {
+    if (title) title.textContent = '🔍 Emergency Scavenger Hunt — Locate Missing Equipment & VIPs';
+    if (iframe) {
+      iframe.src = './minigames/scavenger-hunt/index.html';
+      iframe.classList.remove('hidden');
+    }
+    if (builtin) builtin.classList.add('hidden');
   }
 
   modal.classList.remove('hidden');
@@ -1014,7 +1155,7 @@ const CIRCUIT_CHALLENGES = [
 function loadDynamicCircuitChallenge() {
   const challenge = CIRCUIT_CHALLENGES[currentCircuitIndex % CIRCUIT_CHALLENGES.length];
   currentCircuitIndex++;
-  
+
   const titleEl = document.querySelector('.builtin-header h4');
   const descEl = document.querySelector('.builtin-header p');
   const qEl = document.querySelector('.quiz-q');
@@ -1022,7 +1163,7 @@ function loadDynamicCircuitChallenge() {
   const completeBtn = document.getElementById('modal-complete-btn');
 
   if (titleEl) titleEl.textContent = challenge.title;
-  if (descEl) descEl.textContent = "Select the correct technical solution to stabilize the system and earn your reputation points!";
+  if (descEl) descEl.textContent = "Select the correct technical solution to stabilize the system and earn your Celeste currency!";
   if (qEl) qEl.textContent = `Challenge #${currentCircuitIndex}: ${challenge.q}`;
   if (completeBtn) completeBtn.classList.add('hidden');
 
@@ -1037,12 +1178,12 @@ function loadDynamicCircuitChallenge() {
         allBtns.forEach(b => b.classList.remove('correct', 'wrong'));
         if (opt.correct) {
           btn.classList.add('correct');
-          if (completeBtn) {
-            completeBtn.classList.remove('hidden');
-            completeBtn.textContent = `⚡ Successful! ${challenge.explanation} (+150 Rep)`;
-          }
+          setTimeout(() => {
+            if (window.onMinigameVictory) window.onMinigameVictory('circuit', 150, challenge.explanation);
+          }, 800);
         } else {
           btn.classList.add('wrong');
+          if (window.onMinigameDefeat) window.onMinigameDefeat('circuit', 30, "Incorrect technical solution selected!");
         }
       });
       optionsWrap.appendChild(btn);
@@ -1056,6 +1197,171 @@ function closeMinigame() {
   const iframe = document.getElementById('minigame-iframe');
   if (iframe) iframe.src = 'about:blank';
   if (modal) modal.classList.add('hidden');
+}
+
+// --- JUDGE & ORGANIZER MODAL SYSTEM ---
+function openJudgeModal(verdictKey) {
+  const modal = document.getElementById('judge-modal');
+  const descEl = document.getElementById('judge-verdict-desc');
+  const optionsWrap = document.getElementById('judge-verdict-options');
+  if (!modal || !optionsWrap) return;
+
+  const verdicts = {
+    verdict_cubesat: {
+      title: "🛰️ CubeSat Hardware Legality Dispute",
+      desc: "Team Divyam used an unverified high-gain S-band transceiver from a commercial off-the-shelf drone. Is this allowable under CelesteCon Division rules?",
+      options: [
+        { text: "✅ Rule Allowable: COTS components encourage rapid prototyping (+50 Rep)", rep: 50, toast: "You ruled in favor of open hardware innovation!" },
+        { text: "❌ Rule Violation: All RF modules must undergo pre-event chamber certification (+50 Rep)", rep: 50, toast: "You upheld strict aerospace RF safety compliance!" }
+      ]
+    },
+    verdict_volatus: {
+      title: "✈️ Volatus Drone Flight Envelope Dispute",
+      desc: "A quadrotor team performed a high-G split-S maneuver 2 meters above the spectator net. Does this exceed campus indoor flight safety envelopes?",
+      options: [
+        { text: "⚠️ Issue Yellow Card: Maneuver was thrilling but violated safety altitude buffers (+50 Rep)", rep: 50, toast: "You maintained strict drone safety discipline!" },
+        { text: "🏆 Award Bonus Tech Points: Telemetry confirms autopilot maintained 3x safety margins (+60 Rep)", rep: 60, toast: "You rewarded advanced autonomous flight control!" }
+      ]
+    },
+    verdict_general: {
+      title: "⚖️ CelesteCon General Competition Dispute",
+      desc: "An aerospace team exceeded their 7-minute pitch presentation by 45 seconds, claiming technical audiovisual difficulties.",
+      options: [
+        { text: "⏳ Deduct 5 Points: Strict adherence to mission timelines is essential (+50 Rep)", rep: 50, toast: "You enforced professional timeline rigor!" },
+        { text: "🤝 Waive Penalty: Technical AV delays were outside student control (+50 Rep)", rep: 50, toast: "You demonstrated gracious sporting equity!" }
+      ]
+    }
+  };
+
+  const v = verdicts[verdictKey] || verdicts.verdict_general;
+  if (descEl) descEl.textContent = v.desc;
+  optionsWrap.innerHTML = '';
+
+  v.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'glow-btn small-btn';
+    btn.style.margin = '6px 0';
+    btn.style.width = '100%';
+    btn.textContent = opt.text;
+    btn.addEventListener('click', () => {
+      addRepPoints(opt.rep || 50);
+      modal.classList.add('hidden');
+      showToast(opt.toast || "Verdict recorded officially in the tournament ledger!", "success");
+    });
+    optionsWrap.appendChild(btn);
+  });
+
+  const minigameBtn = document.createElement('button');
+  minigameBtn.className = 'glow-btn small-btn';
+  minigameBtn.style.background = 'linear-gradient(135deg, #00f0ff, #0080ff)';
+  minigameBtn.style.color = '#000';
+  minigameBtn.style.marginTop = '15px';
+  minigameBtn.style.width = '100%';
+  minigameBtn.style.fontWeight = '800';
+  minigameBtn.textContent = '🏗️ Launch CubeStack: Cleanroom Structural Verification Minigame';
+  minigameBtn.addEventListener('click', () => {
+    modal.classList.add('hidden');
+    openMinigame('cubestack');
+  });
+  optionsWrap.appendChild(minigameBtn);
+
+  modal.classList.remove('hidden');
+}
+
+function openOrganizerModal(crisisKey) {
+  const modal = document.getElementById('organizer-modal');
+  const descEl = document.getElementById('organizer-crisis-desc');
+  const optionsWrap = document.getElementById('organizer-crisis-options');
+  if (!modal || !optionsWrap) return;
+
+  const crises = {
+    crisis_pitch: {
+      desc: "VIP Guest Judges are stuck at campus security due to unprinted QR badges while the startup founders are waiting on stage!",
+      options: [
+        { text: "🚨 Dispatch Volunteer Golf Cart & Issue Digital By-pass (+75 Rep)", rep: 75, toast: "VIPs escorted successfully to the boardroom!" },
+        { text: "🎤 Delay Stage Pitch by 10 Mins & Play ISRO Launch Reel (+50 Rep)", rep: 50, toast: "Audience entertained while VIPs arrive!" }
+      ]
+    },
+    crisis_general: {
+      desc: "High-voltage power surge tripped the circuit breaker in the Main Aerospace Exhibition Hall!",
+      options: [
+        { text: "⚡ Switch to Auxiliary Generator & Reroute Feeders (+75 Rep)", rep: 75, toast: "Power restored in 45 seconds flat!" },
+        { text: "📢 Announce Emergency Acoustic Tech Discussion (+50 Rep)", rep: 50, toast: "Crowd stays calm and engaged during reset!" }
+      ]
+    }
+  };
+
+  const c = crises[crisisKey] || crises.crisis_general;
+  if (descEl) descEl.textContent = c.desc;
+  optionsWrap.innerHTML = '';
+
+  c.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'glow-btn small-btn';
+    btn.style.margin = '6px 0';
+    btn.style.width = '100%';
+    btn.textContent = opt.text;
+    btn.addEventListener('click', () => {
+      addRepPoints(opt.rep || 50);
+      modal.classList.add('hidden');
+      showToast(opt.toast || "Crisis averted smoothly! Great event management!", "success");
+    });
+    optionsWrap.appendChild(btn);
+  });
+
+  modal.classList.remove('hidden');
+}
+
+function initJudgeAndOrganizerModals() {
+  const judgeClose = document.getElementById('judge-close-btn');
+  const orgClose = document.getElementById('organizer-close-btn');
+  const judgeModal = document.getElementById('judge-modal');
+  const orgModal = document.getElementById('organizer-modal');
+
+  if (judgeClose && judgeModal) judgeClose.addEventListener('click', () => judgeModal.classList.add('hidden'));
+  if (orgClose && orgModal) orgClose.addEventListener('click', () => orgModal.classList.add('hidden'));
+
+  const btnCubestack = document.getElementById('btn-launch-cubestack');
+  if (btnCubestack) {
+    btnCubestack.addEventListener('click', () => {
+      if (judgeModal) judgeModal.classList.add('hidden');
+      openMinigame('cubestack');
+    });
+  }
+
+  const btnCrowd = document.getElementById('btn-launch-crowd');
+  if (btnCrowd) {
+    btnCrowd.addEventListener('click', () => {
+      if (orgModal) orgModal.classList.add('hidden');
+      openMinigame('crowd_control');
+    });
+  }
+
+  const btnScavenger = document.getElementById('btn-launch-scavenger');
+  if (btnScavenger) {
+    btnScavenger.addEventListener('click', () => {
+      if (orgModal) orgModal.classList.add('hidden');
+      openMinigame('scavenger');
+    });
+  }
+}
+
+function initNarratorWidget() {
+  const box = document.getElementById('narrator-box');
+  const textEl = document.getElementById('narrator-text');
+  const closeBtn = document.getElementById('narrator-close-btn');
+
+  if (closeBtn && box) {
+    closeBtn.addEventListener('click', () => {
+      box.classList.add('hidden');
+    });
+  }
+
+  window.triggerNarratorComment = function(msg) {
+    if (!box || !textEl) return;
+    textEl.textContent = msg;
+    box.classList.remove('hidden');
+  };
 }
 
 // --- INFO / CONTROLS MODAL ---
@@ -1127,6 +1433,8 @@ function initEngine() {
   initReveal();
   initGameplayControls();
   initMinigameModal();
+  initJudgeAndOrganizerModals();
+  initNarratorWidget();
   initInfoModal();
   initFinaleModal();
 }

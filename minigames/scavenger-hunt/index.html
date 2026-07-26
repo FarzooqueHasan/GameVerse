@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AEROSS Scavenger Hunt — Missing Equipment & VIPs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #ffd166;
+      --cyan: #00f0ff;
+      --magenta: #ff007b;
+      --green: #00ff88;
+      --bg-dark: #070913;
+      --panel-bg: rgba(18, 24, 48, 0.85);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+    body {
+      background: var(--bg-dark);
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: var(--panel-bg);
+      border-bottom: 2px solid var(--gold);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+    .title-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    h1 {
+      font-size: 1.3rem;
+      color: var(--gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .badge-tag {
+      background: rgba(255, 209, 102, 0.2);
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+    .hud-stats {
+      display: flex;
+      gap: 20px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .stat-box {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 6px 14px;
+      text-align: center;
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      display: block;
+    }
+    .stat-val {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+    #found-val {
+      color: var(--green);
+    }
+    #main-container {
+      flex: 1;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #0a0e1a;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+    }
+    .radar-hint {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.8);
+      border: 1px solid var(--cyan);
+      padding: 10px 24px;
+      border-radius: 24px;
+      font-size: 0.9rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 5;
+      pointer-events: none;
+      box-shadow: 0 0 20px rgba(0,240,255,0.3);
+    }
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ff007b;
+      box-shadow: 0 0 10px #ff007b;
+    }
+    .status-dot.near {
+      background: #ffd166;
+      box-shadow: 0 0 10px #ffd166;
+    }
+    .status-dot.hot {
+      background: #00ff88;
+      box-shadow: 0 0 15px #00ff88;
+    }
+    .overlay-modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(7, 9, 19, 0.88);
+      backdrop-filter: blur(12px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+      transition: opacity 0.3s ease;
+    }
+    .overlay-modal.hidden {
+      opacity: 0;
+      pointer-events: none;
+      display: none !important;
+    }
+    .modal-card {
+      background: linear-gradient(145deg, #111833, #0c1024);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 520px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(255, 209, 102, 0.3);
+    }
+    .modal-card h2 {
+      font-size: 1.8rem;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .modal-card p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #e2e8f0;
+      margin-bottom: 20px;
+    }
+    .btn {
+      background: linear-gradient(135deg, var(--gold), #ff9f1c);
+      color: #070913;
+      border: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      padding: 12px 28px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 15px rgba(255, 209, 102, 0.5);
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255, 209, 102, 0.8);
+    }
+    .btn-cyan {
+      background: linear-gradient(135deg, var(--cyan), #0080ff);
+      color: #000;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title-area">
+      <span style="font-size: 1.8rem;">🔍</span>
+      <div>
+        <h1>AEROSS Scavenger Hunt <span class="badge-tag">ORGANIZER POV</span></h1>
+      </div>
+    </div>
+    <div class="hud-stats">
+      <div class="stat-box">
+        <span class="stat-label">Items Recovered</span>
+        <span class="stat-val" id="found-val">0 / 4</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">Radar Signal</span>
+        <span class="stat-val" id="signal-val">SCANNING...</span>
+      </div>
+    </div>
+  </header>
+
+  <div id="main-container">
+    <canvas id="game-canvas"></canvas>
+    
+    <div class="radar-hint">
+      <div class="status-dot" id="radar-dot"></div>
+      <span id="radar-text">Move cursor across campus map to scan for hidden equipment & missing VIPs!</span>
+    </div>
+
+    <!-- Start Modal -->
+    <div id="modal-start" class="overlay-modal">
+      <div class="modal-card">
+        <h2>🚨 Unexpected Campus Scenario!</h2>
+        <p>Emergency! 4 critical items and key people have gone missing just as CelesteCon events are launching!</p>
+        <p style="color: #ffd166; font-weight: bold;">1. 📡 S-Band Telemetry Transceiver (Lost in OAT Amphitheater)</p>
+        <p style="color: #00f0ff; font-weight: bold;">2. 🎙️ Mr. Sanchit's Megaphone (Behind Auditorium Stage)</p>
+        <p style="color: #ff007b; font-weight: bold;">3. 🏆 AEROSS VIP Keycard (Under Management HQ table)</p>
+        <p style="color: #00ff88; font-weight: bold;">4. 🧑‍🚀 Divyam, UAV Chief Pilot (Wandering near Backstage)</p>
+        <p>Use your Organizer Radar Scanner 🔍. When you get close, the radar turns green! Click to reveal the missing targets!</p>
+        <button class="btn btn-cyan" id="btn-start-game">🔍 Start Emergency Scan</button>
+      </div>
+    </div>
+
+    <!-- Victory Modal -->
+    <div id="modal-victory" class="overlay-modal hidden">
+      <div class="modal-card">
+        <h2>🏆 Crisis Averted! All Targets Recovered!</h2>
+        <p>Brilliant investigative logistics! You found all 4 missing pieces of equipment and safely located Divyam before the competition started!</p>
+        <p>The AEROSS President has officially commended your squad's quick thinking!</p>
+        <button class="btn" id="btn-claim-reward">🎁 Claim Crisis Reward (+250 🪙 Celeste)</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('game-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    let width = window.innerWidth;
+    let height = window.innerHeight - 65;
+    canvas.width = width;
+    canvas.height = height;
+
+    window.addEventListener('resize', () => {
+      width = window.innerWidth;
+      height = window.innerHeight - 65;
+      canvas.width = width;
+      canvas.height = height;
+      initZones();
+    });
+
+    let state = 'INIT';
+    let foundCount = 0;
+    let mouseX = width / 2;
+    let mouseY = height / 2;
+    let particles = [];
+    let zones = [];
+    let items = [];
+
+    function initZones() {
+      // 5 Campus zones
+      zones = [
+        { name: '🏛️ OAT AMPHITHEATER PLAZA', x: width * 0.1, y: height * 0.1, w: width * 0.35, h: height * 0.35, color: '#1a2238', border: '#2b6cb0' },
+        { name: '🎭 AUDITORIUM STAGE', x: width * 0.55, y: height * 0.1, w: width * 0.35, h: height * 0.35, color: '#2a1a38', border: '#805ad5' },
+        { name: '🏢 MANAGEMENT HQ BOARDROOM', x: width * 0.1, y: height * 0.55, w: width * 0.35, h: height * 0.35, color: '#38281a', border: '#dd6b20' },
+        { name: '✈️ VOLATUS UAV ARENA', x: width * 0.55, y: height * 0.55, w: width * 0.35, h: height * 0.35, color: '#1a382e', border: '#319795' },
+        { name: '🛋️ BACKSTAGE LOUNGE', x: width * 0.42, y: height * 0.42, w: width * 0.16, h: height * 0.16, color: '#2d3748', border: '#718096' }
+      ];
+
+      // 4 Missing targets placed in different zones
+      items = [
+        { id: 1, name: '📡 S-Band Telemetry Transceiver', x: width * 0.25, y: height * 0.28, found: false, icon: '📡', zone: 'OAT Amphitheater' },
+        { id: 2, name: "🎙️ Mr. Sanchit's Megaphone", x: width * 0.72, y: height * 0.22, found: false, icon: '🎙️', zone: 'Auditorium Stage' },
+        { id: 3, name: '🏆 AEROSS VIP Keycard', x: width * 0.22, y: height * 0.75, found: false, icon: '🏆', zone: 'Management HQ' },
+        { id: 4, name: '🧑‍🚀 Divyam (UAV Pilot)', x: width * 0.48, y: height * 0.48, found: false, icon: '🧑‍🚀', zone: 'Backstage Lounge' }
+      ];
+    }
+
+    function initGame() {
+      foundCount = 0;
+      particles = [];
+      initZones();
+      updateHUD();
+      state = 'PLAYING';
+      requestAnimationFrame(gameLoop);
+    }
+
+    function updateHUD() {
+      document.getElementById('found-val').textContent = `${foundCount} / 4`;
+    }
+
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+      
+      if (state === 'PLAYING') {
+        checkRadar();
+      }
+    });
+
+    function checkRadar() {
+      let minDist = 999999;
+      for (let item of items) {
+        if (item.found) continue;
+        const d = Math.hypot(mouseX - item.x, mouseY - item.y);
+        if (d < minDist) minDist = d;
+      }
+
+      const dot = document.getElementById('radar-dot');
+      const text = document.getElementById('radar-text');
+      const sig = document.getElementById('signal-val');
+
+      if (minDist < 45) {
+        dot.className = 'status-dot hot';
+        text.textContent = '🔥 HOT SIGNAL! Target is right under your radar scanner! CLICK TO REVEAL!';
+        text.style.color = '#00ff88';
+        sig.textContent = '🔥🔥 HOT!!';
+        sig.style.color = '#00ff88';
+      } else if (minDist < 140) {
+        dot.className = 'status-dot near';
+        text.textContent = '⚠️ WARM SIGNAL! A missing item is nearby in this sector!';
+        text.style.color = '#ffd166';
+        sig.textContent = '⚡ WARM';
+        sig.style.color = '#ffd166';
+      } else {
+        dot.className = 'status-dot';
+        text.textContent = '🔍 SCANNING SECTORS... Move cursor around map to locate anomalies.';
+        text.style.color = '#fff';
+        sig.textContent = '📡 WEAK';
+        sig.style.color = '#ff007b';
+      }
+    }
+
+    canvas.addEventListener('click', () => {
+      if (state !== 'PLAYING') return;
+
+      for (let item of items) {
+        if (item.found) continue;
+        const dist = Math.hypot(mouseX - item.x, mouseY - item.y);
+        if (dist < 50) {
+          item.found = true;
+          foundCount++;
+          updateHUD();
+          createSparks(item.x, item.y, '#ffd166', 40);
+          playSound(587.33, 0.15, 'triangle');
+          setTimeout(() => playSound(880, 0.3, 'sine'), 150);
+
+          if (foundCount >= 4) {
+            state = 'VICTORY';
+            setTimeout(() => {
+              document.getElementById('modal-victory').classList.remove('hidden');
+              playSound(1046.5, 0.5, 'sine');
+            }, 600);
+          }
+          checkRadar();
+          break;
+        }
+      }
+    });
+
+    function createSparks(x, y, color, count = 20) {
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 8,
+          vy: (Math.random() - 0.5) * 8,
+          life: 1.0,
+          color: color
+        });
+      }
+    }
+
+    function gameLoop() {
+      ctx.fillStyle = '#0a0e1a';
+      ctx.fillRect(0, 0, width, height);
+
+      // Draw Zones
+      for (let z of zones) {
+        ctx.fillStyle = z.color;
+        ctx.fillRect(z.x, z.y, z.w, z.h);
+        ctx.strokeStyle = z.border;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(z.x, z.y, z.w, z.h);
+        
+        ctx.fillStyle = 'rgba(255,255,255,0.4)';
+        ctx.font = 'bold 12px JetBrains Mono, monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText(z.name, z.x + 12, z.y + 24);
+      }
+
+      // Draw decorative grid
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.05)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < width; x += 40) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < height; y += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      // Draw Found Items
+      for (let item of items) {
+        if (item.found) {
+          ctx.beginPath();
+          ctx.arc(item.x, item.y, 25, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(0, 255, 136, 0.2)';
+          ctx.fill();
+          ctx.strokeStyle = '#00ff88';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          ctx.font = '24px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(item.icon, item.x, item.y);
+
+          ctx.fillStyle = '#00ff88';
+          ctx.font = 'bold 11px Outfit, sans-serif';
+          ctx.fillText(item.name, item.x, item.y + 32);
+        }
+      }
+
+      // Draw Radar Scanner Circle around Mouse
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(mouseX, mouseY, 45, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.8)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 4]);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(mouseX, mouseY, 15, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255, 209, 102, 0.5)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.restore();
+
+      // Draw Particles
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const pt = particles[i];
+        pt.x += pt.vx;
+        pt.y += pt.vy;
+        pt.life -= 0.025;
+        if (pt.life <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+        ctx.fillStyle = pt.color;
+        ctx.globalAlpha = pt.life;
+        ctx.fillRect(pt.x, pt.y, 6, 6);
+        ctx.globalAlpha = 1.0;
+      }
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    function playSound(freq, duration, type = 'sine') {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch(e) {}
+    }
+
+    document.getElementById('btn-start-game').addEventListener('click', () => {
+      document.getElementById('modal-start').classList.add('hidden');
+      initGame();
+    });
+
+    document.getElementById('btn-claim-reward').addEventListener('click', () => {
+      if (window.parent && typeof window.parent.onMinigameVictory === 'function') {
+        window.parent.onMinigameVictory('scavenger', 250, "Successfully recovered all missing equipment and key personnel!");
+      } else if (window.parent && typeof window.parent.addRepPoints === 'function') {
+        window.parent.addRepPoints(250);
+        if (window.parent.closeMinigame) window.parent.closeMinigame();
+      }
+    });
+  </script>
+</body>
+</html>

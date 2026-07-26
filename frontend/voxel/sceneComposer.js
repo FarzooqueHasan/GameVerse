@@ -5,6 +5,7 @@
 // is a small JSON-like layout reusing voxelKit pieces, not new geometry code.
 
 import * as THREE from '../vendor/three/three.module.js';
+import { GLTFLoader } from '../vendor/three/GLTFLoader.js';
 import { Kit } from './voxelKit.js';
 
 /**
@@ -79,12 +80,43 @@ export function buildScene(container, layout) {
     scene.add(piece);
   });
 
-  // Render loop with optional subtle idle camera drift (gives the fixed
-  // scene a bit of life without turning it into a free-roam space).
+  // Load provided 3D GLB models if specified in the scene layout
+  if (layout.glbModel) {
+    const loader = new GLTFLoader();
+    loader.load(layout.glbModel, (gltf) => {
+      const model = gltf.scene;
+      if (layout.glbScale) model.scale.set(...layout.glbScale);
+      if (layout.glbPosition) model.position.set(...layout.glbPosition);
+      if (layout.glbRotation) model.rotation.set(...layout.glbRotation);
+      model.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+      scene.add(model);
+    }, undefined, (err) => {
+      console.warn("Error loading GLB model:", layout.glbModel, err);
+    });
+  }
+
+  scene.fog = new THREE.FogExp2(scene.background, 0.018);
+
+  // Render loop with dynamic camera tracking (follows player avatar smoothly)
   let frame = 0;
   function animate() {
     frame += 0.005;
-    if (layout.idleDrift) {
+    if (window.GameState && window.GameState.playerGroup) {
+      const px = window.GameState.playerGroup.position.x;
+      const pz = window.GameState.playerGroup.position.z;
+      // Smoothly interpolate camera towards player position
+      const targetCamX = camPos[0] + px * 0.6;
+      const targetCamZ = camPos[2] + (pz - 4) * 0.55;
+      camera.position.x += (targetCamX - camera.position.x) * 0.08;
+      camera.position.z += (targetCamZ - camera.position.z) * 0.08;
+      // Smooth lookAt tracking towards player and center
+      camera.lookAt(px * 0.4, lookAt[1], pz * 0.35);
+    } else if (layout.idleDrift) {
       camera.position.x = camPos[0] + Math.sin(frame) * 0.3;
       camera.lookAt(...lookAt);
     }

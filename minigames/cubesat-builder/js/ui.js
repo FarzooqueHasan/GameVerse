@@ -75,6 +75,10 @@ class UIController {
     onLaunchCelebration(blueprint, points) {
         if (!this.launchModal) return;
 
+        if (window.parent && typeof window.parent.onMinigameVictory === 'function') {
+            window.parent.onMinigameVictory('cubesat', 250, `Successfully assembled and launched ${blueprint.name}!`);
+        }
+
         this.launchRocketName.textContent = `🚀 ISRO LAUNCH VEHICLE: ${blueprint.rocket}`;
         this.launchSatName.textContent = blueprint.name;
         this.launchBadge.textContent = blueprint.badge;
@@ -90,6 +94,11 @@ class UIController {
 
     onGameOver(finalScore, builtCount) {
         if (!this.gameOverModal) return;
+        if (window.parent && typeof window.parent.onMinigameDefeat === 'function' && builtCount === 0) {
+            window.parent.onMinigameDefeat('cubesat', 30, "Cleanroom shift ended without launching a satellite!");
+        } else if (window.parent && typeof window.parent.onMinigameVictory === 'function' && builtCount > 0) {
+            window.parent.onMinigameVictory('cubesat', finalScore || 200, `Completed shift with ${builtCount} satellite(s) launched!`);
+        }
         this.finalScoreEl.textContent = finalScore;
         this.finalBuiltEl.textContent = builtCount;
         this.gameOverModal.classList.remove('hidden');
