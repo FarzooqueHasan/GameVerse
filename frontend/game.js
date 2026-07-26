@@ -27,6 +27,7 @@ const GameState = {
   isDialogueOpen: false,
   isMinigameOpen: false,
 };
+window.GameState = GameState;
 
 // ==================== CHARACTER ARCHETYPES ====================
 const CHARACTERS = {
@@ -656,7 +657,9 @@ function init3DWorld(zoneKey) {
     text: `${GameState.character ? GameState.character.name : 'Player'} (${GameState.role})`,
   });
   GameState.playerPos = { x: 0, z: 4 };
+  GameState.playerRot = Math.PI;
   GameState.playerGroup.position.set(0, 0, 4);
+  GameState.playerGroup.rotation.y = Math.PI;
   scene.add(GameState.playerGroup);
 
   refreshScavengerVisibility();

@@ -9,39 +9,10 @@ export const SCENES = {
     light: { ambient: 0.75, sunColor: '#fdfaf0', sunIntensity: 0.65, sunPosition: [8, 15, 5] },
     idleDrift: false,
     glbModel: './assets/models/oat_dps_rkpuram.glb',
-    glbScale: [1.5, 1.5, 1.5],
-    glbPosition: [0, -1, -6],
-    glbRotation: [0, Math.PI, 0],
+    glbScale: [1.25, 1.25, 1.25],
+    glbPosition: [0, 0, -2],
+    glbRotation: [0, 0, 0],
     objects: [
-      { type: 'patternedFloor', position: [0, 0, 3], params: [32, 30] },
-
-      { type: 'ellipticalStage', position: [0, 0, -9], params: [5.5, 2.6, 0.6, 0xded9c0] },
-      { type: 'stairs', position: [-3.6, 0, -6.6], params: [4, 1.6, 0.18, 0.4, 0xded9c0] },
-      { type: 'stairs', position: [3.6, 0, -6.6], params: [4, 1.6, 0.18, 0.4, 0xded9c0] },
-
-      { type: 'wall', position: [0, 0, -11.5], params: [20, 1.3, 0.3, 0xc0592e] },
-      { type: 'fence', position: [0, 1.3, -11.8], params: [22, 3, 0xe8e8e8] },
-
-      { type: 'tree', position: [-13, 0, -15] },
-      { type: 'tree', position: [-9, 0, -16] },
-      { type: 'tree', position: [-6, 0, -15] },
-      { type: 'tree', position: [-3, 0, -16] },
-      { type: 'tree', position: [3, 0, -16] },
-      { type: 'tree', position: [6, 0, -15] },
-      { type: 'tree', position: [9, 0, -16] },
-      { type: 'tree', position: [13, 0, -15] },
-
-      { type: 'simpleBuilding', position: [12, 0, -10], params: [3.4, 2.6, 2.2, 0xf6f3ec] },
-      { type: 'stripedTower', position: [7.5, 0, -13], params: [4.5, 0.35] },
-
-      { type: 'pillar', position: [-12, 0, -6], params: [2.4, 0.22, 0xedeae0] },
-      { type: 'pillar', position: [-10.6, 0, -6], params: [2.4, 0.22, 0xedeae0] },
-      { type: 'banner', position: [-11.3, 2.5, -6], params: [1.6, 0.3, 0xedeae0] },
-
-      { type: 'wall', position: [13.5, 0, -2], rotation: [0, Math.PI / 2, 0], params: [6, 1, 0.2, 0x2fb8ab] },
-
-      { type: 'plant', position: [-9, 0, -4] },
-      { type: 'plant', position: [9.5, 0, -3] },
 
       // ==================== INTERACTIVE NPCS ====================
       // Teachers
@@ -113,25 +84,9 @@ export const SCENES = {
     idleDrift: false,
     glbModel: './assets/models/school_OAT.glb',
     glbScale: [1.2, 1.2, 1.2],
-    glbPosition: [0, -1, -5],
+    glbPosition: [0, 0, -2],
     glbRotation: [0, 0, 0],
     objects: [
-      { type: 'floor', position: [0, 0, 0], params: [24, 24, 0xc9b79c] },
-      { type: 'wall', position: [0, 0, -10], params: [24, 6, 0.4, 0xe8ddcf] },
-      { type: 'wall', position: [-12, 0, 0], rotation: [0, Math.PI / 2, 0], params: [22, 6, 0.4, 0xe8ddcf] },
-      { type: 'wall', position: [12, 0, 0], rotation: [0, Math.PI / 2, 0], params: [22, 6, 0.4, 0xe8ddcf] },
-      { type: 'stage', position: [0, 0, -7], params: [10, 4, 0.6, 0xb98d5e] },
-      { type: 'pillar', position: [-9, 0, -6], params: [6, 0.5, 0xd9cdb8] },
-      { type: 'pillar', position: [9, 0, -6], params: [6, 0.5, 0xd9cdb8] },
-      { type: 'banner', position: [0, 4.5, -9.7], params: [6, 1.2, 0xf6c667], text: 'CelesteCon' },
-      { type: 'podium', position: [-2, 0.6, -6.5] },
-      
-      { type: 'chair', position: [-4, 0, -1], rotation: [0, Math.PI, 0] },
-      { type: 'chair', position: [-2, 0, -1], rotation: [0, Math.PI, 0] },
-      { type: 'chair', position: [2, 0, -1], rotation: [0, Math.PI, 0] },
-      { type: 'chair', position: [4, 0, -1], rotation: [0, Math.PI, 0] },
-      { type: 'plant', position: [-10, 0, -8] },
-      { type: 'plant', position: [10, 0, -8] },
 
       // Host NPC
       { type: 'person', position: [0, 0.6, -6.5], rotation: [0, 0, 0],

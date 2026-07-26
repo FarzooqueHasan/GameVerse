@@ -197,16 +197,26 @@ export function buildScene(container, layout) {
 
     if (window.GameState && window.GameState.playerGroup) {
       const px = window.GameState.playerGroup.position.x;
+      const py = window.GameState.playerGroup.position.y || 0;
       const pz = window.GameState.playerGroup.position.z;
-      // User/Player POV: Eye-Level Over-the-Shoulder 3rd-Person Tracking Camera
-      const targetCamX = px * 0.95;
-      const targetCamY = 2.1; // True eye-level height just above avatar (no more top-view ceiling angle)
-      const targetCamZ = pz + 3.2; // Sit closely behind player back for immersive exploration
+      const rotY = window.GameState.playerGroup.rotation.y || 0;
+
+      // True Over-the-Shoulder 3rd-Person AAA Camera: positions behind character and looks forward along their sightline
+      const distBehind = 3.6;
+      const heightAbove = 1.85;
+      const targetCamX = px - Math.sin(rotY) * distBehind;
+      const targetCamY = py + heightAbove;
+      const targetCamZ = pz - Math.cos(rotY) * distBehind;
+
       camera.position.x += (targetCamX - camera.position.x) * 0.12;
       camera.position.y += (targetCamY - camera.position.y) * 0.12;
       camera.position.z += (targetCamZ - camera.position.z) * 0.12;
-      // Look horizontally forward along player eye level
-      camera.lookAt(px, 1.6, pz - 8.0);
+
+      // Focus camera 6 meters ahead along player's facing direction at eye height
+      const lookX = px + Math.sin(rotY) * 6.0;
+      const lookY = py + 1.55;
+      const lookZ = pz + Math.cos(rotY) * 6.0;
+      camera.lookAt(lookX, lookY, lookZ);
     } else if (layout.idleDrift) {
       camera.position.x = camPos[0] + Math.sin(frame) * 0.3;
       camera.lookAt(...lookAt);
