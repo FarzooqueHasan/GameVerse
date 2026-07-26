@@ -33,7 +33,7 @@ export function buildScene(container, layout) {
   scene.background = new THREE.Color('#050814');
   scene.fog = new THREE.FogExp2(0x050814, 0.012);
 
-  const camera = new THREE.PerspectiveCamera(layout.camera?.fov || 55, width / height, 0.1, 150);
+  const camera = new THREE.PerspectiveCamera(layout.camera?.fov || 70, width / height, 0.1, 250);
   const camPos = layout.camera?.position || [0, 4, 11];
   camera.position.set(...camPos);
   const lookAt = layout.camera?.lookAt || [0, 1, 0];
@@ -180,12 +180,12 @@ export function buildScene(container, layout) {
     });
   }
 
-  // Fixed-angle follow camera — the angle NEVER changes, camera just slides to stay above player
-  // Offset is fixed in world space (no yaw), like Pokémon / classic isometric RPG
-  const CAM_OFFSET_X = 0;   // directly behind on X (no side drift)
-  const CAM_OFFSET_Y = 9;   // height above player
-  const CAM_OFFSET_Z = 8;   // distance behind player (south of player start)
-  const CAM_LERP = 0.08;    // gentle follow speed — smooth, never snappy
+  // Fixed-angle overhead follow camera — sits high enough to clear ALL GLB geometry
+  // Increasing Y clears tall structures; small Z keeps a slight forward tilt (not flat top-down)
+  const CAM_OFFSET_X = 0;    // centred — no side drift
+  const CAM_OFFSET_Y = 16;   // high enough to clear the tallest canopy/ramp/tree in the GLB models
+  const CAM_OFFSET_Z = 2;    // almost directly above — tiny forward tilt for depth readability
+  const CAM_LERP = 0.08;     // gentle follow speed — smooth, never snappy
 
   let frame = 0;
   let camFollowX = null; // null = uninitialised, snap on first frame
