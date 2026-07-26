@@ -5,7 +5,7 @@ export const SCENES = {
   // OAT Amphitheater & Plaza -- Primary festival hub
   celestecon_amphitheater: {
     background: '#dfe3df',
-    camera: { position: [0, 4.5, 14], lookAt: [0, 1.0, -4], fov: 45 },
+    camera: { position: [0, 4.5, 14], lookAt: [0, 1.0, -4], fov: 60 },
     light: { ambient: 0.75, sunColor: '#fdfaf0', sunIntensity: 0.65, sunPosition: [8, 15, 5] },
     idleDrift: false,
     glbModel: './assets/models/oat_dps_rkpuram.glb',
@@ -108,7 +108,7 @@ export const SCENES = {
   // Main Auditorium -- Indoor Stage Events
   auditorium_demo: {
     background: '#dfe7f5',
-    camera: { position: [0, 4.5, 11], lookAt: [0, 1.2, -4], fov: 45 },
+    camera: { position: [0, 4.5, 11], lookAt: [0, 1.2, -4], fov: 60 },
     light: { ambient: 0.65, sunColor: '#fff2d9', sunIntensity: 0.9, sunPosition: [6, 10, 6] },
     idleDrift: false,
     glbModel: './assets/models/school_OAT.glb',
@@ -161,7 +161,7 @@ export const SCENES = {
   // Management Room -- Exclusive HQ
   management_room_demo: {
     background: '#efe6d8',
-    camera: { position: [0, 4.0, 8], lookAt: [0, 0.8, -2], fov: 48 },
+    camera: { position: [0, 4.0, 8], lookAt: [0, 0.8, -2], fov: 60 },
     light: { ambient: 0.65, sunColor: '#fff6e0', sunIntensity: 0.8, sunPosition: [4, 8, 4] },
     idleDrift: false,
     objects: [

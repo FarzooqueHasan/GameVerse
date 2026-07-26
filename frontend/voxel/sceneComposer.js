@@ -115,15 +115,15 @@ export function buildScene(container, layout) {
     if (window.GameState && window.GameState.playerGroup) {
       const px = window.GameState.playerGroup.position.x;
       const pz = window.GameState.playerGroup.position.z;
-      // Player/User POV: Over-the-shoulder 3rd person tracking camera
+      // User/Player POV: Eye-Level Over-the-Shoulder 3rd-Person Tracking Camera
       const targetCamX = px * 0.95;
-      const targetCamY = Math.max(3.0, camPos[1] - 0.8);
-      const targetCamZ = pz + 5.2;
+      const targetCamY = 2.1; // True eye-level height just above avatar (no more top-view ceiling angle)
+      const targetCamZ = pz + 3.2; // Sit closely behind player back for immersive exploration
       camera.position.x += (targetCamX - camera.position.x) * 0.12;
       camera.position.y += (targetCamY - camera.position.y) * 0.12;
       camera.position.z += (targetCamZ - camera.position.z) * 0.12;
-      // Look directly over player avatar towards forward campus action
-      camera.lookAt(px, lookAt[1], pz - 3.5);
+      // Look horizontally forward along player eye level
+      camera.lookAt(px, 1.6, pz - 8.0);
     } else if (layout.idleDrift) {
       camera.position.x = camPos[0] + Math.sin(frame) * 0.3;
       camera.lookAt(...lookAt);

@@ -627,7 +627,7 @@
           ctx.strokeStyle = "#fff";
           ctx.lineWidth = 2;
           ctx.strokeRect(currentBlock.x, currentBlock.y, currentBlock.w, currentBlock.h);
-          
+
           // Crane cable
           ctx.strokeStyle = "rgba(255, 209, 102, 0.5)";
           ctx.lineWidth = 3;
@@ -635,43 +635,75 @@
           ctx.moveTo(currentBlock.x + currentBlock.w/2, 0);
           ctx.lineTo(currentBlock.x + currentBlock.w/2, currentBlock.y);
           ctx.stroke();
-
-          // Draw Judge Avatar riding/hovering above the cube!
-          ctx.save();
-          const avatarX = currentBlock.x + currentBlock.w / 2;
-          const avatarY = currentBlock.y - 28 + Math.sin(Date.now() / 150) * 4; // Bobbing animation
-          
-          // Glowing holographic disc above cube
-          ctx.beginPath();
-          ctx.ellipse(avatarX, currentBlock.y - 4, 25, 6, 0, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(0, 240, 255, 0.4)";
-          ctx.fill();
-          ctx.strokeStyle = "#00f0ff";
-          ctx.lineWidth = 1;
-          ctx.stroke();
-
-          // Glowing aura behind avatar
-          ctx.beginPath();
-          ctx.arc(avatarX, avatarY - 8, 22, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(255, 209, 102, 0.25)";
-          ctx.fill();
-          ctx.strokeStyle = "#ffd166";
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-
-          // Draw Judge Avatar emoji/icon
-          ctx.font = "26px sans-serif";
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          ctx.fillText("👩‍⚖️", avatarX, avatarY - 8);
-          
-          // Small badge tag above avatar
-          ctx.font = "bold 10px Outfit, sans-serif";
-          ctx.fillStyle = "#00f0ff";
-          ctx.fillText("JUDGE ON CUBE", avatarX, avatarY - 32);
-          ctx.restore();
         }
       }
+
+      // --- 3D JUDGE AVATAR & SUPERVISORY HUD ---
+      ctx.save();
+      const topBlock = stack[stack.length - 1] || { x: width/2 - 60, y: height - 60, w: 120 };
+      const refY = currentBlock ? currentBlock.y : topBlock.y;
+      const avatarX = width / 2 + Math.sin(Date.now() / 400) * 70;
+      const avatarY = refY - 80 + Math.cos(Date.now() / 250) * 8;
+
+      // Antigravity thruster flames
+      ctx.fillStyle = "rgba(0, 240, 255, 0.7)";
+      ctx.beginPath();
+      ctx.moveTo(avatarX - 12, avatarY + 22);
+      ctx.lineTo(avatarX - 18, avatarY + 40 + Math.random() * 10);
+      ctx.lineTo(avatarX - 6, avatarY + 22);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(avatarX + 6, avatarY + 22);
+      ctx.lineTo(avatarX + 18, avatarY + 40 + Math.random() * 10);
+      ctx.lineTo(avatarX + 12, avatarY + 22);
+      ctx.fill();
+
+      // Holographic hover disc
+      ctx.beginPath();
+      ctx.ellipse(avatarX, avatarY + 22, 32, 8, 0, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(0, 240, 255, 0.35)";
+      ctx.fill();
+      ctx.strokeStyle = "#00f0ff";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Glowing judge aura
+      ctx.beginPath();
+      ctx.arc(avatarX, avatarY - 4, 28, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255, 209, 102, 0.25)";
+      ctx.fill();
+      ctx.strokeStyle = "#ffd166";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Judge Avatar Icon & Robes
+      ctx.font = "32px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("👩‍⚖️", avatarX, avatarY - 4);
+
+      // Glassmorphic Supervisory Speech Bubble
+      const speechBg = state === 'GAMEOVER' ? "rgba(255, 0, 85, 0.85)" : "rgba(12, 16, 36, 0.85)";
+      const speechBorder = state === 'GAMEOVER' ? "#ff0055" : "#00f0ff";
+      let speechText = `⚖️ Judge: Verifying Layer ${stack.length} Structural Alignment...`;
+      if (state === 'GAMEOVER') speechText = "🚨 Judge: Critical Structural Fault! Protocol Halted!";
+      if (state === 'DROPPING') speechText = "⚖️ Judge: Calculating impact tolerance & G-loads...";
+      if (stack.length >= 7) speechText = "🏆 Judge: 100% Certified! Cleanroom Tower Verified!";
+
+      ctx.font = "bold 11px Outfit, sans-serif";
+      const textW = ctx.measureText(speechText).width + 24;
+      const speechX = avatarX - textW / 2;
+      const speechY = avatarY - 52;
+
+      ctx.fillStyle = speechBg;
+      ctx.fillRect(speechX, speechY, textW, 26);
+      ctx.strokeStyle = speechBorder;
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(speechX, speechY, textW, 26);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillText(speechText, avatarX, speechY + 13);
+      ctx.restore();
 
       // Draw Particles
       for (let i = particles.length - 1; i >= 0; i--) {

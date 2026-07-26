@@ -1280,39 +1280,101 @@ function closeMinigame() {
 // --- JUDGE & ORGANIZER MODAL SYSTEM ---
 function openJudgeModal(verdictKey) {
   const modal = document.getElementById('judge-modal');
-  const descEl = document.getElementById('judge-verdict-desc');
+  const titleEl = document.getElementById('judge-modal-title');
+  const disputeTitleEl = document.getElementById('judge-dispute-title');
+  const descEl = document.getElementById('judge-dispute-desc');
+  const tagEl = document.getElementById('judge-event-tag');
   const optionsWrap = document.getElementById('judge-verdict-options');
   if (!modal || !optionsWrap) return;
 
   const verdicts = {
+    verdict_quizzitch: {
+      tag: "Event: Quizzitch (Astrophysics Trivia)",
+      title: "🪐 Astrophysics Ambiguity Rule Dispute",
+      desc: "In the sudden-death round, Team Nova defined the event horizon using a rotating Kerr black hole metric, while the judges' answer key assumed a static Schwarzschild metric. Should points be awarded?",
+      options: [
+        { text: "✅ Accept Answer: Advanced Kerr relativity demonstrates superior astrophysical mastery (+150 🪙 Celeste)", rep: 150, toast: "You ruled in favor of advanced theoretical relativity!" },
+        { text: "❌ Enforce Answer Key: Tournament fairness requires strict adherence to standardized solutions (+100 🪙 Celeste)", rep: 100, toast: "You upheld strict answer key standardization!" }
+      ]
+    },
+    verdict_debate: {
+      tag: "Event: In Pursuit of Dispute (Space Policy Debate)",
+      title: "📜 Orbital Debris Treaty Interpretation",
+      desc: "During cross-examination, a speaker cited a real-time classified satellite conjunction alert that is not in the public domain. Is citation of non-public orbital data admissible in competition?",
+      options: [
+        { text: "⚠️ Allow with Warning: Policy realism requires accounting for live space awareness (+150 🪙 Celeste)", rep: 150, toast: "You encouraged real-world space domain awareness!" },
+        { text: "🛑 Strike Testimony: Debates must rely exclusively on peer-reviewed public treaties (+100 🪙 Celeste)", rep: 100, toast: "You enforced evidentiary standards in debate!" }
+      ]
+    },
+    verdict_theatre: {
+      tag: "Event: Tech Theatre & Cultural Arts",
+      title: "🎭 Sci-Fi Pyrotechnics Safety Dispute",
+      desc: "A drama troupe utilized cold-spark nitro pyrotechnics during their stage climax to simulate a rocket booster ignition. The stage manager claims this violates campus fire safety protocols.",
+      options: [
+        { text: "🔥 Approve Effects: Cold-spark tech emits zero thermal heat and is certified safe (+150 🪙 Celeste)", rep: 150, toast: "You approved certified cold-spark tech theatre!" },
+        { text: "🧯 Disallow & Deduct 10 Points: Unapproved stage effects risk sensor alarms (+100 🪙 Celeste)", rep: 100, toast: "You enforced strict campus fire safety protocols!" }
+      ]
+    },
+    verdict_dim3: {
+      tag: "Event: Dimension III (3D CAD Design)",
+      title: "📐 CAD Structural Tolerance Infraction",
+      desc: "Team Centauri submitted a 3D printable bracket with 0.2mm wall thickness. Simulation shows it saves 40% weight but fails under 8G launch vibrations. Should design innovation override safety margins?",
+      options: [
+        { text: "🏆 Award Weight Innovation: Extreme lightweighting is vital for deep space missions (+150 🪙 Celeste)", rep: 150, toast: "You rewarded structural lightweighting innovation!" },
+        { text: "🛡️ Require Reinforcement: Structural integrity under max-Q loads is non-negotiable (+100 🪙 Celeste)", rep: 100, toast: "You prioritized launch load structural safety!" }
+      ]
+    },
+    verdict_settle: {
+      tag: "Event: Settle-Me-This (Martian Colony)",
+      title: "🔴 Martian Micro-Reactor Radiator Dispute",
+      desc: "A Martian habitat blueprint places nuclear heat radiators directly above the hydroponic agricultural domes to save piping mass, risking radiation scatter to crops.",
+      options: [
+        { text: "🌱 Order Blueprint Revision: Agricultural shielding takes priority over mass savings (+150 🪙 Celeste)", rep: 150, toast: "You safeguarded Martian agricultural life support!" },
+        { text: "⚡ Approve Mass Optimization: Calculated shielding dosage is within limits (+100 🪙 Celeste)", rep: 100, toast: "You approved mass-optimized thermal design!" }
+      ]
+    },
+    verdict_pitch: {
+      tag: "Event: Power Pitch (Aerospace Startup)",
+      title: "💼 Venture ROI vs. Tech Feasibility",
+      desc: "An asteroid mining startup claims $50 billion projected revenue by 2030 but lacks an orbital propulsion demonstration prototype. How should judges weigh financial projections against TRL?",
+      options: [
+        { text: "🚀 Prioritize TRL Score: Hardware prototypes trump theoretical spreadsheet valuation (+150 🪙 Celeste)", rep: 150, toast: "You emphasized physical engineering hardware validation!" },
+        { text: "📈 Reward Vision & Market Size: Early-stage venture capital rewards bold market disruption (+100 🪙 Celeste)", rep: 100, toast: "You rewarded bold commercial aerospace vision!" }
+      ]
+    },
     verdict_cubesat: {
+      tag: "Event: CubeSat Builder",
       title: "🛰️ CubeSat Hardware Legality Dispute",
       desc: "Team Divyam used an unverified high-gain S-band transceiver from a commercial off-the-shelf drone. Is this allowable under CelesteCon Division rules?",
       options: [
-        { text: "✅ Rule Allowable: COTS components encourage rapid prototyping (+50 Rep)", rep: 50, toast: "You ruled in favor of open hardware innovation!" },
-        { text: "❌ Rule Violation: All RF modules must undergo pre-event chamber certification (+50 Rep)", rep: 50, toast: "You upheld strict aerospace RF safety compliance!" }
+        { text: "✅ Rule Allowable: COTS components encourage rapid prototyping (+150 🪙 Celeste)", rep: 150, toast: "You ruled in favor of open hardware innovation!" },
+        { text: "❌ Rule Violation: All RF modules must undergo pre-event chamber certification (+100 🪙 Celeste)", rep: 100, toast: "You upheld strict aerospace RF safety compliance!" }
       ]
     },
     verdict_volatus: {
+      tag: "Event: Volatus UAV Arena",
       title: "✈️ Volatus Drone Flight Envelope Dispute",
       desc: "A quadrotor team performed a high-G split-S maneuver 2 meters above the spectator net. Does this exceed campus indoor flight safety envelopes?",
       options: [
-        { text: "⚠️ Issue Yellow Card: Maneuver was thrilling but violated safety altitude buffers (+50 Rep)", rep: 50, toast: "You maintained strict drone safety discipline!" },
-        { text: "🏆 Award Bonus Tech Points: Telemetry confirms autopilot maintained 3x safety margins (+60 Rep)", rep: 60, toast: "You rewarded advanced autonomous flight control!" }
+        { text: "🏆 Award Bonus Tech Points: Telemetry confirms autopilot maintained 3x safety margins (+150 🪙 Celeste)", rep: 150, toast: "You rewarded advanced autonomous flight control!" },
+        { text: "⚠️ Issue Yellow Card: Maneuver was thrilling but violated safety altitude buffers (+100 🪙 Celeste)", rep: 100, toast: "You maintained strict drone safety discipline!" }
       ]
     },
     verdict_general: {
+      tag: "Event: CelesteCon General Competition",
       title: "⚖️ CelesteCon General Competition Dispute",
-      desc: "An aerospace team exceeded their 7-minute pitch presentation by 45 seconds, claiming technical audiovisual difficulties.",
+      desc: "An aerospace team exceeded their 7-minute pitch presentation by 45 seconds, claiming technical audiovisual difficulties with the auditorium projector.",
       options: [
-        { text: "⏳ Deduct 5 Points: Strict adherence to mission timelines is essential (+50 Rep)", rep: 50, toast: "You enforced professional timeline rigor!" },
-        { text: "🤝 Waive Penalty: Technical AV delays were outside student control (+50 Rep)", rep: 50, toast: "You demonstrated gracious sporting equity!" }
+        { text: "🤝 Waive Penalty: Technical AV delays were outside student control (+150 🪙 Celeste)", rep: 150, toast: "You demonstrated gracious sporting equity!" },
+        { text: "⏳ Deduct 5 Points: Strict adherence to mission timelines is essential (+100 🪙 Celeste)", rep: 100, toast: "You enforced professional timeline rigor!" }
       ]
     }
   };
 
   const v = verdicts[verdictKey] || verdicts.verdict_general;
-  if (descEl) descEl.textContent = v.desc;
+  if (tagEl) tagEl.textContent = v.tag || "Event: CelesteCon Competition";
+  if (disputeTitleEl) disputeTitleEl.textContent = v.title || "Official Dispute Ruling";
+  if (descEl) descEl.textContent = v.desc || "Review the case parameters below and issue your binding ruling.";
   optionsWrap.innerHTML = '';
 
   v.options.forEach(opt => {
@@ -1322,9 +1384,9 @@ function openJudgeModal(verdictKey) {
     btn.style.width = '100%';
     btn.textContent = opt.text;
     btn.addEventListener('click', () => {
-      addRepPoints(opt.rep || 50);
       modal.classList.add('hidden');
-      showToast(opt.toast || "Verdict recorded officially in the tournament ledger!", "success");
+      const sysType = (verdictKey || 'general').replace('verdict_', '');
+      certifySystem(sysType, opt.rep || 150, opt.toast || "Verdict recorded officially in the tournament ledger!");
     });
     optionsWrap.appendChild(btn);
   });
@@ -1348,29 +1410,109 @@ function openJudgeModal(verdictKey) {
 
 function openOrganizerModal(crisisKey) {
   const modal = document.getElementById('organizer-modal');
+  const tagEl = document.getElementById('organizer-crisis-tag');
+  const titleEl = document.getElementById('organizer-crisis-title');
   const descEl = document.getElementById('organizer-crisis-desc');
   const optionsWrap = document.getElementById('organizer-crisis-options');
   if (!modal || !optionsWrap) return;
 
   const crises = {
+    crisis_quizzitch: {
+      tag: "Severity: HIGH EMERGENCY (Table 4)",
+      title: "⚡ Astrophysics Buzzer Circuit Short",
+      desc: "The electronic buzzer system on Table 4 short-circuited during the astrophysics tie-breaker round! Contestants cannot buzz in!",
+      options: [
+        { text: "🔌 Deploy Wireless Reserve Buzzers & Reset Timer (+150 🪙 Celeste)", rep: 150, toast: "Wireless reserve buzzers online! Match resumed!" },
+        { text: "📢 Switch to Manual Hand-Raise & Audio Officiating (+100 🪙 Celeste)", rep: 100, toast: "Manual officiating engaged! Tournament saved!" }
+      ]
+    },
+    crisis_volatus: {
+      tag: "Severity: CRITICAL FLIGHT HAZARD",
+      title: "🚁 Spectator Netting Anchor Detachment",
+      desc: "Spectator drone net in Sector B detached from ceiling anchor during high-speed FPV trials! Spectators are exposed to flying UAVs!",
+      options: [
+        { text: "🚨 Halt Flights & Deploy Emergency Winch Crew (+150 🪙 Celeste)", rep: 150, toast: "Winch crew secured safety nets in 60 seconds!" },
+        { text: "🛡️ Reroute Flight Path Away From Sector B (+100 🪙 Celeste)", rep: 100, toast: "Flight envelope rerouted away from spectators!" }
+      ]
+    },
+    crisis_cubesat: {
+      tag: "Severity: CLEANROOM CONTAMINATION",
+      title: "🧪 Laminar Flow Hood Filter Failure",
+      desc: "Cleanroom laminar flow hood filter failed, blowing particulate dust over unsealed satellite optical sensors during integration!",
+      options: [
+        { text: "🧪 Deploy Portable HEPA Vacuum & Clean Tents (+150 🪙 Celeste)", rep: 150, toast: "HEPA purge cleaned optical sensors to ISO 5 standards!" },
+        { text: "⏳ Pause Assembly for 15-Minute Atmospheric Purge (+100 🪙 Celeste)", rep: 100, toast: "Atmospheric purge cleared cleanroom particulates!" }
+      ]
+    },
+    crisis_sound: {
+      tag: "Severity: AUDIOVISUAL BLACKOUT",
+      title: "📢 Main Stage Acoustic Feedback Loop",
+      desc: "Main stage PA system audio feedback is drowning out the keynote ISRO speaker! 500 audience members cannot hear the presentation!",
+      options: [
+        { text: "🎛️ Switch to Digital Anti-Feedback EQ & Wireless Mics (+150 🪙 Celeste)", rep: 150, toast: "Digital EQ eliminated feedback instantly!" },
+        { text: "📢 Deploy Auxiliary Side-Fill Speakers (+100 🪙 Celeste)", rep: 100, toast: "Side-fill speakers restored stage acoustics!" }
+      ]
+    },
+    crisis_debate: {
+      tag: "Severity: LOGISTICAL BOTTLENECK",
+      title: "🚧 Debate Hall Aisle Overcapacity",
+      desc: "Overcapacity crowd trying to enter the Debate booth is blocking the main aisle, violating campus fire marshal egress rules!",
+      options: [
+        { text: "🚧 Launch Crowd Control Barricades & Stanchions (+150 🪙 Celeste)", rep: 150, toast: "Stanchions redirected crowd flow smoothly!" },
+        { text: "📺 Open Overflow Stream in Auditorium (+100 🪙 Celeste)", rep: 100, toast: "Auditorium overflow stream relieved crowd pressure!" }
+      ]
+    },
+    crisis_theatre: {
+      tag: "Severity: TECHNICAL THEATRE FAULT",
+      title: "💡 Stage DMX Lighting Controller Crash",
+      desc: "Stage lighting console lost DMX signal 5 minutes before curtain rise for the cultural sci-fi performance!",
+      options: [
+        { text: "💡 Engage Manual Spotlights & Override Controller (+150 🪙 Celeste)", rep: 150, toast: "Manual spotlights saved the cultural performance!" },
+        { text: "🌟 Switch to Acoustic Unplugged Lighting Mode (+100 🪙 Celeste)", rep: 100, toast: "Acoustic ambient lighting created intimate stage mood!" }
+      ]
+    },
+    crisis_dim3: {
+      tag: "Severity: CAD HARDWARE TRIP",
+      title: "⚡ 3D Printer Farm Power Surge",
+      desc: "3D Printer farm tripped breaker during a 12-hour continuous endurance print for the aerospace CAD division!",
+      options: [
+        { text: "⚡ Engage UPS Battery Backup & Reroute Power Feed (+150 🪙 Celeste)", rep: 150, toast: "UPS power restored printing without layer shift!" },
+        { text: "🔧 Resume Prints from Saved G-Code Layer (+100 🪙 Celeste)", rep: 100, toast: "G-Code recovery resumed print at exact layer!" }
+      ]
+    },
+    crisis_settle: {
+      tag: "Severity: VR SIMULATION ERROR",
+      title: "🔴 Martian VR Tracking Loss",
+      desc: "VR headsets at Martian Colony booth lost optical tracking calibration just as VIP judges arrived for habitat walkthrough!",
+      options: [
+        { text: "🥽 Re-center Optical Trackers & Reboot Hub (+150 🪙 Celeste)", rep: 150, toast: "VR calibration restored 6DoF tracking!" },
+        { text: "🖥️ Switch to 4K Monitor Flythrough Mode (+100 🪙 Celeste)", rep: 100, toast: "4K flythrough showcased Martian colony flawlessly!" }
+      ]
+    },
     crisis_pitch: {
+      tag: "Severity: VIP PROTOCOL DELAY",
+      title: "🚨 VIP Judge Security Bottleneck",
       desc: "VIP Guest Judges are stuck at campus security due to unprinted QR badges while the startup founders are waiting on stage!",
       options: [
-        { text: "🚨 Dispatch Volunteer Golf Cart & Issue Digital By-pass (+75 Rep)", rep: 75, toast: "VIPs escorted successfully to the boardroom!" },
-        { text: "🎤 Delay Stage Pitch by 10 Mins & Play ISRO Launch Reel (+50 Rep)", rep: 50, toast: "Audience entertained while VIPs arrive!" }
+        { text: "🚨 Dispatch Volunteer Golf Cart & Issue Digital By-pass (+150 🪙 Celeste)", rep: 150, toast: "VIPs escorted successfully to the boardroom!" },
+        { text: "🎤 Delay Stage Pitch by 10 Mins & Play ISRO Launch Reel (+100 🪙 Celeste)", rep: 100, toast: "Audience entertained while VIPs arrive!" }
       ]
     },
     crisis_general: {
-      desc: "High-voltage power surge tripped the circuit breaker in the Main Aerospace Exhibition Hall!",
+      tag: "Severity: CAMPUS ELECTRICAL FAULT",
+      title: "⚡ Exhibition Hall Circuit Trip",
+      desc: "High-voltage power surge tripped the main circuit breaker in the Aerospace Exhibition Hall!",
       options: [
-        { text: "⚡ Switch to Auxiliary Generator & Reroute Feeders (+75 Rep)", rep: 75, toast: "Power restored in 45 seconds flat!" },
-        { text: "📢 Announce Emergency Acoustic Tech Discussion (+50 Rep)", rep: 50, toast: "Crowd stays calm and engaged during reset!" }
+        { text: "⚡ Switch to Auxiliary Generator & Reroute Feeders (+150 🪙 Celeste)", rep: 150, toast: "Power restored in 45 seconds flat!" },
+        { text: "📢 Announce Emergency Acoustic Tech Discussion (+100 🪙 Celeste)", rep: 100, toast: "Crowd stays calm and engaged during reset!" }
       ]
     }
   };
 
   const c = crises[crisisKey] || crises.crisis_general;
-  if (descEl) descEl.textContent = c.desc;
+  if (tagEl) tagEl.textContent = c.tag || "Severity: CAMPUS EMERGENCY";
+  if (titleEl) titleEl.textContent = c.title || "Logistical Crisis Alert";
+  if (descEl) descEl.textContent = c.desc || "Immediate organizer intervention required on campus!";
   optionsWrap.innerHTML = '';
 
   c.options.forEach(opt => {
@@ -1380,9 +1522,9 @@ function openOrganizerModal(crisisKey) {
     btn.style.width = '100%';
     btn.textContent = opt.text;
     btn.addEventListener('click', () => {
-      addRepPoints(opt.rep || 50);
       modal.classList.add('hidden');
-      showToast(opt.toast || "Crisis averted smoothly! Great event management!", "success");
+      const sysType = (crisisKey || 'general').replace('crisis_', '');
+      certifySystem(sysType, opt.rep || 150, opt.toast || "Logistical crisis averted smoothly! Great event management!");
     });
     optionsWrap.appendChild(btn);
   });
