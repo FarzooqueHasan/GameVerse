@@ -806,11 +806,9 @@ function gameLoop() {
           // Pass through collectibles and portals so player can step onto them
           if (child.userData.isEasterEgg || child.userData.isScavengerTarget || child.userData.targetZone) continue;
 
-          if (child.userData.id || child.userData.interactName) {
-            let colRadius = 0.75; // Default NPC cylinder radius
-            if (child.userData.id && child.userData.id.startsWith('booth')) colRadius = 1.7; // Booth counter radius
-            if (child.userData.id && child.userData.id.startsWith('npc')) colRadius = 0.75; // Character radius
-
+          // Only block against booths — NPCs should be walkable-through so player never gets stuck
+          if (child.userData.id && child.userData.id.startsWith('booth')) {
+            const colRadius = 1.4; // Booth counter footprint
             if (Math.hypot(child.position.x - nx, child.position.z - nz) < colRadius) return true;
           }
         }
@@ -1666,20 +1664,44 @@ function initJudgeAndOrganizerModals() {
 }
 
 function initNarratorWidget() {
-  const box = document.getElementById('narrator-box');
-  const textEl = document.getElementById('narrator-text');
-  const closeBtn = document.getElementById('narrator-close-btn');
+  // Correct IDs matching index.html narrator widget
+  const bubble = document.getElementById('narrator-bubble');
+  const textEl  = document.getElementById('narrator-text');
+  const toggle  = document.getElementById('narrator-toggle');
+  const minBtn  = document.getElementById('narrator-min-btn');
 
-  if (closeBtn && box) {
-    closeBtn.addEventListener('click', () => {
-      box.classList.add('hidden');
-    });
+  // Toggle open/close by clicking the avatar
+  if (toggle && bubble) {
+    toggle.style.cursor = 'pointer';
+    toggle.addEventListener('click', () => bubble.classList.toggle('hidden'));
+  }
+  // Minimise (✕) button closes bubble
+  if (minBtn && bubble) {
+    minBtn.addEventListener('click', (e) => { e.stopPropagation(); bubble.classList.add('hidden'); });
   }
 
+  // Topic buttons
+  const TOPICS = {
+    about:  '🌟 CelesteCon is the annual aerospace festival by the AEROSS Club of DPS RK Puram! Explore 7 events: Debate, Quiz, Flight Sim, CubeSat Design, UAV, Theatre & 3D Design!',
+    events: '🚀 7 Events: Quizzitch (Quiz) • In Pursuit of Dispute (Debate) • Volatus (UAV) • Dimension III (3D Design) • AEROSS Theatre • CubeSat Challenge • Flight Sim!',
+    role:   '💡 Organizer: manage crowd & logistics | Participant: compete in events & win Celeste | Judge: audit participants & CubeStack challenges!',
+    eggs:   '✨ There are 5 secret Easter Egg Relics hidden across all 3 campus zones! Collect them to unlock power-ups and bonus Celeste currency!'
+  };
+  document.querySelectorAll('.n-topic-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const topic = btn.getAttribute('data-topic');
+      if (textEl && TOPICS[topic]) {
+        textEl.textContent = TOPICS[topic];
+        if (bubble) bubble.classList.remove('hidden');
+      }
+    });
+  });
+
+  // Allow other parts of the code to trigger narrator messages
   window.triggerNarratorComment = function(msg) {
-    if (!box || !textEl) return;
+    if (!textEl) return;
     textEl.textContent = msg;
-    box.classList.remove('hidden');
+    if (bubble) bubble.classList.remove('hidden');
   };
 }
 

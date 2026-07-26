@@ -180,16 +180,16 @@ export function buildScene(container, layout) {
     });
   }
 
-  // Render loop with dynamic camera tracking (follows player avatar smoothly)
+  // Fixed-angle follow camera — the angle NEVER changes, camera just slides to stay above player
+  // Offset is fixed in world space (no yaw), like Pokémon / classic isometric RPG
+  const CAM_OFFSET_X = 0;   // directly behind on X (no side drift)
+  const CAM_OFFSET_Y = 9;   // height above player
+  const CAM_OFFSET_Z = 8;   // distance behind player (south of player start)
+  const CAM_LERP = 0.08;    // gentle follow speed — smooth, never snappy
+
   let frame = 0;
-  // Cinematic Hollywood Steady-Cam state (prevents violent camera snapping and whipping on turns)
-  let smoothCamX = null;
-  let smoothCamY = null;
-  let smoothCamZ = null;
-  let smoothLookX = null;
-  let smoothLookY = null;
-  let smoothLookZ = null;
-  let currentCamYaw = Math.PI;
+  let camFollowX = null; // null = uninitialised, snap on first frame
+  let camFollowZ = null;
 
   function animate() {
     frame += 0.005;
@@ -208,40 +208,22 @@ export function buildScene(container, layout) {
       const px = window.GameState.playerGroup.position.x;
       const py = window.GameState.playerGroup.position.y || 0;
       const pz = window.GameState.playerGroup.position.z;
-      const targetRotY = window.GameState.playerGroup.rotation.y || 0;
 
-      // Smooth shortest-path angle damping for cinematic Hollywood steady-cam (prevents violent whipping on turns!)
-      let diff = (targetRotY - currentCamYaw + Math.PI * 3) % (Math.PI * 2) - Math.PI;
-      currentCamYaw += diff * 0.045; // Gentle 4.5% lerp per frame keeps camera rock-steady and smooth
+      // Snap to player on first frame so camera doesn't fly in from across the map
+      if (camFollowX === null) { camFollowX = px; camFollowZ = pz; }
 
-      const distBehind = 3.6;
-      const heightAbove = 2.0;
-      const targetCamX = px - Math.sin(currentCamYaw) * distBehind;
-      const targetCamY = py + heightAbove;
-      const targetCamZ = pz - Math.cos(currentCamYaw) * distBehind;
+      // Smoothly chase the player (XZ only — height is fixed offset, no wobble)
+      camFollowX += (px - camFollowX) * CAM_LERP;
+      camFollowZ += (pz - camFollowZ) * CAM_LERP;
 
-      // Look slightly ahead of character upper chest/head (keeps avatar beautifully framed without dizzying swings)
-      const targetLookX = px + Math.sin(currentCamYaw) * 1.5;
-      const targetLookY = py + 1.45;
-      const targetLookZ = pz + Math.cos(currentCamYaw) * 1.5;
-
-      // Initialize instantly on first frame so there is no universe-wide lerp across scenes
-      if (smoothCamX === null) {
-        smoothCamX = targetCamX; smoothCamY = targetCamY; smoothCamZ = targetCamZ;
-        smoothLookX = targetLookX; smoothLookY = targetLookY; smoothLookZ = targetLookZ;
-        currentCamYaw = targetRotY;
-      }
-
-      smoothCamX += (targetCamX - smoothCamX) * 0.1;
-      smoothCamY += (targetCamY - smoothCamY) * 0.1;
-      smoothCamZ += (targetCamZ - smoothCamZ) * 0.1;
-
-      smoothLookX += (targetLookX - smoothLookX) * 0.12;
-      smoothLookY += (targetLookY - smoothLookY) * 0.12;
-      smoothLookZ += (targetLookZ - smoothLookZ) * 0.12;
-
-      camera.position.set(smoothCamX, smoothCamY, smoothCamZ);
-      camera.lookAt(smoothLookX, smoothLookY, smoothLookZ);
+      // Apply the constant world-space offset — angle is always the same
+      camera.position.set(
+        camFollowX + CAM_OFFSET_X,
+        py + CAM_OFFSET_Y,
+        camFollowZ + CAM_OFFSET_Z
+      );
+      // Always look at player's feet/body centre — fixes the angle permanently
+      camera.lookAt(camFollowX, py + 0.9, camFollowZ);
     } else if (layout.idleDrift) {
       camera.position.x = camPos[0] + Math.sin(frame) * 0.3;
       camera.lookAt(...lookAt);
