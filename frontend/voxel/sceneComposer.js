@@ -180,16 +180,40 @@ export function buildScene(container, layout) {
     });
   }
 
-  // Fixed-angle overhead follow camera — sits high enough to clear ALL GLB geometry
-  // Increasing Y clears tall structures; small Z keeps a slight forward tilt (not flat top-down)
-  const CAM_OFFSET_X = 0;    // centred — no side drift
-  const CAM_OFFSET_Y = 16;   // high enough to clear the tallest canopy/ramp/tree in the GLB models
-  const CAM_OFFSET_Z = 2;    // almost directly above — tiny forward tilt for depth readability
-  const CAM_LERP = 0.08;     // gentle follow speed — smooth, never snappy
+  // Follow camera — preferred angle is Y=9, Z=8 (angled view the user liked)
+  // Smart occlusion avoidance: if geometry sits between camera and player, dynamically
+  // raise camera until line-of-sight is clear, then ease back to preferred angle.
+  const PREF_Y = 9;    // preferred height above player
+  const PREF_Z = 8;    // preferred distance behind player
+  const MAX_Y  = 18;   // max raise to clear geometry (never higher)
+  const MIN_Z  = 1;    // min Z when at max height (nearly overhead)
+  const CAM_LERP = 0.08;
 
   let frame = 0;
-  let camFollowX = null; // null = uninitialised, snap on first frame
+  let camFollowX = null;
   let camFollowZ = null;
+  let dynamicY = PREF_Y;   // actual Y used this frame — lerps between PREF_Y and MAX_Y
+  let dynamicZ = PREF_Z;   // actual Z used this frame
+
+  // Raycaster for occlusion detection — reused each frame (zero garbage)
+  const occRay = new THREE.Raycaster();
+  const occDir = new THREE.Vector3();
+  const playerVec = new THREE.Vector3();
+
+  // Build a flat list of blocking meshes — GLB model children (not the playerGroup)
+  // We collect them lazily on first use so the GLB loader has time to finish.
+  let blockMeshes = null;
+  function getBlockMeshes() {
+    if (blockMeshes) return blockMeshes;
+    blockMeshes = [];
+    scene.traverse(child => {
+      if (child.isMesh && child !== window.GameState?.playerGroup &&
+          !child.userData?.isEasterEgg && !child.userData?.isScavengerTarget) {
+        blockMeshes.push(child);
+      }
+    });
+    return blockMeshes;
+  }
 
   function animate() {
     frame += 0.005;
@@ -209,20 +233,37 @@ export function buildScene(container, layout) {
       const py = window.GameState.playerGroup.position.y || 0;
       const pz = window.GameState.playerGroup.position.z;
 
-      // Snap to player on first frame so camera doesn't fly in from across the map
       if (camFollowX === null) { camFollowX = px; camFollowZ = pz; }
-
-      // Smoothly chase the player (XZ only — height is fixed offset, no wobble)
       camFollowX += (px - camFollowX) * CAM_LERP;
       camFollowZ += (pz - camFollowZ) * CAM_LERP;
 
-      // Apply the constant world-space offset — angle is always the same
-      camera.position.set(
-        camFollowX + CAM_OFFSET_X,
-        py + CAM_OFFSET_Y,
-        camFollowZ + CAM_OFFSET_Z
+      // -- Occlusion avoidance --
+      // Test ray from desired camera position toward the player. If anything is
+      // in the way, push dynamicY up (and dynamicZ down) until clear.
+      const testCamX = camFollowX;
+      const testCamY = py + dynamicY;
+      const testCamZ = camFollowZ + dynamicZ;
+      playerVec.set(px, py + 1.0, pz);
+      occDir.set(px - testCamX, (py + 1.0) - testCamY, pz - testCamZ).normalize();
+      occRay.set(new THREE.Vector3(testCamX, testCamY, testCamZ), occDir);
+
+      const dist = Math.sqrt(
+        (px - testCamX) ** 2 + ((py + 1.0) - testCamY) ** 2 + (pz - testCamZ) ** 2
       );
-      // Always look at player's feet/body centre — fixes the angle permanently
+      const hits = occRay.intersectObjects(getBlockMeshes(), false);
+      const blocked = hits.length > 0 && hits[0].distance < dist - 0.5;
+
+      if (blocked) {
+        // Raise camera toward overhead — smooth, one step per frame
+        dynamicY += (MAX_Y - dynamicY) * 0.15;
+        dynamicZ += (MIN_Z - dynamicZ) * 0.15;
+      } else {
+        // Ease back to the preferred angle when view is clear
+        dynamicY += (PREF_Y - dynamicY) * 0.05;
+        dynamicZ += (PREF_Z - dynamicZ) * 0.05;
+      }
+
+      camera.position.set(camFollowX, py + dynamicY, camFollowZ + dynamicZ);
       camera.lookAt(camFollowX, py + 0.9, camFollowZ);
     } else if (layout.idleDrift) {
       camera.position.x = camPos[0] + Math.sin(frame) * 0.3;
