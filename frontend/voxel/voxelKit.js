@@ -22,14 +22,16 @@ export const PALETTE = {
   accentRed: 0xd9776a,
   stone: 0xd9cdb8,
   leaf: 0x8fb996,
+  brick: 0xcc8d76,
+  concrete: 0xa8a8a8
 };
 
 function baseMaterial(color) {
   return new THREE.MeshStandardMaterial({
     color,
     flatShading: true,
-    roughness: 0.85,
-    metalness: 0.05,
+    roughness: 0.42,
+    metalness: 0.28,
   });
 }
 
@@ -53,13 +55,14 @@ function createPaverTexture(repeat = 6, tileColor = '#d9c9a3', borderColor = '#a
   const corners = [
     { x: 0, y: 0, start: 0, end: Math.PI / 2 },
     { x: size, y: 0, start: Math.PI / 2, end: Math.PI },
-    { x: size, y: size, start: Math.PI, end: 1.5 * Math.PI },
-    { x: 0, y: size, start: 1.5 * Math.PI, end: 2 * Math.PI },
+    { x: size, y: size, start: Math.PI, end: Math.PI * 1.5 },
+    { x: 0, y: size, start: Math.PI * 1.5, end: Math.PI * 2 },
   ];
-  corners.forEach(({ x, y, start, end }) => {
-    for (let r = size * 0.08; r < size * 0.55; r += size * 0.07) {
+
+  corners.forEach(c => {
+    for (let r = size * 0.15; r <= size * 0.9; r += size * 0.15) {
       ctx.beginPath();
-      ctx.arc(x, y, r, start, end);
+      ctx.arc(c.x, c.y, r, c.start, c.end);
       ctx.stroke();
     }
   });
@@ -71,87 +74,83 @@ function createPaverTexture(repeat = 6, tileColor = '#d9c9a3', borderColor = '#a
   return texture;
 }
 
-function group(mesh, opts = {}) {
+function group(...children) {
   const g = new THREE.Group();
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  g.add(mesh);
-  if (opts.position) g.position.set(...opts.position);
-  if (opts.rotation) g.rotation.set(...opts.rotation);
-  if (opts.scale) g.scale.set(...opts.scale);
+  children.forEach(c => {
+    if (c) {
+      if (c.isMesh) {
+        c.castShadow = true;
+        c.receiveShadow = true;
+      }
+      g.add(c);
+    }
+  });
   return g;
 }
 
 export const Kit = {
-  floor(width = 10, depth = 10, color = PALETTE.floorWarm, opts = {}) {
-    const geo = new THREE.BoxGeometry(width, 0.4, depth);
+  // Ground surfaces.
+  floor(width = 10, depth = 10, color = PALETTE.stone, opts = {}) {
+    const geo = new THREE.BoxGeometry(width, 0.2, depth);
     const mesh = new THREE.Mesh(geo, baseMaterial(color));
-    mesh.position.y = -0.2;
+    mesh.position.y = -0.1;
     return group(mesh, opts);
   },
 
-  wall(width = 10, height = 5, thickness = 0.4, color = PALETTE.wallLight, opts = {}) {
+  patternedFloor(width = 20, depth = 20, repeat = 8, tileColor = '#d9c9a3', borderColor = '#a85c42', opts = {}) {
+    const geo = new THREE.BoxGeometry(width, 0.2, depth);
+    const texture = createPaverTexture(repeat, tileColor, borderColor);
+    const material = new THREE.MeshStandardMaterial({ map: texture, flatShading: true, roughness: 0.5, metalness: 0.1 });
+    const mesh = new THREE.Mesh(geo, material);
+    mesh.position.y = -0.1;
+    return group(mesh, opts);
+  },
+
+  wall(width = 10, height = 4, thickness = 0.4, color = PALETTE.brick, opts = {}) {
     const geo = new THREE.BoxGeometry(width, height, thickness);
     const mesh = new THREE.Mesh(geo, baseMaterial(color));
     mesh.position.y = height / 2;
     return group(mesh, opts);
   },
 
-  pillar(height = 5, radius = 0.4, color = PALETTE.stone, opts = {}) {
-    const geo = new THREE.CylinderGeometry(radius, radius * 1.1, height, 8);
+  pillar(height = 4, radius = 0.4, color = PALETTE.concrete, opts = {}) {
+    const geo = new THREE.CylinderGeometry(radius, radius, height, 8);
     const mesh = new THREE.Mesh(geo, baseMaterial(color));
     mesh.position.y = height / 2;
     return group(mesh, opts);
   },
 
-  stage(width = 6, depth = 4, height = 0.6, color = PALETTE.wood, opts = {}) {
-    const geo = new THREE.BoxGeometry(width, height, depth);
-    const mesh = new THREE.Mesh(geo, baseMaterial(color));
-    mesh.position.y = height / 2;
-    return group(mesh, opts);
-  },
-
-  table(width = 1.6, depth = 0.8, height = 0.75, color = PALETTE.wood, opts = {}) {
+  table(width = 2, depth = 1, height = 0.8, color = PALETTE.wood, opts = {}) {
     const g = new THREE.Group();
     const top = new THREE.Mesh(new THREE.BoxGeometry(width, 0.1, depth), baseMaterial(color));
     top.position.y = height;
-    const legGeo = new THREE.BoxGeometry(0.08, height, 0.08);
+    g.add(top);
     const legMat = baseMaterial(color);
-    const offsets = [
-      [width / 2 - 0.1, depth / 2 - 0.1],
-      [-width / 2 + 0.1, depth / 2 - 0.1],
-      [width / 2 - 0.1, -depth / 2 + 0.1],
-      [-width / 2 + 0.1, -depth / 2 + 0.1],
-    ];
-    offsets.forEach(([x, z]) => {
+    const legGeo = new THREE.BoxGeometry(0.1, height, 0.1);
+    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([dx, dz]) => {
       const leg = new THREE.Mesh(legGeo, legMat);
-      leg.position.set(x, height / 2, z);
-      leg.castShadow = true;
+      leg.position.set((width / 2 - 0.1) * dx, height / 2, (depth / 2 - 0.1) * dz);
       g.add(leg);
     });
-    top.castShadow = true;
-    top.receiveShadow = true;
-    g.add(top);
-    if (opts.position) g.position.set(...opts.position);
-    if (opts.rotation) g.rotation.set(...opts.rotation);
-    if (opts.scale) g.scale.set(...opts.scale);
-    return g;
+    return group(g, opts);
   },
 
-  chair(color = PALETTE.accentRed, opts = {}) {
+  chair(color = PALETTE.wood, opts = {}) {
     const g = new THREE.Group();
     const seat = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.08, 0.45), baseMaterial(color));
     seat.position.y = 0.45;
     const back = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.5, 0.08), baseMaterial(color));
-    back.position.set(0, 0.7, -0.2);
-    [seat, back].forEach(m => { m.castShadow = true; m.receiveShadow = true; g.add(m); });
-    if (opts.position) g.position.set(...opts.position);
-    if (opts.rotation) g.rotation.set(...opts.rotation);
-    if (opts.scale) g.scale.set(...opts.scale);
-    return g;
+    back.position.set(0, 0.7, -0.18);
+    const legGeo = new THREE.CylinderGeometry(0.03, 0.03, 0.45, 6);
+    [[-0.18, -0.18], [0.18, -0.18], [-0.18, 0.18], [0.18, 0.18]].forEach(([dx, dz]) => {
+      const leg = new THREE.Mesh(legGeo, baseMaterial(color));
+      leg.position.set(dx, 0.225, dz);
+      g.add(leg);
+    });
+    g.add(seat, back);
+    return group(g, opts);
   },
 
-  // Flat panel with an optional text label (canvas texture) -- good for
   // event banners, name plaques, screens.
   banner(width = 4, height = 1, color = PALETTE.accentGold, opts = {}) {
     let material;
@@ -161,13 +160,13 @@ export const Kit = {
       const ctx = canvas.getContext('2d');
       ctx.fillStyle = `#${color.toString(16).padStart(6, '0')}`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#2a2a2a';
+      ctx.fillStyle = '#111827';
       ctx.font = 'bold 56px sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(opts.text, canvas.width / 2, canvas.height / 2);
       const texture = new THREE.CanvasTexture(canvas);
-      material = new THREE.MeshStandardMaterial({ map: texture, flatShading: true });
+      material = new THREE.MeshStandardMaterial({ map: texture, flatShading: true, roughness: 0.3, emissive: color, emissiveIntensity: 0.3 });
     } else {
       material = baseMaterial(color);
     }
@@ -183,19 +182,16 @@ export const Kit = {
       baseMaterial(PALETTE.wood)
     );
     pot.position.y = 0.2;
-    const foliage = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(0.5, 0),
+    const bush = new THREE.Mesh(
+      new THREE.DodecahedronGeometry(0.55),
       baseMaterial(color)
     );
-    foliage.position.y = 0.85;
-    [pot, foliage].forEach(m => { m.castShadow = true; m.receiveShadow = true; g.add(m); });
-    if (opts.position) g.position.set(...opts.position);
-    if (opts.rotation) g.rotation.set(...opts.rotation);
-    if (opts.scale) g.scale.set(...opts.scale);
-    return g;
+    bush.position.y = 0.7;
+    g.add(pot, bush);
+    return group(g, opts);
   },
 
-  window(width = 1.2, height = 1.6, frameColor = PALETTE.wallDark, paneColor = PALETTE.accentBlue, opts = {}) {
+  window(width = 1.2, height = 1.6, frameColor = PALETTE.brick, paneColor = 0x87ceeb, opts = {}) {
     const g = new THREE.Group();
     const frame = new THREE.Mesh(new THREE.BoxGeometry(width, height, 0.15), baseMaterial(frameColor));
     const pane = new THREE.Mesh(

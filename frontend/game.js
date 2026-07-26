@@ -437,25 +437,65 @@ function initLoadingScreen() {
     resize();
     window.addEventListener('resize', resize);
 
-    const stars = Array.from({ length: 90 }, () => ({
+    const stars = Array.from({ length: 200 }, () => ({
       x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height * 0.75,
-      r: Math.random() * 1.5 + 0.3,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.8 + 0.5,
       phase: Math.random() * Math.PI * 2,
-      speed: Math.random() * 0.02 + 0.01,
+      speed: Math.random() * 0.03 + 0.015,
+      color: Math.random() > 0.7 ? '#00f0ff' : (Math.random() > 0.4 ? '#ffd166' : '#ffffff')
+    }));
+
+    const comets = Array.from({ length: 3 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height * 0.5,
+      vx: -(Math.random() * 4 + 3),
+      vy: Math.random() * 2 + 1,
+      len: Math.random() * 80 + 40,
+      alpha: 0
     }));
 
     function drawStars(t) {
-      if (GameState.screen !== 'LOADING') return;
+      if (GameState.screen !== 'LOADING') {
+        requestAnimationFrame(drawStars);
+        return;
+      }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       stars.forEach(s => {
         const twinkle = 0.5 + 0.5 * Math.sin(t * s.speed + s.phase);
-        ctx.globalAlpha = 0.15 + twinkle * 0.65;
-        ctx.fillStyle = '#ffffff';
+        ctx.globalAlpha = 0.2 + twinkle * 0.8;
+        ctx.fillStyle = s.color;
+        ctx.shadowColor = s.color;
+        ctx.shadowBlur = s.r > 1.2 ? 6 : 0;
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
         ctx.fill();
+        ctx.shadowBlur = 0;
       });
+
+      comets.forEach(c => {
+        c.x += c.vx;
+        c.y += c.vy;
+        c.alpha = Math.min(1, c.alpha + 0.02);
+        if (c.x < -100 || c.y > canvas.height + 100) {
+          c.x = canvas.width + 100;
+          c.y = Math.random() * canvas.height * 0.4;
+          c.alpha = 0;
+        }
+        ctx.save();
+        ctx.globalAlpha = c.alpha * 0.75;
+        const grad = ctx.createLinearGradient(c.x, c.y, c.x - c.vx * 15, c.y - c.vy * 15);
+        grad.addColorStop(0, '#00f0ff');
+        grad.addColorStop(1, 'rgba(0, 240, 255, 0)');
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(c.x, c.y);
+        ctx.lineTo(c.x - c.vx * 15, c.y - c.vy * 15);
+        ctx.stroke();
+        ctx.restore();
+      });
+
       requestAnimationFrame(drawStars);
     }
     requestAnimationFrame(drawStars);

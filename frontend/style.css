@@ -18,16 +18,16 @@
 }
 
 :root {
-  --deep: #0a0e1f;
-  --mid: #141b33;
-  --panel: rgba(20, 27, 51, 0.85);
+  --deep: #060914;
+  --mid: #11182c;
+  --panel: rgba(16, 22, 44, 0.88);
   --gold: #ffd166;
-  --cyan: #7fa7c9;
+  --cyan: #00f0ff;
   --warm-white: #f1eaff;
-  --accent-red: #d9776a;
-  --accent-blue: #2b6cb0;
-  --border: rgba(255, 255, 255, 0.12);
-  --glass: rgba(255, 255, 255, 0.05);
+  --accent-red: #ff0055;
+  --accent-blue: #00a8ff;
+  --border: rgba(0, 240, 255, 0.25);
+  --glass: rgba(0, 240, 255, 0.08);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -483,12 +483,12 @@ html, body {
 .dialogue-choices { display: flex; flex-wrap: wrap; gap: 0.8rem; }
 .dialogue-btn {
   padding: 0.65rem 1.2rem; border-radius: 10px; border: 1px solid var(--cyan);
-  background: rgba(127,167,201,0.15); color: #fff; font-family: inherit; font-size: 0.92rem;
+  background: rgba(0, 240, 255, 0.15); color: #fff; font-family: inherit; font-size: 0.92rem;
   font-weight: 600; cursor: pointer; transition: all 0.2s;
 }
-.dialogue-btn:hover { background: var(--cyan); color: var(--deep); box-shadow: 0 0 15px rgba(127,167,201,0.4); }
-.dialogue-btn.minigame-trigger-btn { border-color: var(--gold); background: rgba(255,209,102,0.18); color: var(--gold); }
-.dialogue-btn.minigame-trigger-btn:hover { background: var(--gold); color: var(--deep); box-shadow: 0 0 15px rgba(255,209,102,0.5); }
+.dialogue-btn:hover { background: var(--cyan); color: var(--deep); box-shadow: 0 0 20px rgba(0, 240, 255, 0.7); transform: translateY(-2px); }
+.dialogue-btn.minigame-trigger-btn { border-color: var(--gold); background: rgba(255, 209, 102, 0.18); color: var(--gold); }
+.dialogue-btn.minigame-trigger-btn:hover { background: var(--gold); color: var(--deep); box-shadow: 0 0 20px rgba(255, 209, 102, 0.8); transform: translateY(-2px); }
 
 .dialogue-close {
   position: absolute; top: 14px; right: 16px; background: none; border: none;

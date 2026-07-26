@@ -29,34 +29,104 @@ export function buildScene(container, layout) {
   const height = container.clientHeight;
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(layout.background || '#dfe7f5');
+  // Maxed-out Cyberpunk / Deep Space Galactic Atmosphere
+  scene.background = new THREE.Color('#050814');
+  scene.fog = new THREE.FogExp2(0x050814, 0.012);
 
-  const camera = new THREE.PerspectiveCamera(layout.camera?.fov || 45, width / height, 0.1, 100);
+  const camera = new THREE.PerspectiveCamera(layout.camera?.fov || 55, width / height, 0.1, 150);
   const camPos = layout.camera?.position || [0, 4, 11];
   camera.position.set(...camPos);
   const lookAt = layout.camera?.lookAt || [0, 1, 0];
   camera.lookAt(...lookAt);
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
   renderer.setSize(width, height);
   renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  if (THREE.SRGBColorSpace) {
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+  } else if (THREE.sRGBEncoding) {
+    renderer.outputEncoding = THREE.sRGBEncoding;
+  }
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.35;
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   container.innerHTML = '';
   container.appendChild(renderer.domElement);
 
-  // Lighting rig: soft ambient + a warm "sun" for gentle shadows.
+  // --- MAXED OUT LIGHTING RIG ---
   const lightCfg = layout.light || {};
-  const ambient = new THREE.AmbientLight(0xffffff, lightCfg.ambient ?? 0.6);
+  const ambient = new THREE.AmbientLight(0xffffff, lightCfg.ambient ?? 0.7);
   scene.add(ambient);
 
-  const hemi = new THREE.HemisphereLight(0xffffff, 0x8d8d8d, 0.4);
+  const hemi = new THREE.HemisphereLight(0x7fa7c9, 0x141b33, 0.5);
   scene.add(hemi);
 
-  const sun = new THREE.DirectionalLight(lightCfg.sunColor || '#fff2d9', lightCfg.sunIntensity ?? 0.9);
-  sun.position.set(...(lightCfg.sunPosition || [6, 10, 6]));
+  // High-Resolution Golden Sun Directional Light with Soft Shadows
+  const sun = new THREE.DirectionalLight(lightCfg.sunColor || '#fff8ed', lightCfg.sunIntensity ?? 1.4);
+  sun.position.set(...(lightCfg.sunPosition || [8, 16, 8]));
   sun.castShadow = true;
-  sun.shadow.mapSize.set(1024, 1024);
+  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.camera.near = 0.5;
+  sun.shadow.camera.far = 60;
+  const d = 25;
+  sun.shadow.camera.left = -d;
+  sun.shadow.camera.right = d;
+  sun.shadow.camera.top = d;
+  sun.shadow.camera.bottom = -d;
+  sun.shadow.bias = -0.0003;
   scene.add(sun);
+
+  // Cyberpunk Studio Point Lights (Neon Rim & Warm Gold Fill)
+  const cyanLight = new THREE.PointLight(0x00f0ff, 2.5, 45);
+  cyanLight.position.set(-15, 8, -10);
+  scene.add(cyanLight);
+
+  const goldLight = new THREE.PointLight(0xffd166, 2.0, 45);
+  goldLight.position.set(15, 6, 12);
+  scene.add(goldLight);
+
+  const stageUplight = new THREE.PointLight(0x00f0ff, 1.5, 20);
+  stageUplight.position.set(0, 1.0, -6);
+  scene.add(stageUplight);
+
+  // --- 3D DEEP SPACE STARFIELD & CYBER HORIZON ---
+  const starGeo = new THREE.BufferGeometry();
+  const starCount = 2000;
+  const starPositions = new Float32Array(starCount * 3);
+  const starColors = new Float32Array(starCount * 3);
+  const palette = [new THREE.Color('#ffffff'), new THREE.Color('#00f0ff'), new THREE.Color('#ffd166'), new THREE.Color('#7fa7c9')];
+  for (let i = 0; i < starCount; i++) {
+    const u = Math.random();
+    const v = Math.random();
+    const theta = u * 2.0 * Math.PI;
+    const phi = Math.acos(2.0 * v - 1.0);
+    const r = 70 + Math.random() * 20;
+    starPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+    starPositions[i * 3 + 1] = Math.abs(r * Math.sin(phi) * Math.sin(theta)) + 5; // keep in upper sky
+    starPositions[i * 3 + 2] = r * Math.cos(phi);
+    const c = palette[Math.floor(Math.random() * palette.length)];
+    starColors[i * 3] = c.r;
+    starColors[i * 3 + 1] = c.g;
+    starColors[i * 3 + 2] = c.b;
+  }
+  starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+  starGeo.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
+  const starMat = new THREE.PointsMaterial({ size: 1.2, vertexColors: true, transparent: true, opacity: 0.85 });
+  const starGroup = new THREE.Points(starGeo, starMat);
+  scene.add(starGroup);
+
+  // Hovering Celestial Moon / Orbital Planet
+  const moonGeo = new THREE.SphereGeometry(12, 32, 32);
+  const moonMat = new THREE.MeshStandardMaterial({ color: 0x141b33, emissive: 0x0080ff, emissiveIntensity: 0.3, wireframe: true, roughness: 0.2 });
+  const moon = new THREE.Mesh(moonGeo, moonMat);
+  moon.position.set(20, 32, -55);
+  scene.add(moon);
+
+  // Futuristic Holographic Ground Grid
+  const grid = new THREE.GridHelper(160, 80, 0x00f0ff, 0x112244);
+  grid.position.y = -0.05;
+  scene.add(grid);
 
   // Place every object from the layout using the shared kit.
   (layout.objects || []).forEach(obj => {
@@ -68,7 +138,7 @@ export function buildScene(container, layout) {
     const args = [...(obj.params || [])];
     const opts = { position: obj.position, rotation: obj.rotation, scale: obj.scale, text: obj.text };
     const piece = factory(...args, opts);
-    
+
     // Attach RPG interaction metadata if defined
     if (obj.id) piece.userData.id = obj.id;
     if (obj.interactName) piece.userData.interactName = obj.interactName;
@@ -98,6 +168,10 @@ export function buildScene(container, layout) {
         if (child.isMesh) {
           child.castShadow = true;
           child.receiveShadow = true;
+          if (child.material) {
+            child.material.roughness = Math.min(0.6, child.material.roughness || 0.6);
+            child.material.metalness = Math.max(0.2, child.material.metalness || 0.2);
+          }
         }
       });
       scene.add(model);
@@ -106,12 +180,21 @@ export function buildScene(container, layout) {
     });
   }
 
-  scene.fog = new THREE.FogExp2(scene.background, 0.018);
-
   // Render loop with dynamic camera tracking (follows player avatar smoothly)
   let frame = 0;
   function animate() {
     frame += 0.005;
+    if (starGroup) starGroup.rotation.y += 0.0003;
+    if (moon) moon.rotation.y += 0.002;
+
+    // Animate collectibles (Easter Eggs & Scavenger items float and spin)
+    scene.children.forEach(c => {
+      if (c.userData && (c.userData.isEasterEgg || c.userData.isScavengerTarget)) {
+        c.rotation.y += 0.02;
+        c.position.y += Math.sin(frame * 4) * 0.006;
+      }
+    });
+
     if (window.GameState && window.GameState.playerGroup) {
       const px = window.GameState.playerGroup.position.x;
       const pz = window.GameState.playerGroup.position.z;
