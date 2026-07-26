@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISRO CubeSat Builder | 3D Cleanroom Spacecraft Integration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Rajdhani:wght@600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Three.js 3D WebGL Library (vendored locally -- was a CDN link, broke offline demo) -->
+    <script src="js/vendor/three.min.js"></script>
+</head>
+
+<body>
+    <div id="game-container-3d">
+        <!-- 3D WebGL Viewport Container -->
+        <div id="webgl-container"></div>
+
+        <!-- Reference Image Match UI Overlays -->
+
+        <!-- 1. Top Right Shield Badges (Exact match of NASA Earth & Solar System badges) -->
+        <div id="top-right-badges">
+            <!-- Earth Mission Badge -->
+            <div class="mission-badge earth-badge">
+                <div class="badge-ring">
+                    <div class="badge-title">CubeSat</div>
+                    <div id="earth-score-val" class="badge-score">0</div>
+                    <div style="font-size: 20px; line-height: 1; margin: 1px 0;">🌐</div>
+                    <div class="badge-subtitle">EARTH</div>
+                </div>
+            </div>
+            <!-- Deep Space / Solar System Badge -->
+            <div class="mission-badge solar-badge">
+                <div class="badge-ring">
+                    <div class="badge-title">CubeSat</div>
+                    <div id="solar-score-val" class="badge-score">0</div>
+                    <div style="font-size: 20px; line-height: 1; margin: 1px 0;">🪐</div>
+                    <div class="badge-subtitle">SOLAR SYSTEM</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Top Active Orders Blueprint Overlay -->
+        <div id="orders-overlay-3d">
+            <div id="orders-list"></div>
+        </div>
+
+        <!-- 3. Bottom Right Stopwatch Timer (Exact match of reference clock) -->
+        <div id="bottom-right-timer">
+            <span id="timer-val-3d" class="clock-digital">4:00</span>
+            <div class="stopwatch-icon">⏱️</div>
+        </div>
+
+        <!-- 4. Bottom Left Controls (Exact match of audio & pause buttons) -->
+        <div id="bottom-left-controls">
+            <button id="btn-audio-3d" class="round-ctrl-btn" title="Toggle Sound">🔊</button>
+            <button id="btn-pause-3d" class="round-ctrl-btn" title="Pause Game">⏸️</button>
+        </div>
+
+        <!-- Touch Controls for Mobile -->
+        <div id="touch-controls-3d">
+            <div class="dpad">
+                <button id="btn-up" class="dpad-btn up">▲</button>
+                <button id="btn-left" class="dpad-btn left">◄</button>
+                <button id="btn-down" class="dpad-btn down">▼</button>
+                <button id="btn-right" class="dpad-btn right">►</button>
+            </div>
+            <button id="btn-action" class="action-btn">INTERACT (SPACE)</button>
+        </div>
+        <!-- Toast Notification Container -->
+        <div id="toast-container"></div>
+    </div>
+
+    <!-- Tutorial / Mission Briefing Modal (visible on load) -->
+    <div id="tutorial-modal" class="modal">
+        <div class="modal-content tutorial-content text-center">
+            <div class="tutorial-header">
+                <span class="tutorial-icon">🚀</span>
+                <h2>ISRO CUBESAT CLEANROOM INTEGRATION</h2>
+                <span class="badge-pill" style="background:#0284C7; margin-top:6px; display:inline-block;">MISSION BRIEFING &amp; HOW TO PLAY</span>
+            </div>
+
+            <div class="tutorial-grid">
+                <div class="tutorial-step">
+                    <div class="step-icon">📋</div>
+                    <div class="step-text">
+                        <h4>1. Check Mission Orders</h4>
+                        <p>View required CubeSat components in the top blueprint HUD.</p>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-icon">📦</div>
+                    <div class="step-text">
+                        <h4>2. Gather Components</h4>
+                        <p>Walk to supply crates (bottom row) and press <b>[SPACE]</b> to take parts.</p>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-icon">💻</div>
+                    <div class="step-text">
+                        <h4>3. Test Avionics</h4>
+                        <p>Take CPUs &amp; Sensors to Left Wall terminals. HOLD <b>[SPACE]</b> to test.</p>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-icon">🛠️</div>
+                    <div class="step-text">
+                        <h4>4. Assemble &amp; Verify</h4>
+                        <p>Insert parts into center frame. Test in TVAC chamber &amp; Weighing scale.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tutorial-controls-hint">
+                <span>🎮 <b>CONTROLS:</b> Use <b>ARROW KEYS</b> or <b>W/A/S/D</b> to Walk &bull; Press <b>[SPACE]</b> to Interact / Pick Up / Assemble</span>
+            </div>
+
+            <button id="btn-start-mission" class="btn-primary start-btn">START MISSION 🚀</button>
+        </div>
+    </div>
+
+    <!-- 3-Second Countdown Overlay -->
+    <div id="countdown-overlay" class="modal hidden">
+        <div class="countdown-container text-center">
+            <div id="countdown-number" class="countdown-number">3</div>
+            <div id="countdown-subtext" class="countdown-subtext">PREPARING CLEANROOM...</div>
+        </div>
+    </div>
+
+    <!-- Launch Celebration Modal -->
+    <div id="launch-modal" class="modal hidden">
+        <div class="modal-content launch-content">
+            <div class="rocket-animation">
+                <div class="rocket-icon">🚀</div>
+                <div class="flame-particles">🔥💥✨</div>
+            </div>
+            <h2 id="launch-rocket-name">🚀 ISRO LAUNCH VEHICLE: PSLV-C54</h2>
+            <h3 id="launch-sat-name">EOS-07 EARTH OBSERVER</h3>
+            <div id="launch-badge" class="badge-pill">🌍 EARTH OBSERVER BADGE</div>
+            <p id="launch-points" class="points-earned">+650 SCIENCE POINTS!</p>
+            <span class="launch-subtext">ORBITAL INJECTION SUCCESSFUL • TELEMETRY LINK ESTABLISHED WITH ISTRAC
+                BENGALURU</span>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="game-over-modal" class="modal hidden">
+        <div class="modal-content text-center">
+            <h2>🏆 SHIFT COMPLETED!</h2>
+            <p>Outstanding work at the ISRO Cleanroom Facility!</p>
+
+            <div class="final-stats">
+                <div class="stat-box">
+                    <span class="stat-label">TOTAL SCIENCE POINTS</span>
+                    <span id="final-score" class="stat-val">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">SATELLITES LAUNCHED</span>
+                    <span id="final-built" class="stat-val">0</span>
+                </div>
+            </div>
+
+            <button id="btn-play-again" class="btn-primary">Play Again 🚀</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/data.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/threeModels.js"></script>
+    <script src="js/threeScene.js"></script>
+    <script src="js/gameEngine3D.js"></script>
+    <script src="js/ui3D.js"></script>
+    <script src="js/main3D.js"></script>
+</body>
+
+</html>

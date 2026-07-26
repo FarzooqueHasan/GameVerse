@@ -1,0 +1,23 @@
+{
+  "name": "celestecon-gameverse-rpg",
+  "version": "1.0.0",
+  "description": "CelesteCon AEROSS RPG Web Game",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx -y serve@latest frontend -l 3000",
+    "start": "npx -y serve@latest frontend -l 3000",
+    "server": "python -m http.server 3000 --directory frontend"
+  },
+  "keywords": [
+    "rpg",
+    "celestecon",
+    "aeross",
+    "game"
+  ],
+  "author": "DPS RK Puram AEROSS Club",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "three": "^0.160.0"
+  }
+}

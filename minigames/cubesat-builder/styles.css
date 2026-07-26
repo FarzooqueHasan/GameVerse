@@ -1,0 +1,733 @@
+/* ISRO 3D CubeSat Builder Styling (Exact Reference Match - input_file_0.png) */
+
+:root {
+    --bg-dark: #0B132B;
+    --panel-bg: rgba(15, 23, 42, 0.92);
+    --border-color: rgba(255, 255, 255, 0.2);
+    --isro-saffron: #FF9933;
+    --isro-blue: #0284C7;
+    --cyan-accent: #00E5FF;
+    --green-badge: #15803D;
+    --red-badge: #B91C1C;
+    --navy-badge: #0A1128;
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: #0F172A;
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+#game-container-3d {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    overflow: hidden;
+}
+
+#webgl-container {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* 1. Top Right Shield Badges (Exact match of input_file_0.png) */
+#top-right-badges {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    display: flex;
+    gap: 16px;
+    z-index: 10;
+}
+
+.mission-badge {
+    width: 122px;
+    height: 142px;
+    border-radius: 18px 18px 52px 52px;
+    padding: 4px;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background: #FFFFFF;
+    /* Outer white border trim */
+}
+
+.earth-badge {
+    background: #FFFFFF;
+}
+
+.earth-badge .badge-ring {
+    background: radial-gradient(circle at center, #0B1D3A 0%, #061021 100%);
+    border: 3.5px solid #16A34A;
+}
+
+.solar-badge {
+    background: #FFFFFF;
+}
+
+.solar-badge .badge-ring {
+    background: radial-gradient(circle at center, #2A0E18 0%, #15050B 100%);
+    border: 3.5px solid #DC2626;
+}
+
+.badge-ring {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px 15px 48px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 6px 4px 10px 4px;
+    position: relative;
+}
+
+.badge-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.8px;
+    color: #FFF;
+    background: #0B132B;
+    width: 90%;
+    padding: 2px 0;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.badge-score {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 800;
+    font-size: 34px;
+    color: #FACC15;
+    line-height: 1;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    margin: 1px 0;
+}
+
+.badge-subtitle {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #FFF;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 2px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 2. Top Orders Overlay - Centered so it never covers the main 3D play area */
+#orders-overlay-3d {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 58%;
+    z-index: 10;
+    pointer-events: none;
+}
+
+#orders-list {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.order-card-3d {
+    background: rgba(15, 23, 42, 0.88);
+    border: 1.5px solid rgba(0, 229, 255, 0.5);
+    border-radius: 12px;
+    padding: 8px 12px;
+    min-width: 210px;
+    max-width: 245px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s;
+    pointer-events: auto;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--cyan-accent);
+    letter-spacing: 0.5px;
+}
+
+.order-reward {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    color: #4ADE80;
+    background: rgba(74, 222, 128, 0.2);
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(74, 222, 128, 0.4);
+}
+
+.order-desc {
+    font-size: 11px;
+    color: #CBD5E1;
+    line-height: 1.3;
+}
+
+.order-parts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.part-tag {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.12);
+    color: #FFF;
+}
+
+.timer-bar-bg {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 2px;
+}
+
+.timer-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00E5FF 0%, #3B82F6 100%);
+    transition: width 0.2s linear;
+}
+
+.timer-bar-fill.urgent {
+    background: linear-gradient(90deg, #F97316 0%, #EF4444 100%);
+    box-shadow: 0 0 8px #EF4444;
+}
+
+/* 3. Bottom Right Stopwatch Timer (Exact match of input_file_0.png) */
+#bottom-right-timer {
+    position: absolute;
+    bottom: 24px;
+    right: 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.75));
+}
+
+.clock-digital {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 800;
+    font-size: 56px;
+    color: #38BDF8;
+    letter-spacing: 2px;
+    line-height: 1;
+}
+
+.stopwatch-icon {
+    font-size: 48px;
+    line-height: 1;
+    transform: translateY(-2px);
+}
+
+/* 4. Bottom Left Controls (Exact match of input_file_0.png - circular white buttons) */
+#bottom-left-controls {
+    position: absolute;
+    bottom: 24px;
+    left: 28px;
+    display: flex;
+    gap: 16px;
+    z-index: 10;
+}
+
+.round-ctrl-btn {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 4px solid #CBD5E1;
+    color: #1E293B;
+    font-size: 28px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.round-ctrl-btn:hover {
+    background: #F1F5F9;
+    border-color: #94A3B8;
+    transform: scale(1.1);
+}
+
+.round-ctrl-btn:active {
+    transform: scale(0.95);
+}
+
+/* Modals */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: #1E293B;
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    padding: 30px 40px;
+    max-width: 540px;
+    width: 90%;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.launch-content {
+    text-align: center;
+    background: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+    border-color: var(--cyan-accent);
+}
+
+.rocket-animation {
+    font-size: 54px;
+    animation: bounceRocket 1.2s infinite ease-in-out;
+}
+
+@keyframes bounceRocket {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-14px);
+    }
+}
+
+.badge-pill {
+    align-self: center;
+    background: rgba(255, 153, 51, 0.2);
+    border: 1.5px solid var(--isro-saffron);
+    color: var(--isro-saffron);
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    padding: 6px 18px;
+    border-radius: 24px;
+    letter-spacing: 1px;
+}
+
+.points-earned {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #4ADE80;
+}
+
+.launch-subtext {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.final-stats {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin: 16px 0;
+}
+
+.stat-box {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid var(--border-color);
+    padding: 16px 24px;
+    border-radius: 12px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.stat-val {
+    display: block;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    color: var(--cyan-accent);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+    border: none;
+    color: #FFF;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(2, 132, 199, 0.5);
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(2, 132, 199, 0.65);
+}
+
+/* Touch Controls for Mobile */
+#touch-controls-3d {
+    display: none;
+    position: absolute;
+    bottom: 90px;
+    left: 24px;
+    right: 24px;
+    justify-content: space-between;
+    align-items: flex-end;
+    z-index: 20;
+}
+
+@media (max-width: 768px) {
+    #touch-controls-3d {
+        display: flex;
+    }
+}
+
+.dpad {
+    display: grid;
+    grid-template-columns: repeat(3, 46px);
+    grid-template-rows: repeat(3, 46px);
+    gap: 6px;
+}
+
+.dpad-btn {
+    background: rgba(255, 255, 255, 0.25);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    color: #FFF;
+    border-radius: 10px;
+    font-size: 18px;
+}
+
+.dpad-btn.up {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.dpad-btn.left {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.dpad-btn.down {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.dpad-btn.right {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.action-btn {
+    background: linear-gradient(135deg, #FF9933 0%, #FF6600 100%);
+    border: none;
+    color: #FFF;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 800;
+    padding: 16px 24px;
+    border-radius: 14px;
+    font-size: 16px;
+    letter-spacing: 1px;
+    box-shadow: 0 6px 20px rgba(255, 153, 51, 0.4);
+}
+
+/* Toast Notification Styles */
+#toast-container {
+    position: absolute;
+    top: 85px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    z-index: 50;
+    pointer-events: none;
+}
+
+.toast-msg {
+    background: rgba(15, 23, 42, 0.96);
+    border: 2px solid var(--cyan-accent);
+    color: #FFF;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    padding: 10px 26px;
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
+    animation: toastFadeIn 0.25s ease-out, toastFadeOut 0.3s ease-in 2.2s forwards;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.5px;
+}
+
+.toast-msg.error {
+    border-color: #EF4444;
+    color: #FCA5A5;
+}
+
+.toast-msg.success {
+    border-color: #10B981;
+    color: #6EE7B7;
+}
+
+.toast-msg.info {
+    border-color: #38BDF8;
+    color: #BAE6FD;
+}
+
+@keyframes toastFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-15px) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes toastFadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-15px) scale(0.9);
+    }
+}
+
+/* =============================================
+   TUTORIAL MISSION BRIEFING MODAL
+   ============================================= */
+.tutorial-content {
+    max-width: 660px !important;
+    padding: 28px 35px !important;
+    background: rgba(11, 19, 43, 0.97) !important;
+    border: 2px solid #00E5FF !important;
+    box-shadow: 0 0 60px rgba(0, 229, 255, 0.25), 0 30px 70px rgba(0,0,0,0.9) !important;
+}
+
+.tutorial-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.tutorial-header h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    color: #00E5FF;
+    margin: 6px 0 4px;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.tutorial-icon {
+    font-size: 46px;
+    display: inline-block;
+    animation: bounceRocket 2s infinite ease-in-out;
+}
+
+.tutorial-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 16px 0;
+    text-align: left;
+}
+
+.tutorial-step {
+    background: rgba(30, 41, 59, 0.75);
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    transition: border-color 0.2s;
+}
+
+.tutorial-step:hover {
+    border-color: rgba(0, 229, 255, 0.5);
+}
+
+.step-icon {
+    font-size: 26px;
+    line-height: 1;
+    background: rgba(0, 229, 255, 0.1);
+    padding: 8px;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.step-text h4 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: #FACC15;
+    margin: 0 0 3px 0;
+}
+
+.step-text p {
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    color: #CBD5E1;
+    margin: 0;
+    line-height: 1.45;
+}
+
+.tutorial-controls-hint {
+    background: rgba(2, 132, 199, 0.15);
+    border: 1px dashed rgba(0, 229, 255, 0.5);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #E2E8F0;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.start-btn {
+    font-size: 17px !important;
+    padding: 13px 36px !important;
+    background: linear-gradient(135deg, #00E5FF 0%, #0284C7 100%) !important;
+    color: #0F172A !important;
+    font-weight: 800 !important;
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.5) !important;
+    transition: all 0.2s !important;
+    align-self: center;
+}
+
+.start-btn:hover {
+    transform: scale(1.05) !important;
+    box-shadow: 0 0 40px rgba(0, 229, 255, 0.85) !important;
+}
+
+/* =============================================
+   3-SECOND COUNTDOWN OVERLAY
+   ============================================= */
+.countdown-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.countdown-number {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 800;
+    font-size: 160px;
+    color: #00E5FF;
+    text-shadow: 0 0 50px rgba(0, 229, 255, 0.9), 0 0 100px rgba(2, 132, 199, 0.5);
+    animation: countdownPop 0.95s ease-out forwards;
+    line-height: 1;
+}
+
+.countdown-subtext {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: #FACC15;
+    letter-spacing: 2.5px;
+    text-shadow: 0 0 15px rgba(250, 204, 21, 0.6);
+    animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes countdownPop {
+    0%   { transform: scale(1.5); opacity: 0; }
+    25%  { transform: scale(1.0); opacity: 1; }
+    80%  { transform: scale(0.95); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =============================================
+   LOOK-AT HUD GLOW PULSE ANIMATION
+   ============================================= */
+@keyframes lookAtPulse {
+    0%   { border-color: #00E5FF; box-shadow: 0 10px 35px rgba(0,229,255,0.35); }
+    50%  { border-color: #FACC15; box-shadow: 0 10px 35px rgba(250,204,21,0.45); }
+    100% { border-color: #00E5FF; box-shadow: 0 10px 35px rgba(0,229,255,0.35); }
+}

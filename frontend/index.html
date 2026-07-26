@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CelesteCon — AEROSS RPG</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    
+    <!-- ==================== STAGE 1: LOADING SCREEN ==================== -->
+    <div id="screen-loading" class="screen active">
+      <div id="bg-carousel">
+        <div class="bg-photo"></div>
+        <div class="bg-photo"></div>
+        <div class="bg-photo"></div>
+      </div>
+      <div id="scrim"></div>
+      <canvas id="stars-canvas"></canvas>
+
+      <div id="loading-content">
+        <div class="eyebrow">AEROSS Club Presents</div>
+        <h1 class="wordmark">CELESTE<span>CON</span></h1>
+        <p class="tagline">An Aerospace RPG — Live the Campus Event of the Year</p>
+
+        <div id="loading-wrap">
+          <div id="loading-label">Loading Campus Assets...</div>
+          <div id="loading-track"><div id="loading-fill"></div></div>
+        </div>
+
+        <button id="enter-btn" class="glow-btn">ENTER CELESTECON</button>
+      </div>
+    </div>
+
+    <!-- ==================== STAGE 2: ROLE SELECTION ==================== -->
+    <div id="screen-role-select" class="screen">
+      <div class="screen-header">
+        <div class="eyebrow">Step 1 of 2</div>
+        <h2>Select Your POV</h2>
+        <p>Your role determines your gameplay objectives, dialogue options, and challenges across CelesteCon.</p>
+      </div>
+
+      <div class="role-cards">
+        <div class="role-card" data-role="Organizer">
+          <div class="role-icon">🎙️</div>
+          <h3>Organizer (Management)</h3>
+          <p class="role-desc">Manage the event logistics, solve live crises, and keep the campus running smoothly under pressure.</p>
+          <ul class="role-perks">
+            <li>✨ Solve event emergencies & glitches</li>
+            <li>✨ Command student & teacher volunteers</li>
+            <li>✨ Exclusive Management Room access</li>
+          </ul>
+          <button class="select-role-btn">Play as Organizer</button>
+        </div>
+
+        <div class="role-card" data-role="Participant">
+          <div class="role-icon">🚀</div>
+          <h3>Participant (Player)</h3>
+          <p class="role-desc">Compete in 7 premier aerospace events, conquer technical minigames, and impress the judges.</p>
+          <ul class="role-perks">
+            <li>🏆 Participate in Quizzitch, Debate & UAVs</li>
+            <li>🏆 Play CubeSat & Flight Sim minigames</li>
+            <li>🏆 Earn badges & campus glory</li>
+          </ul>
+          <button class="select-role-btn">Play as Participant</button>
+        </div>
+
+        <div class="role-card" data-role="Judge">
+          <div class="role-icon">⚖️</div>
+          <h3>Judge</h3>
+          <p class="role-desc">Evaluate presentations, resolve disputes, and make the tough scoring decisions that shape winners.</p>
+          <ul class="role-perks">
+            <li>📊 Judge pitch decks & 3D designs</li>
+            <li>📊 Settle debates & rule infractions</li>
+            <li>📊 Determine CelesteCon champions</li>
+          </ul>
+          <button class="select-role-btn">Play as Judge</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== STAGE 3: QUESTIONNAIRE ==================== -->
+    <div id="screen-questionnaire" class="screen">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <div class="eyebrow">Step 2 of 2 — Character Allotment</div>
+          <h2>AEROSS Personality Profiler</h2>
+          <div class="progress-bar-wrap">
+            <div id="quiz-progress-fill"></div>
+          </div>
+          <span id="quiz-progress-text">Question 1 of 10</span>
+        </div>
+
+        <div id="question-box">
+          <h3 id="question-title">Loading question...</h3>
+          <div id="question-options" class="options-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== STAGE 4: CHARACTER REVEAL ==================== -->
+    <div id="screen-reveal" class="screen">
+      <div class="reveal-card">
+        <div class="reveal-badge">ALLOTTED CHARACTER</div>
+        <div id="reveal-emoji" class="reveal-emoji-large">🚀</div>
+        <h2 id="reveal-name">Character Name</h2>
+        <div id="reveal-role-tag" class="role-tag">Role: Participant</div>
+        <p id="reveal-desc" class="reveal-desc">Description goes here.</p>
+        
+        <div class="reveal-stats-grid">
+          <div class="stat-box">
+            <span class="stat-label">Superpower</span>
+            <strong id="reveal-power">Creative Chaos</strong>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Drive</span>
+            <strong id="reveal-drive">Passion & Creativity</strong>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Stress Style</span>
+            <strong id="reveal-stress">Explode with energy</strong>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Sidekick</span>
+            <strong id="reveal-sidekick">Goose (chaotic mascot)</strong>
+          </div>
+        </div>
+
+        <blockquote id="reveal-catchphrase" class="catchphrase-quote">"Sab theek ho jayega!"</blockquote>
+
+        <button id="start-gameplay-btn" class="glow-btn visible">ENTER CAMPUS WORLD 🚀</button>
+      </div>
+    </div>
+
+    <!-- ==================== STAGE 5: RPG GAMEPLAY ==================== -->
+    <div id="screen-gameplay" class="screen">
+      
+      <!-- Top HUD Bar -->
+      <header id="game-hud">
+        <div class="hud-left">
+          <span class="hud-logo">CELESTECON</span>
+          <div class="hud-player-info">
+            <span id="hud-avatar">🤯</span>
+            <div>
+              <strong id="hud-char-name">Siddharth</strong>
+              <small id="hud-role-name">Participant</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="hud-center">
+          <span class="hud-nav-label">📍 Quick Travel:</span>
+          <div class="hud-nav-buttons">
+            <button class="zone-btn active" data-zone="celestecon_amphitheater">🏛️ OAT Amphitheater</button>
+            <button class="zone-btn" data-zone="auditorium_demo">🎭 Main Auditorium</button>
+            <button class="zone-btn" data-zone="management_room_demo">👔 Management HQ</button>
+          </div>
+          <!-- Keep select hidden for fallback/sync -->
+          <select id="campus-zone-select" style="display: none;">
+            <option value="celestecon_amphitheater">OAT Amphitheater & Plaza</option>
+            <option value="auditorium_demo">Main Auditorium</option>
+            <option value="management_room_demo">Management Room</option>
+          </select>
+        </div>
+
+        <div class="hud-right">
+          <button id="hud-finale-btn" class="glow-btn small-btn finale-btn" title="Conclude CelesteCon">🏆 AWARDS FINALE</button>
+          <div class="hud-stat" title="Reputation / Score">
+            <span>⭐ Rep:</span>
+            <strong id="hud-rep">0</strong>
+          </div>
+          <div class="hud-stat" title="Easter Eggs Found">
+            <span>🥚 Easter Eggs:</span>
+            <strong id="hud-eggs">0 / 5</strong>
+          </div>
+          <button id="help-controls-btn" class="icon-btn" title="Controls">ℹ️</button>
+        </div>
+      </header>
+
+      <!-- Main 3D Viewport -->
+      <div id="rpg-viewport-wrap">
+        <div id="rpg-viewport"></div>
+        
+        <!-- Controls Overlay / Hint -->
+        <div id="controls-hint">
+          <span>🎮 <strong>WASD / Arrows</strong> to move • Walk near an NPC or Booth and press <strong>[E]</strong> or <strong>Click</strong> to interact</span>
+        </div>
+
+        <!-- Proximity Indicator -->
+        <div id="interact-prompt" class="hidden">
+          <span class="key-badge">E</span>
+          <span id="interact-target-name">Talk to Mrs. Vibha Arora</span>
+        </div>
+
+        <!-- Easter Egg Notification Toast -->
+        <div id="toast-notify" class="toast hidden">
+          <span class="toast-icon">✨</span>
+          <div class="toast-text">
+            <strong id="toast-title">Easter Egg Discovered!</strong>
+            <p id="toast-msg">You unlocked: Instant Crisis Solver ability!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2D RPG Dialogue Visual Novel Box -->
+      <div id="dialogue-box" class="hidden">
+        <div class="dialogue-portrait-wrap">
+          <div id="dialogue-avatar" class="dialogue-avatar">👩‍🏫</div>
+          <span id="dialogue-name">Mrs. Vibha Arora</span>
+        </div>
+        <div class="dialogue-content-wrap">
+          <div id="dialogue-text" class="dialogue-text">Welcome to CelesteCon! We have several aerospace events lined up. Are you ready?</div>
+          <div id="dialogue-choices" class="dialogue-choices">
+            <!-- Dynamic choice buttons inserted via JS -->
+          </div>
+        </div>
+        <button id="dialogue-close-btn" class="dialogue-close" title="Close Dialogue">✕</button>
+      </div>
+
+    </div>
+
+    <!-- ==================== MINIGAME / CRISIS MODAL ==================== -->
+    <div id="minigame-modal" class="modal hidden">
+      <div class="modal-content">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span id="modal-icon">🎮</span>
+            <h3 id="modal-title">CubeSat Builder Minigame</h3>
+          </div>
+          <button id="modal-close-btn" class="modal-close">✕ Exit Minigame</button>
+        </header>
+        <div class="modal-body">
+          <iframe id="minigame-iframe" src="about:blank" title="Minigame Viewport"></iframe>
+          
+          <!-- Built-in Circuit/Quiz Minigame Container (when not iframe) -->
+          <div id="builtin-minigame-wrap" class="hidden">
+            <div class="builtin-header">
+              <h4>⚡ Aerospace Emergency Circuit Calibration</h4>
+              <p>Match the telemetry wires and answer the physics query to stabilize the system before time runs out!</p>
+            </div>
+            <div id="circuit-puzzle-box">
+              <p class="quiz-q">Question: What is the primary function of an ADCS (Attitude Determination and Control System) on a CubeSat?</p>
+              <div class="circuit-options">
+                <button class="circuit-btn" data-correct="true">Orienting the satellite's position and angle in space</button>
+                <button class="circuit-btn" data-correct="false">Generating solar power from ambient radiation</button>
+                <button class="circuit-btn" data-correct="false">Transmitting high-frequency radio waves to Earth</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="modal-footer">
+          <span class="modal-hint">💡 Solve the challenge to earn +150 Rep Points and help the AEROSS team!</span>
+          <button id="modal-complete-btn" class="glow-btn small-btn hidden">Claim Reward & Complete</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Controls / Info Modal -->
+    <div id="info-modal" class="modal hidden">
+      <div class="modal-content small-modal">
+        <header class="modal-header">
+          <h3>ℹ️ CelesteCon RPG Guide</h3>
+          <button id="info-close-btn" class="modal-close">✕</button>
+        </header>
+        <div class="modal-body pad-body">
+          <h4>How to Play:</h4>
+          <ul>
+            <li><strong>Movement:</strong> Use <code>W</code> <code>A</code> <code>S</code> <code>D</code> or <code>Arrow Keys</code> to move your character around the campus.</li>
+            <li><strong>Quick Travel:</strong> Click the <strong>OAT Amphitheater</strong>, <strong>Main Auditorium</strong>, or <strong>Management HQ</strong> buttons in the top HUD bar to instantly travel between zones!</li>
+            <li><strong>Interaction:</strong> Walk close to any character or booth. When the <code>[E]</code> prompt appears, press <strong>E</strong> or click to open dialogue.</li>
+            <li><strong>Role Gameplay:</strong> Organize events, compete in challenges, or judge debates based on your chosen POV.</li>
+            <li><strong>Minigames:</strong> When NPCs face technical failures, launch minigames (CubeSat, Flight Sim, Circuit Patching) to solve their crises!</li>
+            <li><strong>Grand Finale:</strong> When you are ready to conclude your festival experience, click the <strong>🏆 AWARDS FINALE</strong> button to attend the closing ceremony!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grand Finale / Awards Ceremony Modal -->
+    <div id="finale-modal" class="modal hidden">
+      <div class="modal-content finale-content">
+        <header class="modal-header finale-header">
+          <h3>🏆 CELESTECON 2026 — GRAND FINALE & AWARDS CEREMONY 🏆</h3>
+          <button id="finale-close-btn" class="modal-close">✕</button>
+        </header>
+        <div class="modal-body pad-body finale-body text-center">
+          <div class="finale-emojis">🎆 🛰️ 🏆 🚀 🎆</div>
+          <h2 id="finale-title-text" class="gold-text">Congratulations, Champion of CelesteCon!</h2>
+          <p class="finale-desc">You have successfully navigated the challenges of India's premier aerospace high school symposium. Through technical ingenuity, sharp leadership, and boundless curiosity, you have left an indelible mark on DPS R.K. Puram's AEROSS Club!</p>
+          
+          <div class="finale-stats-card">
+            <div class="f-stat"><span>Character Played:</span> <strong id="f-stat-char">Siddharth</strong></div>
+            <div class="f-stat"><span>Role Perspective:</span> <strong id="f-stat-role">Participant</strong></div>
+            <div class="f-stat"><span>Final Rep Score:</span> <strong id="f-stat-rep" class="gold-text">350</strong></div>
+            <div class="f-stat"><span>Secret Relics Found:</span> <strong id="f-stat-eggs">5 / 5</strong></div>
+          </div>
+
+          <div class="faculty-commendation">
+            <p><strong>Faculty Advisors' Commendation:</strong></p>
+            <blockquote>"On behalf of Mrs. Vibha Arora, Mr. Sanchit Chauhan, and the entire AEROSS executive council, we applaud your exceptional problem-solving and dedication. You didn't just participate in CelesteCon—you elevated it!"</blockquote>
+          </div>
+
+          <div class="finale-actions">
+            <button id="finale-continue-btn" class="glow-btn">Keep Exploring Campus</button>
+            <button id="finale-restart-btn" class="glow-btn sec-btn">Play Again (Reset)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="game.js"></script>
+</body>
+</html>

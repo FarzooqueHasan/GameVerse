@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Voxel Scene Preview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; font-family: system-ui, sans-serif; }
+  #topbar {
+    display: flex; gap: 10px; align-items: center;
+    padding: 10px 16px; background: #1c1c1c; color: #eee;
+  }
+  #topbar select, #topbar button {
+    padding: 6px 10px; border-radius: 6px; border: none; font-size: 0.9rem;
+  }
+  #scene-container { width: 100vw; height: calc(100vh - 48px); }
+  #scene-container canvas { display: block; }
+</style>
+</head>
+<body>
+  <div id="topbar">
+    <strong style="color:#f6c667;">Voxel Scene Preview</strong>
+    <select id="scene-picker">
+      <option value="celestecon_amphitheater">CelesteCon Amphitheater</option>
+      <option value="auditorium_demo">Auditorium (demo)</option>
+      <option value="management_room_demo">Management Room (demo)</option>
+    </select>
+  </div>
+  <div id="scene-container"></div>
+
+  <script type="module">
+    import { buildScene } from './voxel/sceneComposer.js';
+    import { SCENES } from './voxel/scenes.js';
+
+    const container = document.getElementById('scene-container');
+    const picker = document.getElementById('scene-picker');
+
+    function load(sceneKey) {
+      buildScene(container, SCENES[sceneKey]);
+    }
+
+    load(picker.value);
+    picker.addEventListener('change', () => load(picker.value));
+  </script>
+</body>
+</html>
