@@ -31,7 +31,7 @@ export function buildScene(container, layout) {
   const scene = new THREE.Scene();
   // Maxed-out Cyberpunk / Deep Space Galactic Atmosphere
   scene.background = new THREE.Color('#050814');
-  scene.fog = new THREE.FogExp2(0x050814, 0.012);
+  scene.fog = new THREE.FogExp2(0x050814, 0.006); // lighter fog so scene is clear from Y=12
 
   const camera = new THREE.PerspectiveCamera(layout.camera?.fov || 70, width / height, 0.1, 250);
   const camPos = layout.camera?.position || [0, 4, 11];
@@ -171,6 +171,16 @@ export function buildScene(container, layout) {
           if (child.material) {
             child.material.roughness = Math.min(0.6, child.material.roughness || 0.6);
             child.material.metalness = Math.max(0.2, child.material.metalness || 0.2);
+            // Make any roof / canopy mesh (tall geometry) invisible from above
+            // so the camera at Y=12 is never blocked by building tops.
+            // We detect "roof" by checking if the mesh centre is above Y=3.
+            const box = new THREE.Box3().setFromObject(child);
+            if (box.min.y > 3) {
+              child.material = child.material.clone();
+              child.material.transparent = true;
+              child.material.opacity = 0.0;   // fully invisible to camera
+              child.material.depthWrite = false;
+            }
           }
         }
       });
@@ -180,47 +190,23 @@ export function buildScene(container, layout) {
     });
   }
 
-  // Follow camera — preferred angle is Y=9, Z=8 (angled view the user liked)
-  // Smart occlusion avoidance: if geometry sits between camera and player, dynamically
-  // raise camera until line-of-sight is clear, then ease back to preferred angle.
-  const PREF_Y = 9;    // preferred height above player
-  const PREF_Z = 8;    // preferred distance behind player
-  const MAX_Y  = 18;   // max raise to clear geometry (never higher)
-  const MIN_Z  = 1;    // min Z when at max height (nearly overhead)
-  const CAM_LERP = 0.08;
+  // ── Truly fixed-angle follow camera ────────────────────────────────────────
+  // Y=12 clears the tallest GLB canopy/ramp.  Z=8 keeps the same angled RPG
+  // feel as before.  These values NEVER change — the angle is 100 % locked.
+  const CAM_Y = 12;   // world-units above the player
+  const CAM_Z = 8;    // world-units south (behind) the player
+  const LERP  = 0.08; // follow speed — smooth but not laggy
 
   let frame = 0;
-  let camFollowX = null;
-  let camFollowZ = null;
-  let dynamicY = PREF_Y;   // actual Y used this frame — lerps between PREF_Y and MAX_Y
-  let dynamicZ = PREF_Z;   // actual Z used this frame
-
-  // Raycaster for occlusion detection — reused each frame (zero garbage)
-  const occRay = new THREE.Raycaster();
-  const occDir = new THREE.Vector3();
-  const playerVec = new THREE.Vector3();
-
-  // Build a flat list of blocking meshes — GLB model children (not the playerGroup)
-  // We collect them lazily on first use so the GLB loader has time to finish.
-  let blockMeshes = null;
-  function getBlockMeshes() {
-    if (blockMeshes) return blockMeshes;
-    blockMeshes = [];
-    scene.traverse(child => {
-      if (child.isMesh && child !== window.GameState?.playerGroup &&
-          !child.userData?.isEasterEgg && !child.userData?.isScavengerTarget) {
-        blockMeshes.push(child);
-      }
-    });
-    return blockMeshes;
-  }
+  let camX = null;   // null → snap instantly on first frame
+  let camZ = null;
 
   function animate() {
     frame += 0.005;
     if (starGroup) starGroup.rotation.y += 0.0003;
-    if (moon) moon.rotation.y += 0.002;
+    if (moon)      moon.rotation.y      += 0.002;
 
-    // Animate collectibles (Easter Eggs & Scavenger items float and spin)
+    // Animate collectibles
     scene.children.forEach(c => {
       if (c.userData && (c.userData.isEasterEgg || c.userData.isScavengerTarget)) {
         c.rotation.y += 0.02;
@@ -233,42 +219,21 @@ export function buildScene(container, layout) {
       const py = window.GameState.playerGroup.position.y || 0;
       const pz = window.GameState.playerGroup.position.z;
 
-      if (camFollowX === null) { camFollowX = px; camFollowZ = pz; }
-      camFollowX += (px - camFollowX) * CAM_LERP;
-      camFollowZ += (pz - camFollowZ) * CAM_LERP;
+      // Snap to player on first frame (no cross-map fly-in)
+      if (camX === null) { camX = px; camZ = pz; }
 
-      // -- Occlusion avoidance --
-      // Test ray from desired camera position toward the player. If anything is
-      // in the way, push dynamicY up (and dynamicZ down) until clear.
-      const testCamX = camFollowX;
-      const testCamY = py + dynamicY;
-      const testCamZ = camFollowZ + dynamicZ;
-      playerVec.set(px, py + 1.0, pz);
-      occDir.set(px - testCamX, (py + 1.0) - testCamY, pz - testCamZ).normalize();
-      occRay.set(new THREE.Vector3(testCamX, testCamY, testCamZ), occDir);
+      // Smoothly follow player in XZ
+      camX += (px - camX) * LERP;
+      camZ += (pz - camZ) * LERP;
 
-      const dist = Math.sqrt(
-        (px - testCamX) ** 2 + ((py + 1.0) - testCamY) ** 2 + (pz - testCamZ) ** 2
-      );
-      const hits = occRay.intersectObjects(getBlockMeshes(), false);
-      const blocked = hits.length > 0 && hits[0].distance < dist - 0.5;
-
-      if (blocked) {
-        // Raise camera toward overhead — smooth, one step per frame
-        dynamicY += (MAX_Y - dynamicY) * 0.15;
-        dynamicZ += (MIN_Z - dynamicZ) * 0.15;
-      } else {
-        // Ease back to the preferred angle when view is clear
-        dynamicY += (PREF_Y - dynamicY) * 0.05;
-        dynamicZ += (PREF_Z - dynamicZ) * 0.05;
-      }
-
-      camera.position.set(camFollowX, py + dynamicY, camFollowZ + dynamicZ);
-      camera.lookAt(camFollowX, py + 0.9, camFollowZ);
+      // Fixed offset — angle never changes
+      camera.position.set(camX, py + CAM_Y, camZ + CAM_Z);
+      camera.lookAt(camX, py + 0.9, camZ);
     } else if (layout.idleDrift) {
       camera.position.x = camPos[0] + Math.sin(frame) * 0.3;
       camera.lookAt(...lookAt);
     }
+
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
   }
