@@ -778,11 +778,67 @@ function gameLoop() {
     }
   }
 
-  // Apply Movement if not in dialogue or minigame
+  // Apply Movement with 3D Collision Detection & Wall-Sliding Physics if not in dialogue or minigame
   if ((dx !== 0 || dz !== 0) && !GameState.isDialogueOpen && !GameState.isMinigameOpen) {
-    GameState.playerPos.x = Math.max(-14, Math.min(14, GameState.playerPos.x + dx));
-    GameState.playerPos.z = Math.max(-14, Math.min(10, GameState.playerPos.z + dz));
-    GameState.playerGroup.position.set(GameState.playerPos.x, 0, GameState.playerPos.z);
+    const nextX = GameState.playerPos.x + dx;
+    const nextZ = GameState.playerPos.z + dz;
+
+    const checkCollision = (nx, nz) => {
+      if (nx < -14 || nx > 14 || nz < -14 || nz > 10) return true; // Out of map bounds
+
+      // Zone-specific architectural boundaries (buildings, back-walls, stage columns)
+      if (GameState.currentZone === 'celestecon_amphitheater') {
+        if (nz < -8.8) return true; // Main HQ building & canopy back-wall
+        if (Math.hypot(nx - (-7.5), nz - (-4.5)) < 1.2) return true; // Left canopy pillar
+        if (Math.hypot(nx - 7.5, nz - (-4.5)) < 1.2) return true; // Right canopy pillar
+      } else if (GameState.currentZone === 'auditorium_demo') {
+        if (nz < -9.0 || nx < -11.0 || nx > 11.0) return true; // Auditorium walls & backdrop
+      }
+
+      // Proximity collision against scene objects (Event Booths, NPCs, Pillars, Podiums)
+      const { scene } = GameState.sceneData;
+      if (scene) {
+        for (let i = 0; i < scene.children.length; i++) {
+          const child = scene.children[i];
+          if (child === GameState.playerGroup) continue;
+          if (!child.userData) continue;
+
+          // Pass through collectibles and portals so player can step onto them
+          if (child.userData.isEasterEgg || child.userData.isScavengerTarget || child.userData.targetZone) continue;
+
+          if (child.userData.id || child.userData.interactName) {
+            let colRadius = 0.75; // Default NPC cylinder radius
+            if (child.userData.id && child.userData.id.startsWith('booth')) colRadius = 1.7; // Booth counter radius
+            if (child.userData.id && child.userData.id.startsWith('npc')) colRadius = 0.75; // Character radius
+
+            if (Math.hypot(child.position.x - nx, child.position.z - nz) < colRadius) return true;
+          }
+        }
+      }
+      return false;
+    };
+
+    let moved = false;
+    // Attempt diagonal / 2D movement first
+    if (!checkCollision(nextX, nextZ)) {
+      GameState.playerPos.x = nextX;
+      GameState.playerPos.z = nextZ;
+      moved = true;
+    } else if (dx !== 0 && !checkCollision(nextX, GameState.playerPos.z)) {
+      // Wall-slide along X axis
+      GameState.playerPos.x = nextX;
+      moved = true;
+    } else if (dz !== 0 && !checkCollision(GameState.playerPos.x, nextZ)) {
+      // Wall-slide along Z axis
+      GameState.playerPos.z = nextZ;
+      moved = true;
+    }
+
+    if (moved) {
+      GameState.playerGroup.position.set(GameState.playerPos.x, 0, GameState.playerPos.z);
+    } else if (GameState.targetMove) {
+      GameState.targetMove = null; // Cancel click-to-move if blocked by wall/obstacle
+    }
 
     // Turn character in movement direction
     const targetRot = Math.atan2(dx, dz);

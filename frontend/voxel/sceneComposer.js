@@ -182,6 +182,15 @@ export function buildScene(container, layout) {
 
   // Render loop with dynamic camera tracking (follows player avatar smoothly)
   let frame = 0;
+  // Cinematic Hollywood Steady-Cam state (prevents violent camera snapping and whipping on turns)
+  let smoothCamX = null;
+  let smoothCamY = null;
+  let smoothCamZ = null;
+  let smoothLookX = null;
+  let smoothLookY = null;
+  let smoothLookZ = null;
+  let currentCamYaw = Math.PI;
+
   function animate() {
     frame += 0.005;
     if (starGroup) starGroup.rotation.y += 0.0003;
@@ -199,24 +208,40 @@ export function buildScene(container, layout) {
       const px = window.GameState.playerGroup.position.x;
       const py = window.GameState.playerGroup.position.y || 0;
       const pz = window.GameState.playerGroup.position.z;
-      const rotY = window.GameState.playerGroup.rotation.y || 0;
+      const targetRotY = window.GameState.playerGroup.rotation.y || 0;
 
-      // True Over-the-Shoulder 3rd-Person AAA Camera: positions behind character and looks forward along their sightline
+      // Smooth shortest-path angle damping for cinematic Hollywood steady-cam (prevents violent whipping on turns!)
+      let diff = (targetRotY - currentCamYaw + Math.PI * 3) % (Math.PI * 2) - Math.PI;
+      currentCamYaw += diff * 0.045; // Gentle 4.5% lerp per frame keeps camera rock-steady and smooth
+
       const distBehind = 3.6;
-      const heightAbove = 1.85;
-      const targetCamX = px - Math.sin(rotY) * distBehind;
+      const heightAbove = 2.0;
+      const targetCamX = px - Math.sin(currentCamYaw) * distBehind;
       const targetCamY = py + heightAbove;
-      const targetCamZ = pz - Math.cos(rotY) * distBehind;
+      const targetCamZ = pz - Math.cos(currentCamYaw) * distBehind;
 
-      camera.position.x += (targetCamX - camera.position.x) * 0.12;
-      camera.position.y += (targetCamY - camera.position.y) * 0.12;
-      camera.position.z += (targetCamZ - camera.position.z) * 0.12;
+      // Look slightly ahead of character upper chest/head (keeps avatar beautifully framed without dizzying swings)
+      const targetLookX = px + Math.sin(currentCamYaw) * 1.5;
+      const targetLookY = py + 1.45;
+      const targetLookZ = pz + Math.cos(currentCamYaw) * 1.5;
 
-      // Focus camera 6 meters ahead along player's facing direction at eye height
-      const lookX = px + Math.sin(rotY) * 6.0;
-      const lookY = py + 1.55;
-      const lookZ = pz + Math.cos(rotY) * 6.0;
-      camera.lookAt(lookX, lookY, lookZ);
+      // Initialize instantly on first frame so there is no universe-wide lerp across scenes
+      if (smoothCamX === null) {
+        smoothCamX = targetCamX; smoothCamY = targetCamY; smoothCamZ = targetCamZ;
+        smoothLookX = targetLookX; smoothLookY = targetLookY; smoothLookZ = targetLookZ;
+        currentCamYaw = targetRotY;
+      }
+
+      smoothCamX += (targetCamX - smoothCamX) * 0.1;
+      smoothCamY += (targetCamY - smoothCamY) * 0.1;
+      smoothCamZ += (targetCamZ - smoothCamZ) * 0.1;
+
+      smoothLookX += (targetLookX - smoothLookX) * 0.12;
+      smoothLookY += (targetLookY - smoothLookY) * 0.12;
+      smoothLookZ += (targetLookZ - smoothLookZ) * 0.12;
+
+      camera.position.set(smoothCamX, smoothCamY, smoothCamZ);
+      camera.lookAt(smoothLookX, smoothLookY, smoothLookZ);
     } else if (layout.idleDrift) {
       camera.position.x = camPos[0] + Math.sin(frame) * 0.3;
       camera.lookAt(...lookAt);
