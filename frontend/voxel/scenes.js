@@ -29,6 +29,11 @@ export const SCENES = {
         params: [1.65, 0x2b6cb0, 0xd9a878, 0x1a202c], text: 'Jatin (the_blue_warrior)',
         id: 'npc_jatin', interactName: 'Talk to Jatin (CelesteCon Host & Narrator)', dialogueKey: 'npc_jatin' },
 
+      // AI Helper Bot
+      { type: 'person', position: [-2, 0, -3], rotation: [0, 0, 0],
+        params: [1.7, 0x00f0ff, 0xd9a878, 0x1a202c], text: '🤖 AEROSS AI Helper',
+        id: 'npc_ai_bot', interactName: 'Consult AEROSS AI Helper Bot', dialogueKey: 'npc_ai_bot' },
+
       // Students
       { type: 'person', position: [-2.5, 0, 1.5], rotation: [0, 0.3, 0],
         params: [1.58, 0xd9776a, 0xe8b98a, 0x3a2e26], text: 'Divyam',
@@ -93,6 +98,11 @@ export const SCENES = {
         params: [1.65, 0x8fb996, 0xd9a878, 0x1a202c], text: 'Auditorium Host',
         id: 'npc_host', interactName: 'Talk to Auditorium Host', dialogueKey: 'npc_host' },
 
+      // AI Helper Bot
+      { type: 'person', position: [2, 0, -2], rotation: [0, 0, 0],
+        params: [1.7, 0x00f0ff, 0xd9a878, 0x1a202c], text: '🤖 AEROSS AI Helper',
+        id: 'npc_ai_bot', interactName: 'Consult AEROSS AI Helper Bot', dialogueKey: 'npc_ai_bot' },
+
       // AEROSS Event Booths
       { type: 'eventBooth', position: [-6, 0, -3], params: [2.5, 1.6, 2.2, 0x141b33, 0xd9776a], text: 'AEROSS Theatre',
         id: 'booth_theatre', interactName: 'AEROSS Theatre (Standup / Skit / Improv)', dialogueKey: 'booth_theatre' },
@@ -136,6 +146,11 @@ export const SCENES = {
         params: [1.7, 0xf6c667, 0xd9a878, 0x1a202c], text: 'Siddharth (President)',
         id: 'npc_siddharth', interactName: 'Talk to Siddharth (AEROSS President)', dialogueKey: 'npc_siddharth' },
 
+      // AI Helper Bot
+      { type: 'person', position: [-2, 0, -2], rotation: [0, 0, 0],
+        params: [1.7, 0x00f0ff, 0xd9a878, 0x1a202c], text: '🤖 AEROSS AI Helper',
+        id: 'npc_ai_bot', interactName: 'Consult AEROSS AI Helper Bot', dialogueKey: 'npc_ai_bot' },
+
       // Event Booths
       { type: 'eventBooth', position: [-4, 0, 1.5], params: [2.4, 1.5, 2.2, 0x141b33, 0xf6c667], text: 'Settle-Me-This',
         id: 'booth_settle', interactName: 'Settle-me-this (Settlement Design Challenge)', dialogueKey: 'booth_settle' },
@@ -150,6 +165,34 @@ export const SCENES = {
       // Scavenger Hunt Target
       { type: 'scavengerItem', position: [4.5, 0.2, -4], params: [0xffd166, 0.5], text: '📋 Target: Judge Rubrics',
         id: 'scav_4', isScavengerTarget: true, scavengerName: 'Confidential Judge Rubric Sheets' },
+    ],
+  },
+
+  // Celestial Rift Gateway -- Cosmic Secret Zone
+  black_hole_gateway: {
+    background: '#060814',
+    camera: { position: [0, 5, 12], lookAt: [0, 1.5, -3], fov: 60 },
+    light: { ambient: 0.5, sunColor: '#00f0ff', sunIntensity: 0.8, sunPosition: [0, 15, 0] },
+    idleDrift: true,
+    objects: [
+      { type: 'floor', position: [0, 0, 0], params: [16, 16, 0x111633] },
+      { type: 'blackHole', position: [0, 0, -4], text: '🌌 Celestial Rift Gateway',
+        id: 'rift_gate', interactName: 'Enter the Celestial Rift (Requires 3 Celestial Keys)', dialogueKey: 'rift_gate' },
+
+      // Event Booths in Rift
+      { type: 'eventBooth', position: [-5, 0, 1], params: [2.4, 1.5, 2.2, 0x141b33, 0x00f0ff], text: 'Space Dunk Arena',
+        id: 'booth_spacedunk', interactName: 'Space Dunk — Orbital Gravity Challenge', dialogueKey: 'booth_spacedunk' },
+      { type: 'eventBooth', position: [5, 0, 1], params: [2.4, 1.5, 2.2, 0x141b33, 0xff007b], text: 'Paper Plane Rush',
+        id: 'booth_paperplane', interactName: 'Paper Plane Rush Challenge', dialogueKey: 'booth_paperplane' },
+
+      // AI Helper Bot
+      { type: 'person', position: [0, 0, 3], rotation: [0, Math.PI, 0],
+        params: [1.7, 0x00f0ff, 0xd9a878, 0x1a202c], text: '🤖 AEROSS AI Helper',
+        id: 'npc_ai_bot', interactName: 'Consult AEROSS AI Helper Bot', dialogueKey: 'npc_ai_bot' },
+
+      // Easter Egg
+      { type: 'easterEgg', position: [0, 1.0, -8], params: [0xff007b, 0.5], text: '🌌 Relic: Cosmic Core',
+        id: 'egg_6', isEasterEgg: true, easterEggName: 'Cosmic Singularity Core', easterEggPower: 'Infinite Orbital Boost & Celestial Mastery' },
     ],
   },
 };

@@ -17,7 +17,6 @@
         <div class="bg-photo"></div>
       </div>
       <div id="scrim"></div>
-      <canvas id="stars-canvas"></canvas>
 
       <div id="loading-content">
         <div class="eyebrow">AEROSS Club Presents</div>
@@ -30,6 +29,43 @@
         </div>
 
         <button id="enter-btn" class="glow-btn">ENTER CELESTECON</button>
+      </div>
+    </div>
+
+    <!-- ==================== STAGE 1.5: MODE SELECTION ==================== -->
+    <div id="screen-mode-select" class="screen">
+      <div class="screen-header">
+        <div class="eyebrow">Select Game Mode</div>
+        <h2>Choose Your Experience</h2>
+        <p>Experience the full narrative campaign or jump straight into aerospace technical challenges.</p>
+      </div>
+
+      <div class="role-cards">
+        <div class="mode-card role-card" data-mode="story">
+          <div class="role-icon">🌌</div>
+          <h3>Story Mode: Celestial Rift</h3>
+          <p class="role-desc">An alien artifact triggers a cosmic rift at DPS RK Puram. Play through the story, take the personality test, collect Celestial Keys, and seal the rift!</p>
+          <ul class="role-perks">
+            <li>✨ Full narrative RPG campaign</li>
+            <li>✨ 10-question character allotment quiz</li>
+            <li>✨ Explore 4 distinct campus zones</li>
+            <li>✨ 3 branching cinematic endings</li>
+          </ul>
+          <button class="select-role-btn">Start Story Mode</button>
+        </div>
+
+        <div class="mode-card role-card" data-mode="freestyle">
+          <div class="role-icon">🚀</div>
+          <h3>Free Style Mode: AEROSS Challenge</h3>
+          <p class="role-desc">No quiz, no narrative dialogs. Jump straight into the aerospace minigame sandbox, track personal high scores, and explore the AEROSS Archive.</p>
+          <ul class="role-perks">
+            <li>🏆 Direct access to all 5 technical minigames</li>
+            <li>🏆 Local persistent high score leaderboards</li>
+            <li>🏆 Read the AEROSS historical archive</li>
+            <li>🏆 Practice and perfect your engineering skills</li>
+          </ul>
+          <button class="select-role-btn">Start Free Style Mode</button>
+        </div>
       </div>
     </div>
 
@@ -133,6 +169,68 @@
       </div>
     </div>
 
+    <!-- ==================== STAGE 1.8: FREE STYLE HUB ==================== -->
+    <div id="screen-freestyle-hub" class="screen">
+      <div class="screen-header">
+        <div class="eyebrow">Free Style Mode — Sandbox Hub</div>
+        <h2>AEROSS Aerospace Challenge</h2>
+        <p>Select any technical minigame to play instantly. Practice your skills and compete for local campus high scores!</p>
+        <div style="margin-top: 15px;">
+          <button id="hub-back-mode-btn" class="glow-btn" style="padding: 10px 20px; font-size: 0.9rem;">← Switch Game Mode</button>
+        </div>
+      </div>
+
+      <div class="hub-grid">
+        <div class="hub-tile" data-game="cubesat">
+          <div class="hub-tile-icon">🛰️</div>
+          <h3>Build & Scan (3D CubeSat)</h3>
+          <p>Assemble NASA CubeSat orbital modules, attach solar arrays & telemetry payloads in 3D cleanroom!</p>
+          <div class="hub-score-badge">Best Score: <span id="hub-score-cubesat">0</span> PTS</div>
+          <button class="select-role-btn">Launch Simulator</button>
+        </div>
+
+        <div class="hub-tile" data-game="paper_plane">
+          <div class="hub-tile-icon">✈️</div>
+          <h3>Paper Plane Rush</h3>
+          <p>Drag-to-aim glide aerodynamics! Navigate campus corridors, pass through ring gates, and dodge obstacles!</p>
+          <div class="hub-score-badge">Best Score: <span id="hub-score-paper_plane">0</span> PTS</div>
+          <button class="select-role-btn">Launch Rush</button>
+        </div>
+
+        <div class="hub-tile" data-game="space_dunk">
+          <div class="hub-tile-icon">🏀</div>
+          <h3>Space Dunk (Cosmic Rift)</h3>
+          <p>Timing & aiming orbital gravity throw! Send energy spheres into the gravitational vortex center!</p>
+          <div class="hub-score-badge">Best Score: <span id="hub-score-space_dunk">0</span> PTS</div>
+          <button class="select-role-btn">Launch Dunk</button>
+        </div>
+
+        <div class="hub-tile" data-game="cubestack">
+          <div class="hub-tile-icon">🏗️</div>
+          <h3>Space Arcade (CubeStack)</h3>
+          <p>Official Judge structural verification! Drop satellite blocks with precision to build the tallest aerospace tower!</p>
+          <div class="hub-score-badge">Best Score: <span id="hub-score-cubestack">0</span> PTS</div>
+          <button class="select-role-btn">Launch Arcade</button>
+        </div>
+
+        <div class="hub-tile" data-game="bias_buster">
+          <div class="hub-tile-icon">🧠</div>
+          <h3>Bias Buster (Judge POV)</h3>
+          <p>Official Judge scoring calibration! Test your ability to spot cognitive biases and grade projects fairly!</p>
+          <div class="hub-score-badge">Best Score: <span id="hub-score-bias_buster">0</span> PTS</div>
+          <button class="select-role-btn">Launch Simulation</button>
+        </div>
+
+        <div class="hub-tile" data-game="archive">
+          <div class="hub-tile-icon">📜</div>
+          <h3>AEROSS Historical Archive</h3>
+          <p>Browse technical articles, space club milestones, and aerospace engineering history from DPS RK Puram.</p>
+          <div class="hub-score-badge" style="color: var(--cyan);">AEROSS Library</div>
+          <button class="select-role-btn">Open Archive</button>
+        </div>
+      </div>
+    </div>
+
     <!-- ==================== STAGE 5: RPG GAMEPLAY ==================== -->
     <div id="screen-gameplay" class="screen">
       
@@ -140,6 +238,14 @@
       <header id="game-hud">
         <div class="hud-left">
           <span class="hud-logo">CELESTECON</span>
+          <button id="pause-menu-btn" class="hud-menu-btn" type="button" aria-expanded="false" aria-controls="hud-travel-menu" title="Open travel menu (M)">
+            <span aria-hidden="true">☰</span>
+            <span>Menu</span>
+          </button>
+          <div class="hud-zone-readout" aria-live="polite">
+            <span class="hud-kicker">Current sector</span>
+            <strong id="hud-zone-name">OAT Amphitheater</strong>
+          </div>
           <div class="hud-player-info">
             <span id="hud-avatar">🤯</span>
             <div>
@@ -147,25 +253,35 @@
               <small id="hud-role-name">Participant</small>
             </div>
           </div>
+          <div class="hud-objective">
+            <span class="hud-kicker">Objective</span>
+            <strong id="hud-objective-text">Explore the festival grounds</strong>
+          </div>
         </div>
 
-        <div class="hud-center">
-          <span class="hud-nav-label">📍 Quick Travel:</span>
+        <div class="hud-center" id="hud-travel-menu" aria-hidden="true">
+          <span class="hud-nav-label">Sector transfer</span>
           <div class="hud-nav-buttons">
             <button class="zone-btn active" data-zone="celestecon_amphitheater">🏛️ OAT Amphitheater</button>
             <button class="zone-btn" data-zone="auditorium_demo">🎭 Main Auditorium</button>
             <button class="zone-btn" data-zone="management_room_demo">👔 Management HQ</button>
+            <button class="zone-btn" data-zone="black_hole_gateway" id="hud-btn-black-hole">🌌 Black Hole Gateway</button>
           </div>
           <!-- Keep select hidden for fallback/sync -->
           <select id="campus-zone-select" style="display: none;">
             <option value="celestecon_amphitheater">OAT Amphitheater & Plaza</option>
             <option value="auditorium_demo">Main Auditorium</option>
             <option value="management_room_demo">Management Room</option>
+            <option value="black_hole_gateway">Black Hole Gateway</option>
           </select>
         </div>
 
         <div class="hud-right">
           <button id="hud-finale-btn" class="glow-btn small-btn finale-btn hidden" title="Conclude CelesteCon">🏆 AWARDS FINALE</button>
+          <div class="hud-stat" title="Celestial Keys Collected across Campus">
+            <span>🔑 Keys:</span>
+            <strong id="hud-keys" style="color: #a855f7; text-shadow: 0 0 8px rgba(168,85,247,0.6);">0 / 3</strong>
+          </div>
           <div class="hud-stat" title="Certified Aerospace Events (Win challenges to advance!)">
             <span>🚀 Certified:</span>
             <strong id="hud-certified" style="color: #00f0ff; text-shadow: 0 0 8px rgba(0,240,255,0.6);">0 / 5</strong>
@@ -181,6 +297,18 @@
           <button id="help-controls-btn" class="icon-btn" title="Controls">ℹ️</button>
         </div>
       </header>
+
+      <!-- AI Bot Search Countdown HUD -->
+      <div id="ai-bot-timer-hud" class="hidden">
+        <div class="ai-timer-content">
+          <span class="ai-timer-icon">🤖</span>
+          <span class="ai-timer-label">AI BOT EMERGENCY ASSIST — LOCATE THE AI BOT NPC ON CAMPUS!</span>
+          <div class="ai-timer-bar-wrap">
+            <div id="ai-timer-bar-fill"></div>
+          </div>
+          <span id="ai-timer-seconds">90s</span>
+        </div>
+      </div>
 
       <!-- Main 3D Viewport -->
       <div id="rpg-viewport-wrap">
@@ -200,7 +328,7 @@
 
         <!-- Controls Overlay / Hint -->
         <div id="controls-hint">
-          <span>🎮 <strong>WASD / Arrows</strong> to move • Walk near an NPC or Booth and press <strong>[E]</strong> or <strong>Click</strong> to interact</span>
+          <span><strong>WASD / Arrows</strong> move · <strong>[E]</strong> interact · <strong>[M]</strong> travel · <strong>[Esc]</strong> close</span>
         </div>
 
         <!-- Proximity Indicator -->
@@ -220,11 +348,11 @@
 
         <!-- CelesteCon AI Narrator & Guide Widget (input_file_0 / narrator.png) -->
         <div id="narrator-widget" class="narrator-widget">
-          <div class="narrator-avatar-box" id="narrator-toggle">
+          <button id="narrator-toggle" class="narrator-avatar-box" type="button" aria-expanded="false" aria-controls="narrator-bubble" title="Open guide channel (G)">
             <img src="./assets/narrator.png" alt="CelesteCon Narrator" id="narrator-avatar-img" onerror="this.src='./assets/loading/cubesat-gameplay.png'" />
             <span class="narrator-badge">GUIDE</span>
-          </div>
-          <div class="narrator-bubble" id="narrator-bubble">
+          </button>
+          <div class="narrator-bubble hidden" id="narrator-bubble" aria-live="polite">
             <header class="narrator-bubble-header">
               <span class="narrator-title">🎙️ Jatin — CelesteCon AI Narrator</span>
               <button id="narrator-min-btn" class="narrator-close-btn" title="Minimize Guide">✕</button>
@@ -358,13 +486,61 @@
           <h4>How to Play:</h4>
           <ul>
             <li><strong>Movement:</strong> Use <code>W</code> <code>A</code> <code>S</code> <code>D</code> or <code>Arrow Keys</code> to move your character around the campus.</li>
-            <li><strong>Quick Travel:</strong> Click the <strong>OAT Amphitheater</strong>, <strong>Main Auditorium</strong>, or <strong>Management HQ</strong> buttons in the top HUD bar to instantly travel between zones!</li>
-            <li><strong>Interaction:</strong> Walk close to any character or booth. When the <code>[E]</code> prompt appears, press <strong>E</strong> or click to open dialogue.</li>
+            <li><strong>Fast Travel:</strong> Press <code>M</code> to open the sector console, then select <strong>OAT Amphitheater</strong>, <strong>Main Auditorium</strong>, or <strong>Management HQ</strong>.</li>
+            <li><strong>Interaction:</strong> Walk close to any character or booth. When the <code>[E]</code> prompt appears, press <strong>E</strong> to open dialogue.</li>
             <li><strong>Role Gameplay:</strong> Organize events, compete in challenges, or judge debates based on your chosen POV.</li>
             <li><strong>Minigames:</strong> When NPCs face technical failures, launch minigames (CubeSat, Flight Sim, Circuit Patching) to solve their crises!</li>
             <li><strong>Grand Finale:</strong> When you are ready to conclude your festival experience, click the <strong>🏆 AWARDS FINALE</strong> button to attend the closing ceremony!</li>
           </ul>
         </div>
+      </div>
+    </div>
+
+    <!-- ==================== AEROSS ARCHIVE MODAL ==================== -->
+    <div id="archive-modal" class="modal hidden">
+      <div class="modal-content" style="max-width: 750px; max-height: 85vh; display: flex; flex-direction: column;">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">📜</span>
+            <h3 id="archive-modal-title">AEROSS Historical Archive & Aerospace Compendium</h3>
+          </div>
+          <button id="archive-close-btn" class="modal-close">✕ Close Library</button>
+        </header>
+        <div class="modal-body pad-body" id="archive-articles-list" style="overflow-y: auto; flex: 1; text-align: left; padding: 1.5rem 2rem;">
+          <!-- Populated by JS -->
+        </div>
+        <footer class="modal-footer">
+          <span class="modal-hint">💡 DPS RK Puram Aerospace Society — Exploring the frontiers of air & space since inception.</span>
+        </footer>
+      </div>
+    </div>
+
+    <!-- ==================== AI HELPER BOT MODAL ==================== -->
+    <div id="ai-bot-modal" class="modal hidden">
+      <div class="modal-content" style="max-width: 650px;">
+        <header class="modal-header" style="border-bottom-color: var(--cyan);">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">🤖</span>
+            <h3>AI Science & Aerospace Helper Bot</h3>
+          </div>
+          <button id="ai-bot-close-btn" class="modal-close" style="color: var(--cyan); border-color: var(--cyan);">✕ Return to Quiz</button>
+        </header>
+        <div class="modal-body pad-body" style="text-align: left; padding: 1.8rem;">
+          <p style="color: rgba(241,234,255,0.8); margin-bottom: 1.2rem; font-size: 0.95rem;">
+            Ask me anything about aerospace engineering, rocket propulsion, satellite systems (CubeSats, ADCS, orbits), aerodynamic stability, or CelesteCon event rules!
+          </p>
+          <div style="display: flex; gap: 10px; margin-bottom: 1.5rem;">
+            <input type="text" id="ai-bot-input" placeholder="Type your technical question here (e.g. 'What is ADCS?' or 'LEO vs GEO')..." style="flex: 1; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); background: rgba(0,0,0,0.6); color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem;">
+            <button id="ai-bot-submit-btn" class="glow-btn" style="padding: 12px 24px; font-size: 0.95rem; background: var(--cyan); color: #000; font-weight: bold;">Ask AI</button>
+          </div>
+          <div id="ai-bot-response-area" style="background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 12px; padding: 1.5rem; min-height: 120px; color: #fff; font-size: 0.95rem; line-height: 1.6; display: none;">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+        <footer class="modal-footer" style="justify-content: space-between;">
+          <span class="modal-hint">💡 Offline AI Knowledge Base — Real-time keyword analysis active.</span>
+          <button id="ai-bot-resume-quiz-btn" class="glow-btn small-btn" style="display: none; background: #00ff88; color: #000;">Resume Quizzitch Challenge →</button>
+        </footer>
       </div>
     </div>
 
@@ -401,6 +577,54 @@
     </div>
 
   </div>
+
+  <!-- ==================== PRODUCTION ERROR VISIBILITY ==================== -->
+  <!-- Deliberately a plain (non-module) script so it always runs, even if
+       game.js fails to load entirely (wrong path, syntax error, or the
+       file:// CORS block on type="module" scripts -- the single most
+       common deployment mistake, which otherwise fails with zero visible
+       symptom besides "nothing on the page works"). -->
+  <script>
+    function celesteConShowFatalError(message, detail) {
+      var banner = document.getElementById('fatal-error-banner');
+      if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 'fatal-error-banner';
+        banner.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(6,9,20,0.97);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:system-ui,sans-serif;text-align:center;padding:2rem;';
+        document.body.appendChild(banner);
+      }
+      var detailHtml = detail ? '<pre style="background:#000;color:#ff8080;padding:0.8rem;border-radius:8px;text-align:left;font-size:0.78rem;overflow:auto;max-height:180px;">' + String(detail).replace(/</g, '&lt;') + '</pre>' : '';
+      banner.innerHTML =
+        '<div style="max-width:560px;">' +
+        '<div style="font-size:2.5rem;margin-bottom:1rem;">⚠️</div>' +
+        '<h2 style="color:#ffd166;margin-bottom:0.8rem;">CelesteCon hit a loading error</h2>' +
+        '<p style="color:#d1cae5;margin-bottom:1rem;line-height:1.5;">' + message + '</p>' +
+        detailHtml +
+        '<p style="color:#7fa7c9;margin-top:1rem;font-size:0.85rem;">If you opened this file directly (double-clicked index.html), that\'s almost always the cause — this game must be served through a local server, e.g. <code>python3 -m http.server</code> or <code>npx serve</code> run from the <code>frontend</code> folder, then opened via <code>http://localhost:...</code> — not by double-clicking the file.</p>' +
+        '</div>';
+    }
+
+    window.addEventListener('error', function (e) {
+      console.error('[CelesteCon] Uncaught error:', e.error || e.message);
+      celesteConShowFatalError(
+        'Something threw an unexpected error and stopped the game engine from initializing correctly.',
+        (e.error && e.error.stack) ? e.error.stack : e.message
+      );
+    });
+
+    // Backstop: if the game.js module hasn't set its "started" flag within
+    // 6 seconds, something prevented it from ever running at all (this is
+    // the case a window 'error' listener can miss for module-load failures
+    // in some browsers) -- show the same helpful message either way.
+    setTimeout(function () {
+      if (!window.__celesteConEngineStarted) {
+        celesteConShowFatalError(
+          'The game engine script (game.js) never started running.',
+          'This almost always means the module failed to load — check the browser console (F12) for a red error, or confirm this page is being served over http://localhost rather than opened directly as a file.'
+        );
+      }
+    }, 6000);
+  </script>
 
   <!-- Scripts -->
   <script type="module" src="game.js"></script>

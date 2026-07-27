@@ -483,4 +483,49 @@ export const Kit = {
     if (opts.scale) g.scale.set(...opts.scale);
     return g;
   },
+
+  blackHole(opts = {}) {
+    const g = new THREE.Group();
+    const core = new THREE.Mesh(
+      new THREE.SphereGeometry(1.5, 32, 32),
+      new THREE.MeshBasicMaterial({ color: 0x000000 })
+    );
+    core.position.y = 2.5;
+    g.add(core);
+
+    const ringColors = [0xff007b, 0x00f0ff, 0xffd166];
+    ringColors.forEach((color, idx) => {
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(2.2 + idx * 0.6, 0.15, 16, 64),
+        new THREE.MeshBasicMaterial({ color, wireframe: idx % 2 === 1 })
+      );
+      ring.position.y = 2.5;
+      ring.rotation.x = Math.PI / 2 + (idx - 1) * 0.3;
+      ring.rotation.y = idx * 0.4;
+      g.add(ring);
+    });
+
+    if (opts.text) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 380; canvas.height = 80;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = 'rgba(10,14,31,0.85)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#00f0ff';
+      ctx.font = 'bold 32px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(opts.text, canvas.width / 2, canvas.height / 2);
+      const texture = new THREE.CanvasTexture(canvas);
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, depthTest: false }));
+      sprite.scale.set(2.2, 0.45, 1);
+      sprite.position.y = 5.2;
+      g.add(sprite);
+    }
+
+    if (opts.position) g.position.set(...opts.position);
+    if (opts.rotation) g.rotation.set(...opts.rotation);
+    if (opts.scale) g.scale.set(...opts.scale);
+    return g;
+  },
 };

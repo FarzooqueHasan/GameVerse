@@ -54,6 +54,9 @@ export function buildScene(container, layout) {
   container.innerHTML = '';
   container.appendChild(renderer.domElement);
 
+  let disposed = false;
+  let animationFrameId = null;
+
   // --- MAXED OUT LIGHTING RIG ---
   const lightCfg = layout.light || {};
   const ambient = new THREE.AmbientLight(0xffffff, lightCfg.ambient ?? 0.7);
@@ -160,6 +163,7 @@ export function buildScene(container, layout) {
   if (layout.glbModel) {
     const loader = new GLTFLoader();
     loader.load(layout.glbModel, (gltf) => {
+      if (disposed) return;
       const model = gltf.scene;
       if (layout.glbScale) model.scale.set(...layout.glbScale);
       if (layout.glbPosition) model.position.set(...layout.glbPosition);
@@ -202,6 +206,7 @@ export function buildScene(container, layout) {
   let camZ = null;
 
   function animate() {
+    if (disposed) return;
     frame += 0.005;
     if (starGroup) starGroup.rotation.y += 0.0003;
     if (moon)      moon.rotation.y      += 0.002;
@@ -235,7 +240,7 @@ export function buildScene(container, layout) {
     }
 
     renderer.render(scene, camera);
-    requestAnimationFrame(animate);
+    animationFrameId = requestAnimationFrame(animate);
   }
   animate();
 
@@ -249,5 +254,32 @@ export function buildScene(container, layout) {
   }
   window.addEventListener('resize', handleResize);
 
-  return { scene, camera, renderer };
+  return {
+    scene,
+    camera,
+    renderer,
+    dispose() {
+      if (disposed) return;
+      disposed = true;
+      if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', handleResize);
+
+      const geometries = new Set();
+      const materials = new Set();
+      scene.traverse((object) => {
+        if (object.geometry) geometries.add(object.geometry);
+        if (object.material) {
+          const objectMaterials = Array.isArray(object.material) ? object.material : [object.material];
+          objectMaterials.forEach((material) => materials.add(material));
+        }
+      });
+      geometries.forEach((geometry) => geometry.dispose?.());
+      materials.forEach((material) => material.dispose?.());
+      scene.clear();
+      renderer.dispose();
+      if (renderer.domElement.parentElement === container) {
+        renderer.domElement.remove();
+      }
+    },
+  };
 }

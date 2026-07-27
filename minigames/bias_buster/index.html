@@ -1,0 +1,2450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bias Buster - Interactive Judge Simulation Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+/* ==========================================================================
+   BIAS BUSTER - STYLESHEET (VANILLA CSS)
+   ========================================================================== */
+
+:root {
+    --bg-dark: #0b0f19;
+    --bg-card: rgba(22, 31, 49, 0.75);
+    --bg-card-hover: rgba(30, 42, 66, 0.85);
+    --bg-glass: rgba(15, 23, 42, 0.8);
+
+    --primary: #3b82f6;
+    --primary-glow: rgba(59, 130, 246, 0.4);
+    --accent-cyan: #06b6d4;
+    
+    --merit-green: #10b981;
+    --merit-green-glow: rgba(16, 185, 129, 0.3);
+    --merit-bg: rgba(16, 185, 129, 0.12);
+
+    --noise-purple: #a855f7;
+    --noise-purple-glow: rgba(168, 85, 247, 0.3);
+    --noise-bg: rgba(168, 85, 247, 0.12);
+
+    --danger-red: #ef4444;
+    --gold-accent: #f59e0b;
+
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+    --text-dim: #6b7280;
+
+    --border-subtle: rgba(255, 255, 255, 0.1);
+    --border-highlight: rgba(255, 255, 255, 0.2);
+
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-full: 9999px;
+
+    --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--border-subtle);
+    --shadow-glow: 0 0 25px var(--primary-glow);
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset & Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.1) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-main);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* Header & Navigation */
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: var(--bg-glass);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-subtle);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-icon {
+    font-size: 2rem;
+    background: linear-gradient(135deg, var(--primary), var(--accent-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 10px var(--primary-glow));
+}
+
+.brand-title {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    display: block;
+    background: linear-gradient(90deg, #ffffff, #93c5fd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.brand-subtitle {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.view-toggle {
+    display: flex;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 4px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-subtle);
+}
+
+.nav-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 0.5rem 1.25rem;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-btn.active {
+    background: linear-gradient(135deg, var(--primary), #2563eb);
+    color: #fff;
+    box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.icon-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: var(--transition);
+    display: grid;
+    place-items: center;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.secondary-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--border-highlight);
+}
+
+.primary-btn {
+    background: linear-gradient(135deg, var(--primary), #2563eb);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.75rem;
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 16px var(--primary-glow);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.primary-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--primary-glow);
+}
+
+.primary-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.pulse {
+    animation: pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+    70% { box-shadow: 0 0 0 14px rgba(59, 130, 246, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
+
+/* Main Container & Sections */
+.main-container {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    flex: 1;
+}
+
+.view-section {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.view-section.active {
+    display: block;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* HUD Bar */
+.hud-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.hud-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-subtle);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-card);
+}
+
+.hud-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.hud-value {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-top: 0.2rem;
+}
+
+.hud-value.highlight {
+    color: var(--accent-cyan);
+}
+
+.hud-value.streak {
+    color: var(--gold-accent);
+}
+
+/* Scenario Banner */
+.scenario-card {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+    border: 1px solid var(--border-highlight);
+    border-left: 4px solid var(--primary);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+}
+
+.scenario-badge {
+    display: inline-block;
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--accent-cyan);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    margin-bottom: 0.5rem;
+}
+
+.scenario-title {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.scenario-desc {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    max-width: 900px;
+    margin-bottom: 1rem;
+}
+
+.interactive-guide-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    font-size: 0.9rem;
+}
+
+.tag-legend {
+    font-weight: 700;
+    padding: 0.1rem 0.5rem;
+    border-radius: 4px;
+}
+
+.tag-legend.merit {
+    background: var(--merit-bg);
+    color: var(--merit-green);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.tag-legend.noise {
+    background: var(--noise-bg);
+    color: var(--noise-purple);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+/* Candidates Grid */
+.candidates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+/* Candidate Card */
+.candidate-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 2px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+    position: relative;
+    cursor: pointer;
+}
+
+.candidate-card:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+}
+
+.candidate-card.selected {
+    border-color: var(--primary);
+    background: rgba(30, 42, 66, 0.95);
+    box-shadow: 0 0 30px var(--primary-glow);
+}
+
+.candidate-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.avatar-wrapper {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border: 2px solid var(--border-highlight);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    flex-shrink: 0;
+}
+
+.candidate-meta h3 {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.candidate-meta .subtitle {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Tag Sections */
+.attr-group-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin: 0.75rem 0 0.4rem 0;
+}
+
+.attr-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.attr-tag {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
+    font-size: 0.85rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition);
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.attr-tag:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--border-highlight);
+}
+
+.attr-tag.classified-merit {
+    background: var(--merit-bg) !important;
+    color: var(--merit-green) !important;
+    border-color: rgba(16, 185, 129, 0.5) !important;
+    box-shadow: 0 0 10px var(--merit-green-glow);
+}
+
+.attr-tag.classified-noise {
+    background: var(--noise-bg) !important;
+    color: var(--noise-purple) !important;
+    border-color: rgba(168, 85, 247, 0.5) !important;
+    box-shadow: 0 0 10px var(--noise-purple-glow);
+}
+
+.card-select-btn {
+    margin-top: auto;
+    width: 100%;
+    padding: 0.6rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.candidate-card.selected .card-select-btn {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+/* Decision Bar */
+.decision-bar {
+    position: sticky;
+    bottom: 1.5rem;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-highlight);
+    padding: 1rem 2rem;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    z-index: 90;
+}
+
+.selected-info {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+
+.selected-info strong {
+    color: var(--text-main);
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+}
+
+/* Modal Overlay & Styling */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(5, 8, 15, 0.85);
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal-card {
+    background: #0f172a;
+    border: 1px solid var(--border-highlight);
+    border-radius: var(--radius-lg);
+    max-width: 750px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    animation: modalPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalPop {
+    from { transform: scale(0.9) translateY(20px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    text-align: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 1rem;
+}
+
+.outcome-icon {
+    font-size: 3.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.outcome-title {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+.outcome-subtitle {
+    display: inline-block;
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--merit-green);
+    padding: 0.3rem 1rem;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+}
+
+/* Score Breakdown Table */
+.score-breakdown {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.score-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+.score-row.total {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 0.6rem;
+    margin-top: 0.4rem;
+    font-weight: 700;
+    color: var(--text-main);
+    font-size: 1.1rem;
+}
+
+.score-row.total strong {
+    color: var(--accent-cyan);
+    font-family: var(--font-mono);
+}
+
+/* Bias Trap Box */
+.bias-analysis-box {
+    background: rgba(30, 41, 59, 0.5);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    border: 1px solid var(--border-subtle);
+}
+
+.bias-analysis-box h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent-cyan);
+}
+
+.bias-trap-alert {
+    margin-top: 1rem;
+    background: rgba(168, 85, 247, 0.1);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+}
+
+.bias-trap-alert h4 {
+    color: var(--noise-purple);
+    font-size: 0.95rem;
+    margin-bottom: 0.3rem;
+}
+
+/* Matrix Table */
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.comparison-table th, .comparison-table td {
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.comparison-table th {
+    color: var(--text-muted);
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Summary Screen */
+.summary-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-highlight);
+    border-radius: var(--radius-lg);
+    padding: 3rem 2rem;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    box-shadow: var(--shadow-card);
+}
+
+.trophy-badge {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+}
+
+.summary-title {
+    font-family: var(--font-heading);
+    font-size: 2.4rem;
+    font-weight: 800;
+}
+
+.summary-subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.summary-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.summary-stat-box {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-num {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent-cyan);
+}
+
+.stat-lbl {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.blindspot-audit {
+    text-align: left;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    margin-bottom: 2rem;
+}
+
+.blindspot-audit h2 {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    margin-bottom: 0.25rem;
+}
+
+.blindspot-subtext {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+}
+
+.bias-meter-row {
+    margin-bottom: 1rem;
+}
+
+.meter-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.meter-track {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.meter-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--merit-green));
+    border-radius: var(--radius-full);
+    transition: width 0.8s ease;
+}
+
+.summary-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* GDD STYLES */
+.gdd-container {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2.5rem;
+}
+
+.gdd-sidebar {
+    position: sticky;
+    top: 6rem;
+    height: calc(100vh - 8rem);
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.gdd-sidebar h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.gdd-nav {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.gdd-nav-item {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    display: block;
+}
+
+.gdd-nav-item:hover, .gdd-nav-item.active {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--accent-cyan);
+    font-weight: 600;
+}
+
+.gdd-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+}
+
+.gdd-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    box-shadow: var(--shadow-card);
+}
+
+.gdd-tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--primary);
+    font-weight: 700;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 0.4rem;
+}
+
+.gdd-section h1 {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 1.25rem;
+}
+
+.gdd-section h2 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 1.75rem 0 0.75rem 0;
+    color: #e2e8f0;
+}
+
+.gdd-lead {
+    font-size: 1.15rem;
+    color: #cbd5e1;
+    margin-bottom: 1.5rem;
+}
+
+.gdd-box {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border-highlight);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    margin-top: 1rem;
+}
+
+.gdd-box ul, .gdd-section ul {
+    margin-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.gdd-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.gdd-card-preview {
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.merit-border { border-left: 4px solid var(--merit-green); }
+.noise-border { border-left: 4px solid var(--noise-purple); }
+
+.code-block {
+    background: #090d16;
+    border: 1px solid var(--border-subtle);
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--accent-cyan);
+    margin: 1rem 0;
+    overflow-x: auto;
+}
+
+.gdd-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.gdd-table th, .gdd-table td {
+    padding: 0.8rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.gdd-table th {
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--text-muted);
+}
+
+.timeline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+.timeline-item {
+    display: flex;
+    gap: 1.25rem;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+}
+
+.timeline-num {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--primary);
+    background: rgba(59, 130, 246, 0.15);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.gdd-sample-profile {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--border-highlight);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.distraction-trap-bg {
+    background: rgba(168, 85, 247, 0.05);
+    border-color: rgba(168, 85, 247, 0.3);
+}
+
+.gdd-sample-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.role-pill {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.badge-merit-high {
+    background: var(--merit-bg);
+    color: var(--merit-green);
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.badge-merit-low {
+    background: var(--noise-bg);
+    color: var(--noise-purple);
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.gdd-sample-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.col-head-merit { color: var(--merit-green); font-size: 0.95rem; margin-bottom: 0.5rem; }
+.col-head-noise { color: var(--noise-purple); font-size: 0.95rem; margin-bottom: 0.5rem; }
+
+.gdd-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+}
+
+.gdd-feature-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+}
+
+.fc-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.flow-chart {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    margin-top: 1.5rem;
+    overflow-x: auto;
+}
+
+.flow-step {
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid var(--primary-glow);
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.flow-arrow {
+    color: var(--text-dim);
+}
+
+/* Footer */
+.app-footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border-subtle);
+    margin-top: 4rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .gdd-container { grid-template-columns: 1fr; }
+    .gdd-sidebar { display: none; }
+    .hud-bar { grid-template-columns: repeat(2, 1fr); }
+    .gdd-two-col, .gdd-sample-body, .gdd-grid-3 { grid-template-columns: 1fr; }
+}
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <header class="app-header">
+        <div class="logo-container">
+            <div class="logo-icon">⚖️</div>
+            <div class="logo-text">
+                <span class="brand-title">BIAS BUSTER</span>
+                <span class="brand-subtitle">Judicial Merit Simulator</span>
+            </div>
+        </div>
+
+        <nav class="view-toggle">
+            <button id="btn-play-mode" class="nav-btn active" onclick="switchView('game')">
+                <span class="icon">🎮</span> Play Simulation
+            </button>
+            <button id="btn-gdd-mode" class="nav-btn" onclick="switchView('gdd')">
+                <span class="icon">📄</span> Game Design Document
+            </button>
+        </nav>
+
+        <div class="header-actions">
+            <button id="btn-sound" class="icon-btn" onclick="toggleAudio()" title="Toggle Sound FX">🔊</button>
+            <button id="btn-restart" class="secondary-btn" onclick="restartGame()">↻ Reset</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+
+        <!-- GAME VIEW SECTION -->
+        <section id="view-game" class="view-section active">
+            
+            <!-- Game HUD / Stats Bar -->
+            <div class="hud-bar">
+                <div class="hud-card">
+                    <span class="hud-label">ROUND</span>
+                    <span class="hud-value" id="hud-round">1 / 6</span>
+                </div>
+                <div class="hud-card">
+                    <span class="hud-label">TOTAL SCORE</span>
+                    <span class="hud-value highlight" id="hud-score">0</span>
+                </div>
+                <div class="hud-card">
+                    <span class="hud-label">CONSISTENCY STREAK</span>
+                    <span class="hud-value streak" id="hud-streak">0x 🔥</span>
+                </div>
+                <div class="hud-card">
+                    <span class="hud-label">ACCURACY RATE</span>
+                    <span class="hud-value" id="hud-accuracy">100%</span>
+                </div>
+            </div>
+
+            <!-- Scenario & Round Mission Banner -->
+            <div class="scenario-card" id="scenario-card">
+                <div class="scenario-badge" id="round-category">CATEGORY: TECH LEAD SELECTION</div>
+                <h2 class="scenario-title" id="round-title">Round 1: The Charisma Trap</h2>
+                <p class="scenario-desc" id="round-desc">
+                    Evaluate 3 candidates for Senior Software Architect. Your mission: Identify the candidate with superior technical merit while disregarding physical appearance, social media hype, and prestige markers.
+                </p>
+                <div class="interactive-guide-pill">
+                    💡 <strong>Pro Tip:</strong> Click any detail tag inside profile cards to mark it as <span class="tag-legend merit">Merit</span> or <span class="tag-legend noise">Distraction</span> for extra reasoning points!
+                </div>
+            </div>
+
+            <!-- Candidate Grid -->
+            <div class="candidates-grid" id="candidates-container">
+                <!-- Dynamic Candidates rendered via JS -->
+            </div>
+
+            <!-- Submit Decision Bar -->
+            <div class="decision-bar" id="decision-bar">
+                <div class="selected-info">
+                    <span>Selected Candidate: </span>
+                    <strong id="selected-candidate-name">None Selected</strong>
+                </div>
+                <button id="btn-submit-judgment" class="primary-btn pulse" disabled onclick="submitJudgment()">
+                    ⚖️ Finalize Judicial Decision
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ROUND FEEDBACK MODAL / SCREEN -->
+        <div id="feedback-modal" class="modal-overlay hidden">
+            <div class="modal-card">
+                <div class="modal-header" id="modal-header">
+                    <div class="outcome-icon" id="outcome-icon">🎯</div>
+                    <h2 class="outcome-title" id="outcome-title">Verdict Delivered!</h2>
+                    <span class="outcome-subtitle" id="outcome-subtitle">+150 Points Earned</span>
+                </div>
+
+                <div class="modal-body">
+                    <!-- Score Breakdown Card -->
+                    <div class="score-breakdown">
+                        <div class="score-row">
+                            <span>Merit Choice Accuracy</span>
+                            <strong id="score-merit-points">+100 pts</strong>
+                        </div>
+                        <div class="score-row">
+                            <span>Reasoning / Tagging Precision</span>
+                            <strong id="score-reasoning-points">+30 pts</strong>
+                        </div>
+                        <div class="score-row">
+                            <span>Consistency Streak Bonus</span>
+                            <strong id="score-streak-points">+20 pts</strong>
+                        </div>
+                        <div class="score-row total">
+                            <span>Round Score Total</span>
+                            <strong id="score-round-total">+150 pts</strong>
+                        </div>
+                    </div>
+
+                    <!-- Bias Audit Analysis -->
+                    <div class="bias-analysis-box">
+                        <h3>🔍 Judicial Bias Audit Report</h3>
+                        <p id="bias-audit-text">
+                            You successfully identified Dr. Aris Thorne as the candidate with the highest merit! You ignored Candidate B's 250k Instagram followers and Candidate C's designer suit.
+                        </p>
+                        <div class="bias-trap-alert" id="bias-trap-alert">
+                            <h4>⚠️ Cognitive Bias Breakdown: <span id="bias-type-name">Halo Effect</span></h4>
+                            <p id="bias-type-desc">
+                                The Halo Effect leads evaluators to assume that physically attractive or highly popular candidates possess superior competence, despite no empirical correlation.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Merit Matrix Comparison Table -->
+                    <div class="matrix-comparison">
+                        <h3>📊 Objective Candidate Matrix</h3>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Candidate</th>
+                                    <th>Objective Merit Score</th>
+                                    <th>Distraction / Noise Factor</th>
+                                    <th>Your Pick</th>
+                                </tr>
+                            </thead>
+                            <tbody id="matrix-table-body">
+                                <!-- Rendered via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="primary-btn" onclick="nextRound()">Proceed to Next Case ➔</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- GAME OVER / FINAL SUMMARY SCREEN -->
+        <section id="view-summary" class="view-section hidden">
+            <div class="summary-card">
+                <div class="trophy-badge">🏆</div>
+                <h1 class="summary-title">Judicial Evaluation Complete</h1>
+                <p class="summary-subtitle">Here is your official Bias Resistance & Merit Evaluation Audit</p>
+
+                <div class="summary-stats-grid">
+                    <div class="summary-stat-box">
+                        <span class="stat-num" id="final-score">0</span>
+                        <span class="stat-lbl">Final Score</span>
+                    </div>
+                    <div class="summary-stat-box">
+                        <span class="stat-num" id="final-accuracy">0%</span>
+                        <span class="stat-lbl">Merit Accuracy</span>
+                    </div>
+                    <div class="summary-stat-box">
+                        <span class="stat-num" id="final-rank">Master Judge</span>
+                        <span class="stat-lbl">Evaluation Rank</span>
+                    </div>
+                    <div class="summary-stat-box">
+                        <span class="stat-num" id="final-streak">0</span>
+                        <span class="stat-lbl">Max Streak</span>
+                    </div>
+                </div>
+
+                <!-- Radar / Bias Blindspot Audit -->
+                <div class="blindspot-audit">
+                    <h2>🎯 Cognitive Blindspot Breakdown</h2>
+                    <p class="blindspot-subtext">How well did you resist specific cognitive biases across all cases?</p>
+                    <div class="bias-bars-list" id="bias-bars-list">
+                        <!-- JS generated bias meter bars -->
+                    </div>
+                </div>
+
+                <div class="summary-actions">
+                    <button class="primary-btn" onclick="restartGame()">🎮 Play Again</button>
+                    <button class="secondary-btn" onclick="switchView('gdd')">📄 Read Game Design Document</button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- GAME DESIGN DOCUMENT (GDD) VIEW SECTION -->
+        <section id="view-gdd" class="view-section hidden">
+            <div class="gdd-container">
+                <div class="gdd-sidebar">
+                    <h3>GDD Contents</h3>
+                    <ul class="gdd-nav">
+                        <li><a href="#gdd-overview" class="gdd-nav-item active">1. Vision & Executive Summary</a></li>
+                        <li><a href="#gdd-mechanics" class="gdd-nav-item">2. Core Game Mechanics</a></li>
+                        <li><a href="#gdd-scoring" class="gdd-nav-item">3. Scoring System Architecture</a></li>
+                        <li><a href="#gdd-rounds" class="gdd-nav-item">4. Round Structure & Progression</a></li>
+                        <li><a href="#gdd-profiles" class="gdd-nav-item">5. Sample Profiles & Distraction Traps</a></li>
+                        <li><a href="#gdd-feedback" class="gdd-nav-item">6. Feedback & Cognitive Psychology</a></li>
+                        <li><a href="#gdd-ux" class="gdd-nav-item">7. User Interaction Flow</a></li>
+                    </ul>
+                </div>
+
+                <div class="gdd-content">
+                    
+                    <!-- Section 1 -->
+                    <article id="gdd-overview" class="gdd-section">
+                        <span class="gdd-tag">SECTION 1</span>
+                        <h1>Vision & Executive Summary</h1>
+                        <p class="gdd-lead">
+                            <strong>Bias Buster</strong> is an interactive judicial simulation game that trains players to make objective, merit-based decisions while actively resisting unconscious cognitive biases and superficial distractions.
+                        </p>
+                        
+                        <div class="gdd-box">
+                            <h3>Key Design Pillars</h3>
+                            <ul>
+                                <li><strong>Experiential Learning:</strong> Rather than telling players about bias, the game actively lures players into cognitive traps (halo effect, social proof, affinity bias) and exposes their blindspots in real-time.</li>
+                                <li><strong>Dual-Layer Evaluation:</strong> Players evaluate both <em>who</em> to pick and <em>why</em> by categorizing individual profile data points into Merit vs. Distraction.</li>
+                                <li><strong>Empirical Feedback Loops:</strong> Instant post-round audits map decisions directly against quantified merit scores, providing actionable psychology-backed insight.</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <!-- Section 2 -->
+                    <article id="gdd-mechanics" class="gdd-section">
+                        <span class="gdd-tag">SECTION 2</span>
+                        <h1>Core Game Mechanics</h1>
+                        
+                        <h2>1. Profile Evaluation Phase</h2>
+                        <p>In each round, players receive a judicial bench assignment containing 3 candidate dossiers. Profiles are designed with equal textual length but contrasting internal validity.</p>
+                        
+                        <div class="gdd-two-col">
+                            <div class="gdd-card-preview merit-border">
+                                <h3>🟢 True Merit Signals</h3>
+                                <ul>
+                                    <li>Verified quantitative accomplishments (e.g. "Increased server throughput by 42%")</li>
+                                    <li>Peer-reviewed certifications & patents</li>
+                                    <li>Demonstrated problem-solving metrics</li>
+                                    <li>Directly relevant tenure & domain expertise</li>
+                                </ul>
+                            </div>
+                            <div class="gdd-card-preview noise-border">
+                                <h3>🔴 Superficial Distractions</h3>
+                                <ul>
+                                    <li>Attractive headshots & physical fashion choices</li>
+                                    <li>Social media follower counts & viral fame</li>
+                                    <li>Shared hobbies, alma maters, or personal affinity</li>
+                                    <li>Buzzword fluency without underlying metrics</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h2>2. Interactive Tagging Mechanic</h2>
+                        <p>
+                            Players do not just click a button to pick a winner. They can click on specific attribute badges on any candidate's profile to mark them as either <strong>Merit</strong> (Green) or <strong>Distraction</strong> (Purple). This measures their active signal-to-noise recognition ratio.
+                        </p>
+                    </article>
+
+                    <!-- Section 3 -->
+                    <article id="gdd-scoring" class="gdd-section">
+                        <span class="gdd-tag">SECTION 3</span>
+                        <h1>Scoring System Architecture</h1>
+                        <p>The total score for each round is calculated using a multi-factor mathematical formula designed to reward consistency, accuracy, and rigorous reasoning.</p>
+
+                        <div class="code-block">
+                            <pre>Round Score = (Base Selection Score + Reasoning Bonus - Distraction Penalty) × Consistency Multiplier</pre>
+                        </div>
+
+                        <table class="gdd-table">
+                            <thead>
+                                <tr>
+                                    <th>Scoring Factor</th>
+                                    <th>Point Value</th>
+                                    <th>Condition / Rule</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Correct Candidate Pick</strong></td>
+                                    <td>+100 Points</td>
+                                    <td>Awarded when selecting candidate with highest mathematical merit score.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Suboptimal Candidate Pick</strong></td>
+                                    <td>+25 Points</td>
+                                    <td>Selected candidate has moderate merit, but not the top performer.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Distraction Trap Pick</strong></td>
+                                    <td>0 Points (-30 Penalty)</td>
+                                    <td>Selected candidate was heavily skewed by superficial hype/beauty with poor merit.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tagging Precision Bonus</strong></td>
+                                    <td>Up to +50 Points</td>
+                                    <td>+10 pts per correctly classified attribute tag (Merit vs Noise).</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Consistency Multiplier</strong></td>
+                                    <td>1.0x to 2.5x</td>
+                                    <td>Increases by +0.3x for each consecutive correct round. Resets on falling for bias.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </article>
+
+                    <!-- Section 4 -->
+                    <article id="gdd-rounds" class="gdd-section">
+                        <span class="gdd-tag">SECTION 4</span>
+                        <h1>Round Structure & Progression Architecture</h1>
+                        <p>The game consists of 6 core rounds, each specifically engineered around a distinct cognitive bias psychological phenomenon:</p>
+
+                        <div class="timeline-list">
+                            <div class="timeline-item">
+                                <div class="timeline-num">R1</div>
+                                <div class="timeline-body">
+                                    <h3>The Halo Effect (Visual & Aesthetics Bias)</h3>
+                                    <p>Pits an ultra-glamorous, immaculately dressed candidate with mediocre stats against an unpolished candidate with ground-breaking research publications.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-num">R2</div>
+                                <div class="timeline-body">
+                                    <h3>Social Proof & Popularity Hype</h3>
+                                    <p>Features a viral tech influencer candidate with 250k followers vs a quiet engineer responsible for critical open-source infrastructure.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-num">R3</div>
+                                <div class="timeline-body">
+                                    <h3>In-Group Affinity Bias</h3>
+                                    <p>Tests whether the judge favors a candidate who shares their personal hometown, favorite band, and alma mater over a candidate with superior domain metrics.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-num">R4</div>
+                                <div class="timeline-body">
+                                    <h3>Prestige & Brand-Name Fallacy</h3>
+                                    <p>Exposes reliance on elite university titles or big tech company logos vs real individual execution and problem-solving impact.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-num">R5</div>
+                                <div class="timeline-body">
+                                    <h3>Confidence & Charisma vs. Substance Trap</h3>
+                                    <p>Features a candidate using high-powered corporate jargon and assertive delivery vs an introverted candidate with rigorous empirical testing proof.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-num">R6</div>
+                                <div class="timeline-body">
+                                    <h3>Final Boss: The Multi-Bias Crucible</h3>
+                                    <p>Combines visual charm, social clout, prestige titles, and affinity markers into a masterclass profile evaluation trial.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Section 5 -->
+                    <article id="gdd-profiles" class="gdd-section">
+                        <span class="gdd-tag">SECTION 5</span>
+                        <h1>Sample Candidate Dossiers</h1>
+                        <p>Below are detailed sample profile specs demonstrating the deliberate contrast between Merit and Distractions across candidate dossiers.</p>
+
+                        <div class="gdd-sample-profile">
+                            <div class="gdd-sample-header">
+                                <div>
+                                    <h2>Candidate A: Elena Rostova</h2>
+                                    <span class="role-pill">Applied Role: Lead Cybersecurity Analyst</span>
+                                </div>
+                                <span class="badge-merit-high">Merit Score: 96 / 100</span>
+                            </div>
+                            <div class="gdd-sample-body">
+                                <div class="sample-col">
+                                    <h4 class="col-head-merit">Verified Merit Signals</h4>
+                                    <ul>
+                                        <li>Discovered and patched 14 zero-day vulnerabilities in Linux kernel</li>
+                                        <li>Authored DEF CON paper on post-quantum cryptography</li>
+                                        <li>10+ years hands-on penetration testing experience</li>
+                                        <li>Built automated threat detection tool saving $4M annually</li>
+                                    </ul>
+                                </div>
+                                <div class="sample-col">
+                                    <h4 class="col-head-noise">Superficial / Irrelevant Distractions</h4>
+                                    <ul>
+                                        <li>Attires in basic plain hoodies; self-described introvert</li>
+                                        <li>Zero social media footprint (12 Twitter followers)</li>
+                                        <li>Attended non-ranking local community college</li>
+                                        <li>Does not speak with corporate jargon or bravado</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="gdd-sample-profile distraction-trap-bg">
+                            <div class="gdd-sample-header">
+                                <div>
+                                    <h2>Candidate B: Julian Vance</h2>
+                                    <span class="role-pill">Applied Role: Lead Cybersecurity Analyst</span>
+                                </div>
+                                <span class="badge-merit-low">Merit Score: 48 / 100 (Bias Trap)</span>
+                            </div>
+                            <div class="gdd-sample-body">
+                                <div class="sample-col">
+                                    <h4 class="col-head-merit">Verified Merit Signals</h4>
+                                    <ul>
+                                        <li>2 years junior analyst experience</li>
+                                        <li>Basic Security+ Certification</li>
+                                    </ul>
+                                </div>
+                                <div class="sample-col">
+                                    <h4 class="col-head-noise">Superficial / Irrelevant Distractions (High Hype)</h4>
+                                    <ul>
+                                        <li>Voted "Most Stylish Cyber Influencer" with 380k LinkedIn Followers</li>
+                                        <li>Keynote speaker at luxury Tech Retreats in Monaco</li>
+                                        <li>Stanford Alumni & Fraternity President</li>
+                                        <li>Drives a custom Tesla Cybertruck with "HACK3R" plate</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Section 6 -->
+                    <article id="gdd-feedback" class="gdd-section">
+                        <span class="gdd-tag">SECTION 6</span>
+                        <h1>Feedback System & Cognitive Psychology</h1>
+                        <p>Effective bias mitigation requires actionable, psychological feedback loops. Every post-round feedback report contains three crucial components:</p>
+
+                        <div class="gdd-grid-3">
+                            <div class="gdd-feature-card">
+                                <div class="fc-icon">🎯</div>
+                                <h3>Direct Empirical Mirror</h3>
+                                <p>Shows side-by-side comparison of candidate true merit scores vs player choice score.</p>
+                            </div>
+                            <div class="fc-feature-card">
+                                <div class="fc-icon">🧠</div>
+                                <h3>Psychological Naming</h3>
+                                <p>Explains the exact cognitive bias trap (e.g. Confirmation Bias, In-Group Favoritism) that triggered the misstep.</p>
+                            </div>
+                            <div class="gdd-feature-card">
+                                <div class="fc-icon">💡</div>
+                                <h3>Mitigation Heuristic</h3>
+                                <p>Provides a practical rule of thumb for future evaluations (e.g. "Blinded Auditing", "Metric Stripping").</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Section 7 -->
+                    <article id="gdd-ux" class="gdd-section">
+                        <span class="gdd-tag">SECTION 7</span>
+                        <h1>User Interaction Flow & UI Guidelines</h1>
+                        <p>The interface uses dark glassmorphism, color-coded tag indicators, micro-animations, and immediate interactive feedback to keep players engaged and alert.</p>
+                        
+                        <div class="flow-chart">
+                            <div class="flow-step">1. Read Scenario</div>
+                            <div class="flow-arrow">➔</div>
+                            <div class="flow-step">2. Evaluate Profiles & Tag Attributes</div>
+                            <div class="flow-arrow">➔</div>
+                            <div class="flow-step">3. Select Winner</div>
+                            <div class="flow-arrow">➔</div>
+                            <div class="flow-step">4. Review Bias Audit & Score</div>
+                            <div class="flow-arrow">➔</div>
+                            <div class="flow-step">5. Advance Round</div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="app-footer">
+        <p>Bias Buster Simulation &copy; 2026 | Built for Judicial & Evaluative Excellence</p>
+    </footer>
+
+    <!-- VANILLA JAVASCRIPT ENGINE -->
+    <script>
+/* ==========================================================================
+   BIAS BUSTER - GAME ENGINE & INTERACTIVE LOGIC (VANILLA JS)
+   ========================================================================== */
+
+// Web Audio API Synthesizer
+class SoundManager {
+    constructor() {
+        this.ctx = null;
+        this.muted = false;
+    }
+
+    init() {
+        if (!this.ctx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            this.ctx = new AudioContext();
+        }
+    }
+
+    playClick() {
+        if (this.muted) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.05);
+        gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.05);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.05);
+    }
+
+    playSuccess() {
+        if (this.muted) return;
+        this.init();
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, idx) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.08);
+            gain.gain.setValueAtTime(0.12, this.ctx.currentTime + idx * 0.08);
+            gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + idx * 0.08 + 0.2);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(this.ctx.currentTime + idx * 0.08);
+            osc.stop(this.ctx.currentTime + idx * 0.08 + 0.2);
+        });
+    }
+
+    playTrapAlert() {
+        if (this.muted) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(250, this.ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(120, this.ctx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.3);
+    }
+}
+
+const audio = new SoundManager();
+
+function toggleAudio() {
+    audio.muted = !audio.muted;
+    const btn = document.getElementById('btn-sound');
+    btn.innerHTML = audio.muted ? '🔇' : '🔊';
+}
+
+// 6 PROGRESSIVE ROUNDS DATA
+const GAME_ROUNDS = [
+    {
+        id: 1,
+        title: "Round 1: The Halo Effect (Visual & Style Trap)",
+        category: "LEAD ARCHITECT SELECTION",
+        desc: "Evaluate 3 candidates for Senior Software Architect. Mission: Select the highest merit candidate while disregarding physical appearance, designer attire, and groomed headshots.",
+        biasTrapName: "Halo Effect (Physical & Visual Aesthetics)",
+        biasTrapDesc: "The Halo Effect occurs when an evaluator's impression of a person's physical attractiveness, personal style, or polished headshot improperly inflates their perceived technical competency.",
+        candidates: [
+            {
+                id: "c1_1",
+                name: "Julian Vance",
+                avatarEmoji: "🕺🏻",
+                role: "Senior Software Architect",
+                meritScore: 48,
+                isBestChoice: false,
+                isDistractionTrap: true,
+                bio: "Speaks with effortless charm, wears bespoke suits, and presents polished keynotes.",
+                meritAttributes: [
+                    { text: "3 years experience in Python", isMerit: true },
+                    { text: "Managed 2 small dev teams", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Voted Most Stylish Tech Leader", isMerit: false },
+                    { text: "Ultra-high resolution professional portrait photo", isMerit: false },
+                    { text: "Models for GQ Tech magazine", isMerit: false },
+                    { text: "Drives a custom luxury electric sports car", isMerit: false }
+                ]
+            },
+            {
+                id: "c1_2",
+                name: "Dr. Aris Thorne",
+                avatarEmoji: "👩🏽‍💻",
+                role: "Senior Software Architect",
+                meritScore: 96,
+                isBestChoice: true,
+                isDistractionTrap: false,
+                bio: "Unassuming, plain hoodie attire, introverted, focused entirely on high-scale systems architecture.",
+                meritAttributes: [
+                    { text: "12 years cloud architecture experience", isMerit: true },
+                    { text: "Architected system handling 100M daily active users", isMerit: true },
+                    { text: "Authored 4 patents in distributed data consensus", isMerit: true },
+                    { text: "Reduced infrastructure latency by 45%", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Plain monochrome avatar photo", isMerit: false },
+                    { text: "Wears oversized hoodies to work", isMerit: false },
+                    { text: "No personal branding on social media", isMerit: false }
+                ]
+            },
+            {
+                id: "c1_3",
+                name: "Marcus Brody",
+                avatarEmoji: "👨🏼‍💼",
+                role: "Senior Software Architect",
+                meritScore: 72,
+                isBestChoice: false,
+                isDistractionTrap: false,
+                bio: "Solid mid-level candidate with dependable software skills.",
+                meritAttributes: [
+                    { text: "6 years Full Stack development", isMerit: true },
+                    { text: "AWS Certified Solutions Architect", isMerit: true },
+                    { text: "Led migration to Kubernetes microservices", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Loves mountain biking", isMerit: false },
+                    { text: "Casually dressed in plaid shirts", isMerit: false }
+                ]
+            }
+        ]
+    },
+    {
+        id: 2,
+        title: "Round 2: Social Proof & Hype Trap",
+        category: "HEAD OF CYBERSECURITY",
+        desc: "Evaluate 3 cybersecurity specialists. Mission: Distinguish between actual vulnerability discovery records vs viral social media follower metrics and podcast clout.",
+        biasTrapName: "Social Proof & Bandwagon Bias",
+        biasTrapDesc: "Evaluators often mistake high follower counts, viral popularity, and loud public hype for actual domain mastery and security rigor.",
+        candidates: [
+            {
+                id: "c2_1",
+                name: "Leo 'Hax' Rivera",
+                avatarEmoji: "📱",
+                role: "Head of Cybersecurity",
+                meritScore: 52,
+                isBestChoice: false,
+                isDistractionTrap: true,
+                bio: "Cybersecurity influencer with viral clips and huge follower count.",
+                meritAttributes: [
+                    { text: "CompTIA Security+ Certified", isMerit: true },
+                    { text: "2 years junior SOC analyst experience", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "350k Followers on TikTok & YouTube", isMerit: false },
+                    { text: "Hosts #1 Trending Tech Podcast", isMerit: false },
+                    { text: "Sells signature 'Hacker' merch line", isMerit: false },
+                    { text: "Featured on viral meme pages", isMerit: false }
+                ]
+            },
+            {
+                id: "c2_2",
+                name: "Elena Rostova",
+                avatarEmoji: "🛡️",
+                role: "Head of Cybersecurity",
+                meritScore: 98,
+                isBestChoice: true,
+                isDistractionTrap: false,
+                bio: "Quiet researcher dedicated to low-level vulnerability research and zero-day patches.",
+                meritAttributes: [
+                    { text: "Discovered & patched 14 Critical Zero-Day CVEs", isMerit: true },
+                    { text: "10+ years penetration testing in defense banking", isMerit: true },
+                    { text: "DEF CON keynote paper on Post-Quantum Encryption", isMerit: true },
+                    { text: "Built security audit tool used by 500+ enterprises", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Only 15 followers on Twitter", isMerit: false },
+                    { text: "Has zero YouTube or TikTok videos", isMerit: false },
+                    { text: "Rarely speaks at casual networking mixers", isMerit: false }
+                ]
+            },
+            {
+                id: "c2_3",
+                name: "Siddharth Patel",
+                avatarEmoji: "👨🏽‍💻",
+                role: "Head of Cybersecurity",
+                meritScore: 78,
+                isBestChoice: false,
+                isDistractionTrap: false,
+                bio: "Experienced IT security manager with solid compliance track record.",
+                meritAttributes: [
+                    { text: "7 years ISO-27001 compliance management", isMerit: true },
+                    { text: "CISSP & CISM certified", isMerit: true },
+                    { text: "Reduced security breach response time by 30%", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Active in local chess club", isMerit: false },
+                    { text: "Writes occasional blog posts on LinkedIn", isMerit: false }
+                ]
+            }
+        ]
+    },
+    {
+        id: 3,
+        title: "Round 3: In-Group Affinity Bias",
+        category: "PRINCIPAL DATA SCIENTIST",
+        desc: "Evaluate 3 Data Science candidates. Mission: Beware of candidate who shares your exact hometown, favorite band, and personal hobbies.",
+        biasTrapName: "In-Group Affinity Bias",
+        biasTrapDesc: "We naturally favor people who remind us of ourselves or share common background details (hobbies, schools, hometowns), falsely viewing them as more competent.",
+        candidates: [
+            {
+                id: "c3_1",
+                name: "Dr. Maya Lin",
+                avatarEmoji: "📊",
+                role: "Principal Data Scientist",
+                meritScore: 95,
+                isBestChoice: true,
+                isDistractionTrap: false,
+                bio: "Machine learning research scientist with groundbreaking NLP models.",
+                meritAttributes: [
+                    { text: "Ph.D. in Machine Learning & Neural Networks", isMerit: true },
+                    { text: "15 publications in NeurIPS & ICML", isMerit: true },
+                    { text: "Developed predictive AI model generating $12M revenue", isMerit: true },
+                    { text: "Expert in PyTorch, CUDA, and LLM optimization", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Grew up in a country far away from yours", isMerit: false },
+                    { text: "Listens exclusively to classical opera", isMerit: false },
+                    { text: "Does not follow popular sports leagues", isMerit: false }
+                ]
+            },
+            {
+                id: "c3_2",
+                name: "Ethan Walker",
+                avatarEmoji: "🎸",
+                role: "Principal Data Scientist",
+                meritScore: 50,
+                isBestChoice: false,
+                isDistractionTrap: true,
+                bio: "Shares your hometown, loves your favorite indie rock band, and plays the same video games as you.",
+                meritAttributes: [
+                    { text: "2 years data analyst experience", isMerit: true },
+                    { text: "Basic knowledge of SQL and Python", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Grew up in your exact hometown neighbourhood!", isMerit: false },
+                    { text: "Diehard fan of your favorite indie band", isMerit: false },
+                    { text: "Plays the exact same online RPG games as you", isMerit: false },
+                    { text: "Attended your same high school rival", isMerit: false }
+                ]
+            },
+            {
+                id: "c3_3",
+                name: "Kavita Rao",
+                avatarEmoji: "👩🏽‍🔬",
+                role: "Principal Data Scientist",
+                meritScore: 76,
+                isBestChoice: false,
+                isDistractionTrap: false,
+                bio: "Quantitative analyst with strong statistical background.",
+                meritAttributes: [
+                    { text: "M.S. in Applied Statistics", isMerit: true },
+                    { text: "5 years building customer churn models", isMerit: true },
+                    { text: "Proficient in R, Python, and Tableau", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Enjoys gourmet coffee roasting", isMerit: false },
+                    { text: "Volunteers at local cat shelter", isMerit: false }
+                ]
+            }
+        ]
+    },
+    {
+        id: 4,
+        title: "Round 4: Prestige & Brand-Name Fallacy",
+        category: "VP OF PRODUCT ENGINEERING",
+        desc: "Evaluate 3 Product Executives. Mission: Do not be dazzled by elite university names or big-tech logos when the candidate had minimal actual project impact.",
+        biasTrapName: "Prestige & Brand-Name Fallacy",
+        biasTrapDesc: "Assuming that a candidate from an elite university or famous tech giant is automatically superior, ignoring their actual personal contributions.",
+        candidates: [
+            {
+                id: "c4_1",
+                name: "Chadwick Sterling III",
+                avatarEmoji: "🏛️",
+                role: "VP of Product Engineering",
+                meritScore: 45,
+                isBestChoice: false,
+                isDistractionTrap: true,
+                bio: "Rides on the coattails of Ivy League credentials and big-company brand names.",
+                meritAttributes: [
+                    { text: "1.5 years associate product manager", isMerit: true },
+                    { text: "Attended executive weekend seminar", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Harvard Magna Cum Laude graduate", isMerit: false },
+                    { text: "Ex-Google, Ex-Apple, Ex-Goldman Sachs titles", isMerit: false },
+                    { text: "Member of exclusive secret golf club", isMerit: false },
+                    { text: "Family name is on a university library wing", isMerit: false }
+                ]
+            },
+            {
+                id: "c4_2",
+                name: "Amara Okezie",
+                avatarEmoji: "🚀",
+                role: "VP of Product Engineering",
+                meritScore: 97,
+                isBestChoice: true,
+                isDistractionTrap: false,
+                bio: "Self-taught relentless operator who scaled two high-growth tech startups from scratch.",
+                meritAttributes: [
+                    { text: "Scaled product from 0 to 5M monthly active users", isMerit: true },
+                    { text: "Managed 80+ engineering org across 3 continents", isMerit: true },
+                    { text: "Achieved 99.99% service uptime during peak surge", isMerit: true },
+                    { text: "Pioneered open-source developer framework used by 40k devs", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Attended local state community college", isMerit: false },
+                    { text: "No famous big-tech logos on resume", isMerit: false },
+                    { text: "Started career as self-taught night coder", isMerit: false }
+                ]
+            },
+            {
+                id: "c4_3",
+                name: "David Miller",
+                avatarEmoji: "👨🏻‍💻",
+                role: "VP of Product Engineering",
+                meritScore: 75,
+                isBestChoice: false,
+                isDistractionTrap: false,
+                bio: "Experienced engineering director from mid-market SaaS company.",
+                meritAttributes: [
+                    { text: "8 years directing engineering teams", isMerit: true },
+                    { text: "Delivered 12 enterprise SaaS releases on schedule", isMerit: true },
+                    { text: "Reduced team turnover to under 4%", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Enjoys woodworking on weekends", isMerit: false },
+                    { text: "Degree from State University", isMerit: false }
+                ]
+            }
+        ]
+    },
+    {
+        id: 5,
+        title: "Round 5: Confidence & Jargon vs Substance Trap",
+        category: "CHIEF AI OFFICER",
+        desc: "Evaluate 3 AI Leadership candidates. Mission: Filter out superficial buzzwords and aggressive bravado; focus on empirical model benchmarks and testing validation.",
+        biasTrapName: "Confidence Heuristic (Charisma over Substance)",
+        biasTrapDesc: "Evaluators frequently confuse high social dominance, loud assertive posture, and buzzword fluency with real technical knowledge.",
+        candidates: [
+            {
+                id: "c5_1",
+                name: "Rex 'Disruptor' Vance",
+                avatarEmoji: "⚡",
+                role: "Chief AI Officer",
+                meritScore: 40,
+                isBestChoice: false,
+                isDistractionTrap: true,
+                bio: "Uses hyper-aggressive corporate jargon like 'quantum-synergy' and 'hyper-scale disruptor'.",
+                meritAttributes: [
+                    { text: "1 year AI sales consultant", isMerit: true },
+                    { text: "Prompt engineering certificate online", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Speaks with intense eye contact and bravado", isMerit: false },
+                    { text: "Uses buzzwords: 'Quantum-Synergy Quantum AI Paradigm'", isMerit: false },
+                    { text: "Claims he will 'disrupt human consciousness'", isMerit: false },
+                    { text: "Interprets questioning as lack of vision", isMerit: false }
+                ]
+            },
+            {
+                id: "c5_2",
+                name: "Dr. Kenji Sato",
+                avatarEmoji: "🔬",
+                role: "Chief AI Officer",
+                meritScore: 99,
+                isBestChoice: true,
+                isDistractionTrap: false,
+                bio: "Rigorously empirical AI researcher who measures everything by benchmark scores and validation loss curves.",
+                meritAttributes: [
+                    { text: "Reduced LLM hallucination rate by 64% using RAG & RLHF", isMerit: true },
+                    { text: "Authored fundamental transformer architecture benchmark paper", isMerit: true },
+                    { text: "Built enterprise AI safety alignment protocols", isMerit: true },
+                    { text: "14 years AI research at National Labs", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Speaks quietly and carefully in simple language", isMerit: false },
+                    { text: "Avoids hype buzzwords like 'ASI disruption'", isMerit: false },
+                    { text: "Admits model limitations transparently", isMerit: false }
+                ]
+            },
+            {
+                id: "c5_3",
+                name: "Rachel Green",
+                avatarEmoji: "👩🏼‍💼",
+                role: "Chief AI Officer",
+                meritScore: 77,
+                isBestChoice: false,
+                isDistractionTrap: false,
+                bio: "Pragmatic AI implementation manager.",
+                meritAttributes: [
+                    { text: "Deployed machine learning models to production for 6 years", isMerit: true },
+                    { text: "Managed $5M AI GPU cluster infrastructure", isMerit: true },
+                    { text: "Improved recommendation model click-through by 18%", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Enjoys marathon running", isMerit: false },
+                    { text: "Hosts monthly team pizza nights", isMerit: false }
+                ]
+            }
+        ]
+    },
+    {
+        id: 6,
+        title: "Round 6: The Multi-Bias Crucible (Final Trial)",
+        category: "CHIEF EXECUTIVE JUDGE",
+        desc: "Final Master Level Case: 3 candidates for Chief Executive Officer. Distractions combine visual charm, follower clout, Ivy prestige, and shared hobbies into one massive cognitive trap!",
+        biasTrapName: "Multi-Layered Cognitive Bias Crucible",
+        biasTrapDesc: "The ultimate test: several cognitive bias vectors are combined simultaneously into a single candidate to overwhelm your judgment filters.",
+        candidates: [
+            {
+                id: "c6_1",
+                name: "Maximillian 'Max' Sterling",
+                avatarEmoji: "🌟",
+                role: "Chief Executive Officer",
+                meritScore: 42,
+                isBestChoice: false,
+                isDistractionTrap: true,
+                bio: "The ultimate distraction trap candidate combining beauty, prestige, followers, and shared hobbies.",
+                meritAttributes: [
+                    { text: "2 years CEO at bankrupt tech venture", isMerit: true },
+                    { text: "Published 1 sponsored opinion article", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Model-grade headshot & designer suit", isMerit: false },
+                    { text: "500k Followers on Instagram & LinkedIn", isMerit: false },
+                    { text: "Stanford Alumni & Ivy League Polo Team Captain", isMerit: false },
+                    { text: "Plays your exact favorite video game & loves your hometown", isMerit: false },
+                    { text: "Charismatic storytelling speaker", isMerit: false }
+                ]
+            },
+            {
+                id: "c6_2",
+                name: "Dr. Fatima Al-Mansoor",
+                avatarEmoji: "👩🏽‍💼",
+                role: "Chief Executive Officer",
+                meritScore: 100,
+                isBestChoice: true,
+                isDistractionTrap: false,
+                bio: "Stellar operational executive with unmatched P&L growth metrics and crisis turnarounds.",
+                meritAttributes: [
+                    { text: "Turned around 2 distressed companies, growing valuation by 300%", isMerit: true },
+                    { text: "18 years executive leadership with zero ethics compliance violations", isMerit: true },
+                    { text: "Grew annual enterprise revenue from $50M to $450M", isMerit: true },
+                    { text: "Pioneered employee profit-sharing model increasing retention by 92%", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Modest attire with no designer logos", isMerit: false },
+                    { text: "Zero interest in social media influencer fame", isMerit: false },
+                    { text: "Did not attend Ivy League schools", isMerit: false },
+                    { text: "Enjoys gardening quietly in spare time", isMerit: false }
+                ]
+            },
+            {
+                id: "c6_3",
+                name: "Robert Chen",
+                avatarEmoji: "👨🏻‍💼",
+                role: "Chief Executive Officer",
+                meritScore: 80,
+                isBestChoice: false,
+                isDistractionTrap: false,
+                bio: "Experienced COO with strong execution track record.",
+                meritAttributes: [
+                    { text: "12 years Chief Operating Officer experience", isMerit: true },
+                    { text: "Managed global supply chain operations across 14 countries", isMerit: true },
+                    { text: "Reduced operating expenses by 22%", isMerit: true }
+                ],
+                noiseAttributes: [
+                    { text: "Avid tennis player", isMerit: false },
+                    { text: "Attended Midwestern State University", isMerit: false }
+                ]
+            }
+        ]
+    }
+];
+
+// STATE MANAGEMENT
+let gameState = {
+    currentRoundIndex: 0,
+    totalScore: 0,
+    streak: 0,
+    maxStreak: 0,
+    correctPicksCount: 0,
+    selectedCandidateId: null,
+    taggedAttributes: {},
+    biasHistory: [],
+    biasVulnerability: {
+        "Halo Effect": { tested: 0, resisted: 0 },
+        "Social Proof": { tested: 0, resisted: 0 },
+        "In-Group Bias": { tested: 0, resisted: 0 },
+        "Prestige Fallacy": { tested: 0, resisted: 0 },
+        "Confidence Trap": { tested: 0, resisted: 0 },
+        "Multi-Bias Crucible": { tested: 0, resisted: 0 }
+    }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    initGame();
+    setupGddNav();
+});
+
+function switchView(viewName) {
+    audio.playClick();
+    document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+    if (viewName === 'game') {
+        document.getElementById('view-game').classList.add('active');
+        document.getElementById('btn-play-mode').classList.add('active');
+    } else if (viewName === 'gdd') {
+        document.getElementById('view-gdd').classList.add('active');
+        document.getElementById('btn-gdd-mode').classList.add('active');
+    }
+}
+
+function initGame() {
+    gameState.currentRoundIndex = 0;
+    gameState.totalScore = 0;
+    gameState.streak = 0;
+    gameState.maxStreak = 0;
+    gameState.correctPicksCount = 0;
+    gameState.selectedCandidateId = null;
+    gameState.taggedAttributes = {};
+    gameState.biasHistory = [];
+    
+    Object.keys(gameState.biasVulnerability).forEach(k => {
+        gameState.biasVulnerability[k].tested = 0;
+        gameState.biasVulnerability[k].resisted = 0;
+    });
+
+    renderRound();
+    updateHud();
+    document.getElementById('view-summary').classList.add('hidden');
+    document.getElementById('view-game').classList.add('active');
+}
+
+function restartGame() {
+    audio.playClick();
+    initGame();
+}
+
+function renderRound() {
+    const roundData = GAME_ROUNDS[gameState.currentRoundIndex];
+    gameState.selectedCandidateId = null;
+    gameState.taggedAttributes = {};
+
+    document.getElementById('hud-round').innerText = `${roundData.id} / ${GAME_ROUNDS.length}`;
+    document.getElementById('round-category').innerText = `CATEGORY: ${roundData.category}`;
+    document.getElementById('round-title').innerText = roundData.title;
+    document.getElementById('round-desc').innerText = roundData.desc;
+    document.getElementById('selected-candidate-name').innerText = "None Selected";
+    document.getElementById('btn-submit-judgment').disabled = true;
+
+    const grid = document.getElementById('candidates-container');
+    grid.innerHTML = '';
+
+    roundData.candidates.forEach(cand => {
+        const card = document.createElement('div');
+        card.className = 'candidate-card';
+        card.id = `card-${cand.id}`;
+        card.onclick = (e) => {
+            if (!e.target.classList.contains('attr-tag')) {
+                selectCandidate(cand.id, cand.name);
+            }
+        };
+
+        let allAttributesHTML = `<div class="attr-group-title">Key Profile Attributes (Click to Classify):</div><div class="attr-list">`;
+        
+        cand.meritAttributes.forEach((attr, idx) => {
+            const tagId = `${cand.id}_m_${idx}`;
+            allAttributesHTML += `<span class="attr-tag" id="tag-${tagId}" onclick="toggleTag('${tagId}', true)">${attr.text}</span>`;
+        });
+
+        cand.noiseAttributes.forEach((attr, idx) => {
+            const tagId = `${cand.id}_n_${idx}`;
+            allAttributesHTML += `<span class="attr-tag" id="tag-${tagId}" onclick="toggleTag('${tagId}', false)">${attr.text}</span>`;
+        });
+
+        allAttributesHTML += `</div>`;
+
+        card.innerHTML = `
+            <div class="candidate-header">
+                <div class="avatar-wrapper">${cand.avatarEmoji}</div>
+                <div class="candidate-meta">
+                    <h3>${cand.name}</h3>
+                    <div class="subtitle">${cand.role}</div>
+                </div>
+            </div>
+            <p class="scenario-desc" style="font-size: 0.9rem; margin-bottom: 0.75rem;">"${cand.bio}"</p>
+            ${allAttributesHTML}
+            <button class="card-select-btn" id="btn-select-${cand.id}">Select for Bench Appointment</button>
+        `;
+
+        grid.appendChild(card);
+    });
+}
+
+function selectCandidate(candId, candName) {
+    audio.playClick();
+    gameState.selectedCandidateId = candId;
+
+    document.querySelectorAll('.candidate-card').forEach(card => card.classList.remove('selected'));
+    document.querySelectorAll('.card-select-btn').forEach(btn => btn.innerText = 'Select for Bench Appointment');
+
+    const selectedCard = document.getElementById(`card-${candId}`);
+    if (selectedCard) {
+        selectedCard.classList.add('selected');
+        document.getElementById(`btn-select-${candId}`).innerText = '✓ Selected Candidate';
+    }
+
+    document.getElementById('selected-candidate-name').innerText = candName;
+    document.getElementById('btn-submit-judgment').disabled = false;
+}
+
+function toggleTag(tagId, actualIsMerit) {
+    audio.playClick();
+    const tagElem = document.getElementById(`tag-${tagId}`);
+    if (!tagElem) return;
+
+    const currentStatus = gameState.taggedAttributes[tagId];
+
+    if (!currentStatus) {
+        gameState.taggedAttributes[tagId] = { userClassified: 'merit', actualIsMerit };
+        tagElem.classList.add('classified-merit');
+        tagElem.classList.remove('classified-noise');
+    } else if (currentStatus.userClassified === 'merit') {
+        gameState.taggedAttributes[tagId] = { userClassified: 'noise', actualIsMerit };
+        tagElem.classList.remove('classified-merit');
+        tagElem.classList.add('classified-noise');
+    } else {
+        delete gameState.taggedAttributes[tagId];
+        tagElem.classList.remove('classified-merit', 'classified-noise');
+    }
+}
+
+function submitJudgment() {
+    if (!gameState.selectedCandidateId) return;
+
+    const roundData = GAME_ROUNDS[gameState.currentRoundIndex];
+    const selectedCand = roundData.candidates.find(c => c.id === gameState.selectedCandidateId);
+    const bestCand = roundData.candidates.find(c => c.isBestChoice);
+
+    let baseScore = 0;
+    let isCorrect = false;
+    let isTrap = selectedCand.isDistractionTrap;
+
+    if (selectedCand.isBestChoice) {
+        baseScore = 100;
+        isCorrect = true;
+        gameState.correctPicksCount++;
+        gameState.streak++;
+        if (gameState.streak > gameState.maxStreak) gameState.maxStreak = gameState.streak;
+        audio.playSuccess();
+    } else if (selectedCand.isDistractionTrap) {
+        baseScore = 0;
+        gameState.streak = 0;
+        audio.playTrapAlert();
+    } else {
+        baseScore = 30;
+        gameState.streak = 0;
+        audio.playTrapAlert();
+    }
+
+    let reasoningPoints = 0;
+    Object.keys(gameState.taggedAttributes).forEach(tagId => {
+        const item = gameState.taggedAttributes[tagId];
+        if ((item.userClassified === 'merit' && item.actualIsMerit) || 
+            (item.userClassified === 'noise' && !item.actualIsMerit)) {
+            reasoningPoints += 10;
+        } else {
+            reasoningPoints -= 5;
+        }
+    });
+    reasoningPoints = Math.max(0, reasoningPoints);
+
+    const streakMultiplier = 1 + (gameState.streak * 0.2);
+    const streakBonus = Math.round(baseScore * (streakMultiplier - 1));
+
+    const roundTotalScore = Math.round((baseScore + reasoningPoints + streakBonus));
+    gameState.totalScore += roundTotalScore;
+
+    const keyBias = getShortBiasKey(roundData.biasTrapName);
+    if (gameState.biasVulnerability[keyBias]) {
+        gameState.biasVulnerability[keyBias].tested++;
+        if (isCorrect) gameState.biasVulnerability[keyBias].resisted++;
+    }
+
+    updateHud();
+    renderFeedbackModal(selectedCand, bestCand, roundData, baseScore, reasoningPoints, streakBonus, roundTotalScore, isCorrect, isTrap);
+}
+
+function getShortBiasKey(fullName) {
+    if (fullName.includes("Halo")) return "Halo Effect";
+    if (fullName.includes("Social")) return "Social Proof";
+    if (fullName.includes("Affinity")) return "In-Group Bias";
+    if (fullName.includes("Prestige")) return "Prestige Fallacy";
+    if (fullName.includes("Confidence")) return "Confidence Trap";
+    return "Multi-Bias Crucible";
+}
+
+function updateHud() {
+    document.getElementById('hud-score').innerText = gameState.totalScore;
+    document.getElementById('hud-streak').innerText = `${gameState.streak}x 🔥`;
+
+    const totalEvaluated = gameState.currentRoundIndex + (gameState.selectedCandidateId ? 1 : 0);
+    const accuracy = totalEvaluated > 0 ? Math.round((gameState.correctPicksCount / totalEvaluated) * 100) : 100;
+    document.getElementById('hud-accuracy').innerText = `${accuracy}%`;
+}
+
+function renderFeedbackModal(selectedCand, bestCand, roundData, baseScore, reasoningPoints, streakBonus, totalRound, isCorrect, isTrap) {
+    const modal = document.getElementById('feedback-modal');
+    modal.classList.remove('hidden');
+
+    const icon = document.getElementById('outcome-icon');
+    const title = document.getElementById('outcome-title');
+    const subtitle = document.getElementById('outcome-subtitle');
+
+    if (isCorrect) {
+        icon.innerText = "🎯";
+        title.innerText = "Objective Verdict Delivered!";
+        title.style.color = "var(--merit-green)";
+        subtitle.innerText = `+${totalRound} Points Earned!`;
+        subtitle.style.background = "var(--merit-bg)";
+        subtitle.style.color = "var(--merit-green)";
+    } else if (isTrap) {
+        icon.innerText = "⚠️";
+        title.innerText = "You Fell For The Distraction Trap!";
+        title.style.color = "var(--noise-purple)";
+        subtitle.innerText = `+${totalRound} Points (Sucked into Hype Trap)`;
+        subtitle.style.background = "var(--noise-bg)";
+        subtitle.style.color = "var(--noise-purple)";
+    } else {
+        icon.innerText = "⚖️";
+        title.innerText = "Suboptimal Judicial Pick";
+        title.style.color = "var(--gold-accent)";
+        subtitle.innerText = `+${totalRound} Points (Missed Top Performer)`;
+        subtitle.style.background = "rgba(245, 158, 11, 0.15)";
+        subtitle.style.color = "var(--gold-accent)";
+    }
+
+    document.getElementById('score-merit-points').innerText = `+${baseScore} pts`;
+    document.getElementById('score-reasoning-points').innerText = `+${reasoningPoints} pts`;
+    document.getElementById('score-streak-points').innerText = `+${streakBonus} pts`;
+    document.getElementById('score-round-total').innerText = `+${totalRound} pts`;
+
+    const auditText = document.getElementById('bias-audit-text');
+    if (isCorrect) {
+        auditText.innerText = `Outstanding objectivity! You appointed ${bestCand.name} based purely on their verified merit score of ${bestCand.meritScore}/100, ignoring superficial noise.`;
+    } else {
+        auditText.innerText = `You appointed ${selectedCand.name} (Merit Score: ${selectedCand.meritScore}/100). The most qualified candidate was ${bestCand.name} with a true Merit Score of ${bestCand.meritScore}/100.`;
+    }
+
+    document.getElementById('bias-type-name').innerText = roundData.biasTrapName;
+    document.getElementById('bias-type-desc').innerText = roundData.biasTrapDesc;
+
+    const tbody = document.getElementById('matrix-table-body');
+    tbody.innerHTML = '';
+
+    roundData.candidates.forEach(cand => {
+        const row = document.createElement('tr');
+        const isPicked = cand.id === selectedCand.id;
+        
+        row.innerHTML = `
+            <td><strong>${cand.name}</strong> ${cand.isBestChoice ? '🌟 (Best)' : ''}</td>
+            <td><strong style="color: ${cand.meritScore > 80 ? 'var(--merit-green)' : 'var(--text-muted)'}">${cand.meritScore} / 100</strong></td>
+            <td>${cand.isDistractionTrap ? '🔴 High Distraction Trap' : '🟢 Low Noise'}</td>
+            <td>${isPicked ? '👉 Your Selection' : '-'}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function nextRound() {
+    audio.playClick();
+    document.getElementById('feedback-modal').classList.add('hidden');
+
+    if (gameState.currentRoundIndex + 1 < GAME_ROUNDS.length) {
+        gameState.currentRoundIndex++;
+        renderRound();
+    } else {
+        showFinalSummary();
+    }
+}
+
+function showFinalSummary() {
+    document.getElementById('view-game').classList.remove('active');
+    document.getElementById('view-summary').classList.remove('hidden');
+
+    document.getElementById('final-score').innerText = gameState.totalScore;
+    
+    const accuracy = Math.round((gameState.correctPicksCount / GAME_ROUNDS.length) * 100);
+    document.getElementById('final-accuracy').innerText = `${accuracy}%`;
+    document.getElementById('final-streak').innerText = `${gameState.maxStreak}x`;
+
+    let rank = "Master Objective Sentinel";
+    if (accuracy < 50) rank = "Susceptible to Hype";
+    else if (accuracy < 80) rank = "Discriminating Magistrate";
+    document.getElementById('final-rank').innerText = rank;
+
+    const list = document.getElementById('bias-bars-list');
+    list.innerHTML = '';
+
+    Object.keys(gameState.biasVulnerability).forEach(biasKey => {
+        const item = gameState.biasVulnerability[biasKey];
+        const pct = item.tested > 0 ? Math.round((item.resisted / item.tested) * 100) : 100;
+        
+        const row = document.createElement('div');
+        row.className = 'bias-meter-row';
+        row.innerHTML = `
+            <div class="meter-header">
+                <span>${biasKey} Resistance</span>
+                <strong>${pct}% Resisted</strong>
+            </div>
+            <div class="meter-track">
+                <div class="meter-fill" style="width: ${pct}%;"></div>
+            </div>
+        `;
+        list.appendChild(row);
+    });
+}
+
+function setupGddNav() {
+    const navLinks = document.querySelectorAll('.gdd-nav-item');
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            navLinks.forEach(l => l.classList.remove('active'));
+            e.target.classList.add('active');
+        });
+    });
+}
+    </script>
+</body>
+</html>
