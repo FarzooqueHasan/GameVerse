@@ -143,6 +143,7 @@ export function buildScene(container, layout) {
     const piece = factory(...args, opts);
 
     // Attach RPG interaction metadata if defined
+    if (obj.type) piece.userData.type = obj.type;
     if (obj.id) piece.userData.id = obj.id;
     if (obj.interactName) piece.userData.interactName = obj.interactName;
     if (obj.dialogueKey) piece.userData.dialogueKey = obj.dialogueKey;
@@ -194,12 +195,15 @@ export function buildScene(container, layout) {
     });
   }
 
-  // ── Truly fixed-angle follow camera ────────────────────────────────────────
-  // Y=12 clears the tallest GLB canopy/ramp.  Z=8 keeps the same angled RPG
-  // feel as before.  These values NEVER change — the angle is 100 % locked.
-  const CAM_Y = 12;   // world-units above the player
-  const CAM_Z = 8;    // world-units south (behind) the player
-  const LERP  = 0.08; // follow speed — smooth but not laggy
+  // ── AAA Cinematic Third-Person Follow Camera ───────────────────────────────
+  // Keep the follow camera at a consistent, immersive game-native distance and
+  // tilt so the player is clearly framed in the lower-middle without distant
+  // objects or portals clipping between the camera and avatar.
+  const CAM_Y = layout.cameraFollow?.y !== undefined ? layout.cameraFollow.y : 3.2;       // height above player
+  const CAM_Z = layout.cameraFollow?.z !== undefined ? layout.cameraFollow.z : 5.5;       // distance behind player
+  const LOOK_Y = layout.cameraFollow?.lookY !== undefined ? layout.cameraFollow.lookY : 1.3; // eye-level target
+  const LOOK_OFFSET_Z = layout.cameraFollow?.lookOffsetZ !== undefined ? layout.cameraFollow.lookOffsetZ : 3.5; // forward sightline
+  const LERP  = 0.08; // smooth follow speed
 
   let frame = 0;
   let camX = null;   // null → snap instantly on first frame
@@ -233,7 +237,7 @@ export function buildScene(container, layout) {
 
       // Fixed offset — angle never changes
       camera.position.set(camX, py + CAM_Y, camZ + CAM_Z);
-      camera.lookAt(camX, py + 0.9, camZ);
+      camera.lookAt(camX, py + LOOK_Y, camZ - LOOK_OFFSET_Z);
     } else if (layout.idleDrift) {
       camera.position.x = camPos[0] + Math.sin(frame) * 0.3;
       camera.lookAt(...lookAt);

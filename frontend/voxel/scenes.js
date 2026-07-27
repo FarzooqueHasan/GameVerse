@@ -84,12 +84,12 @@ export const SCENES = {
   // Main Auditorium -- Indoor Stage Events
   auditorium_demo: {
     background: '#dfe7f5',
-    camera: { position: [0, 4.5, 11], lookAt: [0, 1.2, -4], fov: 60 },
+    camera: { position: [0, 6, 16], lookAt: [0, 1.2, -4], fov: 60 },
     light: { ambient: 0.65, sunColor: '#fff2d9', sunIntensity: 0.9, sunPosition: [6, 10, 6] },
     idleDrift: false,
     glbModel: './assets/models/school_OAT.glb',
-    glbScale: [1.2, 1.2, 1.2],
-    glbPosition: [0, 0, -2],
+    glbScale: [1.0, 1.0, 1.0],
+    glbPosition: [0, -3.5, -8],
     glbRotation: [0, 0, 0],
     objects: [
 

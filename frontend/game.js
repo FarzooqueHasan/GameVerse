@@ -844,17 +844,33 @@ function init3DWorld(zoneKey) {
   refreshScavengerVisibility();
 
   // Add 3D Teleport Portals to other zones
-  const portalZones = [
-    { key: 'celestecon_amphitheater', name: '🏛️ Portal: OAT Amphitheater', x: -10, z: -8, color: 0xffd166 },
-    { key: 'auditorium_demo', name: '🎭 Portal: Main Auditorium', x: 0, z: -10, color: 0x7fa7c9 },
-    { key: 'management_room_demo', name: '👔 Portal: Management HQ', x: 10, z: -8, color: 0x8fb996 },
-    { key: 'black_hole_gateway', name: '🌌 Portal: Celestial Rift Gateway (3 Keys Req.)', x: 0, z: 8, color: 0xff007b }
-  ];
+  const portalZonesMap = {
+    celestecon_amphitheater: [
+      { key: 'auditorium_demo', name: '🎭 Portal: Main Auditorium', x: -10, z: 1, color: 0x7fa7c9 },
+      { key: 'management_room_demo', name: '👔 Portal: Management HQ', x: 10, z: 1, color: 0x8fb996 },
+      { key: 'black_hole_gateway', name: '🌌 Portal: Celestial Rift Gateway (3 Keys Req.)', x: -10, z: -5, color: 0xff007b }
+    ],
+    auditorium_demo: [
+      { key: 'celestecon_amphitheater', name: '🏛️ Portal: OAT Amphitheater', x: -9, z: 2, color: 0xffd166 },
+      { key: 'management_room_demo', name: '👔 Portal: Management HQ', x: 9, z: 2, color: 0x8fb996 },
+      { key: 'black_hole_gateway', name: '🌌 Portal: Celestial Rift Gateway (3 Keys Req.)', x: -9, z: -5, color: 0xff007b }
+    ],
+    management_room_demo: [
+      { key: 'celestecon_amphitheater', name: '🏛️ Portal: OAT Amphitheater', x: -5.5, z: 1.5, color: 0xffd166 },
+      { key: 'auditorium_demo', name: '🎭 Portal: Main Auditorium', x: 5.5, z: 1.5, color: 0x7fa7c9 },
+      { key: 'black_hole_gateway', name: '🌌 Portal: Celestial Rift Gateway (3 Keys Req.)', x: -5.5, z: -3.5, color: 0xff007b }
+    ],
+    black_hole_gateway: [
+      { key: 'celestecon_amphitheater', name: '🏛️ Portal: OAT Amphitheater', x: -6.5, z: 2.5, color: 0xffd166 },
+      { key: 'auditorium_demo', name: '🎭 Portal: Main Auditorium', x: 6.5, z: 2.5, color: 0x7fa7c9 },
+      { key: 'management_room_demo', name: '👔 Portal: Management HQ', x: 6.5, z: -2.5, color: 0x8fb996 }
+    ]
+  };
+  const portalZones = portalZonesMap[zoneKey] || [];
   portalZones.forEach(pz => {
-    if (pz.key === zoneKey) return;
     const portalGroup = Kit.eventBooth(2.2, 1.5, 2.4, 0x141b33, pz.color, { text: pz.name });
     portalGroup.position.set(pz.x, 0, pz.z);
-    portalGroup.userData = { id: `portal_${pz.key}`, interactName: pz.name, dialogueKey: `portal_${pz.key}` };
+    portalGroup.userData = { id: `portal_${pz.key}`, interactName: pz.name, dialogueKey: `portal_${pz.key}`, type: 'portal' };
     scene.add(portalGroup);
     if (GameState.interactables) GameState.interactables.push(portalGroup);
   });
@@ -1023,7 +1039,14 @@ function gameLoop() {
     const nextZ = GameState.playerPos.z + dz;
 
     const checkCollision = (nx, nz) => {
-      if (nx < -14 || nx > 14 || nz < -14 || nz > 10) return true; // Out of map bounds
+      // Zone-specific map bounds
+      if (GameState.currentZone === 'management_room_demo') {
+        if (nx < -6.5 || nx > 6.5 || nz < -5.5 || nz > 6.5) return true;
+      } else if (GameState.currentZone === 'black_hole_gateway') {
+        if (nx < -7.5 || nx > 7.5 || nz < -7.5 || nz > 7.5) return true;
+      } else {
+        if (nx < -14 || nx > 14 || nz < -14 || nz > 10) return true; // Out of map bounds
+      }
 
       // Zone-specific architectural boundaries (buildings, back-walls, stage columns)
       if (GameState.currentZone === 'celestecon_amphitheater') {
@@ -1031,10 +1054,10 @@ function gameLoop() {
         if (Math.hypot(nx - (-7.5), nz - (-4.5)) < 1.2) return true; // Left canopy pillar
         if (Math.hypot(nx - 7.5, nz - (-4.5)) < 1.2) return true; // Right canopy pillar
       } else if (GameState.currentZone === 'auditorium_demo') {
-        if (nz < -9.0 || nx < -11.0 || nx > 11.0) return true; // Auditorium walls & backdrop
+        if (nz < -15.0 || nx < -11.0 || nx > 11.0) return true; // Auditorium walls & backdrop
       }
 
-      // Proximity collision against scene objects (Event Booths, NPCs, Pillars, Podiums)
+      // Proximity collision against scene objects (Event Booths, Portals, NPCs, Tables, Chairs, Plants, Pillars)
       const { scene } = GameState.sceneData;
       if (scene) {
         for (let i = 0; i < scene.children.length; i++) {
@@ -1042,12 +1065,31 @@ function gameLoop() {
           if (child === GameState.playerGroup) continue;
           if (!child.userData) continue;
 
-          // Pass through collectibles and portals so player can step onto them
-          if (child.userData.isEasterEgg || child.userData.isScavengerTarget || child.userData.targetZone) continue;
+          // Pass through collectibles so player can walk over to pick them up
+          if (child.userData.isEasterEgg || child.userData.isScavengerTarget) continue;
 
-          // Only block against booths — NPCs should be walkable-through so player never gets stuck
-          if (child.userData.id && child.userData.id.startsWith('booth')) {
-            const colRadius = 1.4; // Booth counter footprint
+          const objType = child.userData.type || '';
+          const objId = child.userData.id || '';
+
+          // Determine solid hitbox radius for each object type
+          let colRadius = 0;
+          if (objId.startsWith('booth') || objType === 'eventBooth') {
+            colRadius = 1.5;
+          } else if (objId.startsWith('portal') || objType === 'portal') {
+            colRadius = 1.5;
+          } else if (objId.startsWith('npc_') || objType === 'person') {
+            colRadius = 0.7; // Character body hitbox so you can't walk inside NPCs
+          } else if (objType === 'table') {
+            colRadius = 1.3;
+          } else if (objType === 'chair' || objType === 'plant') {
+            colRadius = 0.6;
+          } else if (objType === 'pillar' || objType === 'column') {
+            colRadius = 0.8;
+          } else if (objType === 'blackHole' || objId.startsWith('rift')) {
+            colRadius = 2.2;
+          }
+
+          if (colRadius > 0) {
             if (Math.hypot(child.position.x - nx, child.position.z - nz) < colRadius) return true;
           }
         }
