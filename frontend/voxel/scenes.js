@@ -16,21 +16,21 @@ export const SCENES = {
 
       // ==================== INTERACTIVE NPCS ====================
       // Teachers
-      { type: 'person', position: [-5, 0, -5.5], rotation: [0, 0.6, 0],
+      { type: 'person', position: [-7, 0, 3], rotation: [0, 1.0, 0],
         params: [1.7, 0x4a5568, 0xd9a878, 0x2b2118], text: 'Mrs. Vibha Arora',
         id: 'npc_vibha', interactName: 'Talk to Mrs. Vibha Arora (Teacher Coordinator)', dialogueKey: 'npc_vibha' },
       
-      { type: 'person', position: [5, 0, -5.5], rotation: [0, -0.6, 0],
+      { type: 'person', position: [7, 0, 3], rotation: [0, -1.0, 0],
         params: [1.68, 0x2c5282, 0xc98a5e, 0x1c1c1c], text: 'Mr. Sanchit Chauhan',
         id: 'npc_sanchit', interactName: 'Talk to Mr. Sanchit Chauhan (Teacher Coordinator)', dialogueKey: 'npc_sanchit' },
 
       // Narrator / Host
-      { type: 'person', position: [0, 0, -8], rotation: [0, 0, 0],
+      { type: 'person', position: [-5, 0, 5], rotation: [0, 0.5, 0],
         params: [1.65, 0x2b6cb0, 0xd9a878, 0x1a202c], text: 'Jatin (the_blue_warrior)',
         id: 'npc_jatin', interactName: 'Talk to Jatin (CelesteCon Host & Narrator)', dialogueKey: 'npc_jatin' },
 
       // AI Helper Bot
-      { type: 'person', position: [-2, 0, -3], rotation: [0, 0, 0],
+      { type: 'person', position: [5, 0, 5], rotation: [0, -0.5, 0],
         params: [1.7, 0x00f0ff, 0xd9a878, 0x1a202c], text: '🤖 AEROSS AI Helper',
         id: 'npc_ai_bot', interactName: 'Consult AEROSS AI Helper Bot', dialogueKey: 'npc_ai_bot' },
 
@@ -94,12 +94,12 @@ export const SCENES = {
     objects: [
 
       // Host NPC
-      { type: 'person', position: [0, 0, -6.5], rotation: [0, 0, 0],
+      { type: 'person', position: [-7, 0, -1], rotation: [0, 1.0, 0],
         params: [1.65, 0x8fb996, 0xd9a878, 0x1a202c], text: 'Auditorium Host',
         id: 'npc_host', interactName: 'Talk to Auditorium Host', dialogueKey: 'npc_host' },
 
       // AI Helper Bot
-      { type: 'person', position: [2, 0, -2], rotation: [0, 0, 0],
+      { type: 'person', position: [7, 0, -1], rotation: [0, -1.0, 0],
         params: [1.7, 0x00f0ff, 0xd9a878, 0x1a202c], text: '🤖 AEROSS AI Helper',
         id: 'npc_ai_bot', interactName: 'Consult AEROSS AI Helper Bot', dialogueKey: 'npc_ai_bot' },
 
