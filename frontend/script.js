@@ -21,7 +21,6 @@ document.getElementById("match-btn").addEventListener("click", async () => {
 
     const data = await res.json();
     const top = data.ranking[0];
-
     const resultBox = document.getElementById("result");
     resultBox.classList.remove("hidden");
     document.getElementById("result-name").innerText = `You matched: ${top.name}`;
