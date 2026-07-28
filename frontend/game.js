@@ -29,7 +29,7 @@ const GameState = {
   isMenuOpen: false,
   controlsHintTimer: null,
   mode: null,              // 'story' | 'freestyle'
-  celestialKeys: new Set(),
+  celestialKeys: 0,
   spaceDunkScore: 0,
   paperPlaneScore: 0,
   aiBotEncounterActive: false,
@@ -329,7 +329,7 @@ const DIALOGUES = {
     avatar: "🗣️",
     text: "Welcome to the premier CelesteCon debate! Teams are currently arguing: 'Should private corporations have property rights over lunar resources?'",
     choices: [
-      { text: "🚀 [Participant] Enter the debate challenge & test your reasoning!", role: "Participant", action: "minigame_circuit" },
+      { text: "🚀 [Participant] Enter the debate challenge & test your reasoning!", role: "Participant", action: "debate_mechanic" },
       { text: "⚖️ [Judge] Rule on a dispute over unauthorized AI note-taking tools", role: "Judge", action: "judge_verdict", verdictKey: "verdict_debate" },
       { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
       { text: "🧠 [Judge Challenge] Play Bias Buster: Score Calibration & Bias Elimination!", role: "Judge", action: "minigame_bias" },
@@ -344,7 +344,7 @@ const DIALOGUES = {
     avatar: "⚡",
     text: "Step right up to Quizzitch! Test your mastery over rocket propulsion, astronomy, and aviation history.",
     choices: [
-      { text: "🚀 [Participant] Answer the aerospace brain teaser challenge!", role: "Participant", action: "minigame_circuit" },
+      { text: "🚀 [Participant] Answer the aerospace brain teaser challenge!", role: "Participant", action: "quizzitch_mechanic" },
       { text: "⚖️ [Judge] Determine if an ambiguous astrophysics answer should be awarded points", role: "Judge", action: "judge_verdict", verdictKey: "verdict_quizzitch" },
       { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
       { text: "🧠 [Judge Challenge] Play Bias Buster: Score Calibration & Bias Elimination!", role: "Judge", action: "minigame_bias" },
@@ -357,9 +357,9 @@ const DIALOGUES = {
   booth_volatus: {
     name: "Volatus — Aviation & UAV Challenge Booth",
     avatar: "🚁",
-    text: "Welcome to Volatus! Test your drone piloting reflexes and aerodynamic stability in our flight simulator.",
+    text: "Welcome to Volatus! Test your drone piloting reflexes and aerodynamic stability in Celeste Drift.",
     choices: [
-      { text: "🚀 [Participant] Take control in the Flight Simulator challenge!", role: "Participant", action: "minigame_flight" },
+      { text: "🚀 [Participant] Take control in the Celeste Drift challenge!", role: "Participant", action: "minigame_flight" },
       { text: "⚖️ [Judge] Inspect drone propeller dimensions against tournament regulations", role: "Judge", action: "judge_verdict", verdictKey: "verdict_volatus" },
       { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
       { text: "🧠 [Judge Challenge] Play Bias Buster: Score Calibration & Bias Elimination!", role: "Judge", action: "minigame_bias" },
@@ -374,7 +374,7 @@ const DIALOGUES = {
     avatar: "🎭",
     text: "A crowd gathers around the stage! Students are performing a hilarious educational skit about what happens when astronauts forget their wrenches in zero gravity.",
     choices: [
-      { text: "🚀 [Participant] Perform an impromptu standup skit! (+35 Rep)", role: "Participant", action: "rep", val: 35 },
+      { text: "🚀 [Participant] Perform an impromptu standup skit!", role: "Participant", action: "decision_modal", decisionKey: "decision_theatre" },
       { text: "⚖️ [Judge] Score the performance on educational value and comedic timing", role: "Judge", action: "judge_verdict", verdictKey: "verdict_theatre" },
       { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
       { text: "🧠 [Judge Challenge] Play Bias Buster: Score Calibration & Bias Elimination!", role: "Judge", action: "minigame_bias" },
@@ -389,7 +389,7 @@ const DIALOGUES = {
     avatar: "📐",
     text: "Examine the incredible 3D printed rover prototypes and orbital space station CAD assemblies created by school competitors.",
     choices: [
-      { text: "🚀 [Participant] Inspect CAD models & review structural integrity (+30 Rep)", role: "Participant", action: "rep", val: 30 },
+      { text: "🚀 [Participant] Inspect CAD models & review structural integrity!", role: "Participant", action: "decision_modal", decisionKey: "decision_dim3" },
       { text: "⚖️ [Judge] Evaluate CAD structural tolerances and originality", role: "Judge", action: "judge_verdict", verdictKey: "verdict_dim3" },
       { text: "⚖️ [Judge Challenge] Play CubeStack: Verify & Stack 3D Assembly Modules!", role: "Judge", action: "minigame_cubestack" },
       { text: "🧠 [Judge Challenge] Play Bias Buster: Score Calibration & Bias Elimination!", role: "Judge", action: "minigame_bias" },
@@ -404,7 +404,7 @@ const DIALOGUES = {
     avatar: "🌐",
     text: "Competitors are designing a self-sustaining Martian colony for 10,000 inhabitants, handling life support, radiation shielding, and agriculture.",
     choices: [
-      { text: "🚀 [Participant] Suggest hydroponic algae farms for oxygen balance! (+40 Rep)", role: "Participant", action: "rep", val: 40 },
+      { text: "🚀 [Participant] Suggest hydroponic algae farms for oxygen balance!", role: "Participant", action: "decision_modal", decisionKey: "decision_settle" },
       { text: "⚖️ [Judge] Rule on feasibility of proposed nuclear micro-reactors", role: "Judge", action: "judge_verdict", verdictKey: "verdict_settle" },
       { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
       { text: "🧠 [Judge Challenge] Play Bias Buster: Score Calibration & Bias Elimination!", role: "Judge", action: "minigame_bias" },
@@ -419,7 +419,7 @@ const DIALOGUES = {
     avatar: "💼",
     text: "Student entrepreneurs are pitching commercial space tech startups to a panel of venture capitalists and industry judges.",
     choices: [
-      { text: "🚀 [Participant] Analyze unit economics of reusable rocket boosters! (+45 Rep)", role: "Participant", action: "rep", val: 45 },
+      { text: "🚀 [Participant] Analyze unit economics of reusable rocket boosters!", role: "Participant", action: "decision_modal", decisionKey: "decision_pitch" },
       { text: "⚖️ [Judge] Evaluate startup ROI, patent defensibility, and market size", role: "Judge", action: "judge_verdict", verdictKey: "verdict_pitch" },
       { text: "⚖️ [Judge Challenge] Play CubeStack: Cleanroom Stacking Inspection!", role: "Judge", action: "minigame_cubestack" },
       { text: "🧠 [Judge Challenge] Play Bias Buster: Score Calibration & Bias Elimination!", role: "Judge", action: "minigame_bias" },
@@ -1371,13 +1371,18 @@ window.onMinigameVictory = function(type, rewardCeleste, successMessage, score) 
 
   const storyNarrations = {
     cubesat: "🎙️ Jatin: Phenomenal space engineering! With the ISRO CubeSat payload certified and orbital telemetry locked in, our satellite link is 100% operational! Next: Visit the Volatus UAV Arena!",
-    flight: "🎙️ Jatin: Masterful piloting! You demonstrated elite UAV aerodynamics in the Volatus arena! The festival crowds are cheering your name!",
+    flight: "🎙️ Jatin: Masterful drifting! You demonstrated elite UAV maneuvering in the Celeste Drift arena! The festival crowds are cheering your name!",
     circuit: "🎙️ Jatin: Brilliance under pressure! You solved the aerospace circuit emergency and restored power to the stage! Next: Visit the Debate Booth or Quizzitch!",
     cubestack: "🎙️ Jatin: Official Judge Certification granted! The cleanroom structural tower is certified safe for competition!",
     bias_buster: "🎙️ Jatin: Cognitive Bias eliminated! Official Judge Scoring Calibration certified for fair tournament grading!",
     crowd_control: "🎙️ Jatin: Masterful event logistics! You guided all student cohorts into their correct event halls without a single bottleneck!",
     scavenger: "🎙️ Jatin: Crisis averted! All 4 missing pieces of equipment and key personnel have been safely recovered across campus!"
   };
+  
+  if (type === 'circuit') {
+    setTimeout(() => openCutsceneModal('circuit_crisis'), 500);
+  }
+
   if (typeof window.triggerNarratorComment === 'function') {
     window.triggerNarratorComment(storyNarrations[type] || `🎙️ Jatin: Outstanding victory in ${type}! You earned +${rewardCeleste} 🪙 Celeste! Keep exploring campus!`);
   }
@@ -1405,6 +1410,11 @@ window.onMinigameDefeat = function(type, penaltyCeleste, failMessage) {
   }
 
   if (typeof closeMinigame === 'function') closeMinigame();
+
+  
+  if (type === 'circuit') {
+    setTimeout(() => openCutsceneModal('circuit_crisis'), 500);
+  }
 
   if (typeof window.triggerNarratorComment === 'function') {
     window.triggerNarratorComment(`🎙️ Jatin: Don't give up! That test run didn't go as planned (${failMessage || 'circuit overload'}). Re-check your aerodynamics and try again to win those Celeste points!`);
@@ -1474,6 +1484,15 @@ function handleDialogueAction(choice, diagData) {
   } else if (choice.action === 'minigame_flight' || choice.action === 'crisis_flight') {
     closeDialogue();
     openMinigame('flight');
+    } else if (choice.action === 'debate_mechanic') {
+    closeDialogue();
+    openDebateModal();
+  } else if (choice.action === 'quizzitch_mechanic') {
+    closeDialogue();
+    openMinigame('quizzitch');
+  } else if (choice.action === 'decision_modal') {
+    closeDialogue();
+    openDecisionModal(choice.decisionKey);
   } else if (choice.action === 'minigame_circuit') {
     closeDialogue();
     openMinigame('circuit');
@@ -1565,12 +1584,20 @@ function openMinigame(type) {
     }
     if (builtin) builtin.classList.add('hidden');
   } else if (type === 'flight') {
-    if (title) title.textContent = '✈️ Volatus Flight Simulator — UAV Stability & Aerodynamics';
+    if (title) title.textContent = '✈️ Volatus Celeste Drift — UAV Stability & Aerodynamics';
     if (iframe) {
-      iframe.src = './minigames/flight-sim/dist/index.html';
+      iframe.src = './minigames/celeste-drift/index.html';
       iframe.classList.remove('hidden');
     }
     if (builtin) builtin.classList.add('hidden');
+    } else if (type === 'quizzitch') {
+    if (title) title.textContent = '⚡ Quizzitch — High Speed Aerospace Trivia';
+    if (iframe) {
+      iframe.src = 'about:blank';
+      iframe.classList.add('hidden');
+    }
+    if (builtin) builtin.classList.remove('hidden');
+    loadDynamicCircuitChallenge('quizzitch');
   } else if (type === 'circuit') {
     if (title) title.textContent = '⚡ Aerospace Emergency Circuit & Quiz Challenge';
     if (iframe) {
@@ -1578,7 +1605,7 @@ function openMinigame(type) {
       iframe.classList.add('hidden');
     }
     if (builtin) builtin.classList.remove('hidden');
-    loadDynamicCircuitChallenge();
+    loadDynamicCircuitChallenge(type);
   } else if (type === 'cubestack') {
     if (title) title.textContent = '🏗️ CubeStack — Judge Structural Verification & Assembly Tower';
     if (iframe) {
@@ -1840,8 +1867,9 @@ const CIRCUIT_CHALLENGES = [
   }
 ];
 
-function loadDynamicCircuitChallenge() {
-  const challenge = CIRCUIT_CHALLENGES[currentCircuitIndex % CIRCUIT_CHALLENGES.length];
+function loadDynamicCircuitChallenge(type = 'circuit') {
+  let pool = type === 'quizzitch' ? QUIZZITCH_CHALLENGES : CIRCUIT_CHALLENGES;
+  const challenge = pool[currentCircuitIndex % pool.length];
   currentCircuitIndex++;
 
   const titleEl = document.querySelector('.builtin-header h4');
@@ -1867,11 +1895,11 @@ function loadDynamicCircuitChallenge() {
         if (opt.correct) {
           btn.classList.add('correct');
           setTimeout(() => {
-            if (window.onMinigameVictory) window.onMinigameVictory('circuit', 150, challenge.explanation);
+            if (window.onMinigameVictory) window.onMinigameVictory(type, 150, challenge.explanation);
           }, 800);
         } else {
           btn.classList.add('wrong');
-          if (window.onMinigameDefeat) window.onMinigameDefeat('circuit', 30, "Incorrect technical solution selected!");
+          if (window.onMinigameDefeat) window.onMinigameDefeat(type, 30, "Incorrect technical solution selected!");
         }
       });
       optionsWrap.appendChild(btn);
@@ -1890,6 +1918,7 @@ function closeMinigame() {
 
 // --- JUDGE & ORGANIZER MODAL SYSTEM ---
 function openJudgeModal(verdictKey) {
+  GameState.isMinigameOpen = true;
   const modal = document.getElementById('judge-modal');
   const titleEl = document.getElementById('judge-modal-title');
   const disputeTitleEl = document.getElementById('judge-dispute-title');
@@ -2062,6 +2091,7 @@ function openJudgeModal(verdictKey) {
 }
 
 function openOrganizerModal(crisisKey) {
+  GameState.isMinigameOpen = true;
   const modal = document.getElementById('organizer-modal');
   const tagEl = document.getElementById('organizer-crisis-tag');
   const titleEl = document.getElementById('organizer-crisis-title');
@@ -2208,9 +2238,12 @@ function initJudgeAndOrganizerModals() {
   const orgClose = document.getElementById('organizer-close-btn');
   const judgeModal = document.getElementById('judge-modal');
   const orgModal = document.getElementById('organizer-modal');
+  const debateModal = document.getElementById('debate-modal');
+  const debateClose = document.getElementById('debate-close-btn');
 
-  if (judgeClose && judgeModal) judgeClose.addEventListener('click', () => judgeModal.classList.add('hidden'));
-  if (orgClose && orgModal) orgClose.addEventListener('click', () => orgModal.classList.add('hidden'));
+  if (judgeClose && judgeModal) judgeClose.addEventListener('click', () => { judgeModal.classList.add('hidden'); GameState.isMinigameOpen = false; });
+  if (orgClose && orgModal) orgClose.addEventListener('click', () => { orgModal.classList.add('hidden'); GameState.isMinigameOpen = false; });
+  if (debateClose && debateModal) debateClose.addEventListener('click', () => { debateModal.classList.add('hidden'); GameState.isMinigameOpen = false; });
 
   const btnCubestack = document.getElementById('btn-launch-cubestack');
   if (btnCubestack) {
@@ -2390,17 +2423,17 @@ window.openClimaxModal = function(endingKey = 'savior') {
 
   let title = "", icon = "", text = "", color = "#ffd166";
   if (endingKey === 'savior') {
-    title = "🏆 ENDING 1: THE COSMIC SAVIOR";
+    title = "🏆 The Cosmic Savior Ending";
     icon = "🌟";
     color = "#00ff88";
     text = "With 3 Celestial Keys in hand, you plunge into the Black Hole Challenge and execute a legendary Space Dunk! The cosmic device powers to 100%, stabilizing the gravity anomaly and sealing the rift forever. CelesteCon '26 is saved! AEROSS gains worldwide recognition as Earth's premier aerospace defenders. The school returns to normal just in time for a grand offline celebration filled with food stalls, awards, and triumphant cheers!";
   } else if (endingKey === 'pioneer') {
-    title = "🚀 ENDING 2: THE RIFT UNLEASHED";
+    title = "🚀 The Rift Unleashed Ending";
     icon = "🪐";
     color = "#00f0ff";
     text = "The cosmic energy surge cannot be contained! Instead of collapsing, the rift expands and permanently transforms Delhi Public School R.K. Puram into a magnificent floating space station orbiting a new celestial frontier! AEROSS students become interstellar pioneers, adapting to life and engineering challenges in this breathtaking new cosmic dimension.";
   } else if (endingKey === 'nebulon') {
-    title = "👾 ENDING 3: THE DARK NEBULON";
+    title = "👾 The Dark Nebulon Ending";
     icon = "☄️";
     color = "#ff007b";
     text = "During the chaotic climax, the rival faction intercepts the energy flow and harnesses the rift's dark power! Swarms of Nebulons take over the campus halls, turning CelesteCon into a zero-gravity battleground. But all is not lost—you and the AEROSS council retreat to the secret underground labs to regroup, upgrade your CubeSats, and prepare for a sequel event to reclaim your world!";
@@ -2426,6 +2459,11 @@ window.openClimaxModal = function(endingKey = 'savior') {
     </div>
   `;
   climaxModal.style.display = 'flex';
+  
+  if (type === 'circuit') {
+    setTimeout(() => openCutsceneModal('circuit_crisis'), 500);
+  }
+
   if (typeof window.triggerNarratorComment === 'function') {
     window.triggerNarratorComment(`🎉 EPIC CONCLUSION! You unlocked ${title}! Check out the narrative summary on screen.`);
   }
@@ -2453,7 +2491,10 @@ const AI_KNOWLEDGE_BASE = [
   { keywords: ['riddle of balance', 'balance chaos and order', 'judge fairness', 'wisdom'], answer: "⚖️ **Riddle of Balance Solution:** The figure who balances chaos and order and judges fairness with wisdom is **An Official Judge**!" },
   { keywords: ['1, 1, 2, 3, 5, 8', 'sequence puzzle', 'fibonacci', 'spiral'], answer: "🌀 **Fibonacci Sequence Solution:** In the sequence 1, 1, 2, 3, 5, 8..., the next number is **13** (the sum of 5 and 8)!" },
   { keywords: ['without me celestecon falls into silence', 'voices rise', 'lore puzzle', 'microphone'], answer: "🎙️ **Voice of CelesteCon Solution:** What lets voices rise and ideas spread is **The Microphone / Stage**!" },
-  { keywords: ['final star', 'completes the constellation of knowledge', 'without me the sky is incomplete'], answer: "🌟 **The Final Star Solution:** The star that completes the constellation of knowledge is **The Participant / Student** (You)!" }
+  { keywords: ['final star', 'completes the constellation of knowledge', 'without me the sky is incomplete'], answer: "🌟 **The Final Star Solution:** The star that completes the constellation of knowledge is **The Participant / Student** (You)!" },
+  { keywords: ['celeste', 'token', 'currency', 'spend'], answer: "🪙 **Celeste Tokens:** The official currency of the festival! Earning them through minigames unlocks prestige, but rumor has it that a secret cosmic vendor appears at midnight if you hoard over 500." },
+  { keywords: ['aero', 'society', 'dps', 'rkp'], answer: "🚀 **AEROSS:** The Aerospace Society of Delhi Public School R.K. Puram. A legacy of innovation, driven by high schoolers building the future of flight, satellites, and rocketry." },
+  { keywords: ['glitch', 'shadow', 'anomaly', 'void'], answer: "👁️ **The Void Anomaly:** Competitors whisper that the 'glitches' in the campus WiFi are actually the Rift trying to communicate. Some even claim they've seen shadowy figures—the Nebulons—watching from the auditorium balcony." }
 ];
 
 function initAIBotModal() {
@@ -2527,6 +2568,11 @@ window.startAIBotTimerChallenge = function() {
   if (secEl) secEl.textContent = `${timeLeft}s`;
   if (barFill) barFill.style.width = '100%';
 
+  
+  if (type === 'circuit') {
+    setTimeout(() => openCutsceneModal('circuit_crisis'), 500);
+  }
+
   if (typeof window.triggerNarratorComment === 'function') {
     window.triggerNarratorComment("🚨 EMERGENCY AI BOT SEARCH! You have 90 seconds to locate and interact with the AI Helper Bot on campus!");
   }
@@ -2551,3 +2597,178 @@ window.startAIBotTimerChallenge = function() {
   }, 1000);
 };
 
+
+// ==================== NEW SYSTEMS ====================
+
+const QUIZZITCH_CHALLENGES = [
+  {
+    title: "⚡ Quizzitch: Orbital Velocity",
+    q: "As an orbiting satellite moves from its apogee (farthest point) to its perigee (closest point) in an elliptical orbit, what happens to its velocity?",
+    options: [
+      { text: "Its orbital velocity increases due to gravitational acceleration", correct: true },
+      { text: "Its orbital velocity decreases to conserve angular momentum", correct: false },
+      { text: "Its orbital velocity remains constant throughout the orbit", correct: false }
+    ],
+    explanation: "Correct! According to Kepler's Second Law, satellites accelerate as they approach the celestial body."
+  },
+  {
+    title: "⚡ Quizzitch: The Rocket Equation",
+    q: "The Tsiolkovsky rocket equation calculates delta-v based on exhaust velocity and what other parameter?",
+    options: [
+      { text: "The ratio of initial mass to final mass", correct: true },
+      { text: "The cross-sectional aerodynamic drag", correct: false },
+      { text: "The thermal efficiency of the combustion chamber", correct: false }
+    ],
+    explanation: "Correct! The mass ratio dictates how much of a rocket must be fuel."
+  },
+  {
+    title: "⚡ Quizzitch: SSO Orbits",
+    q: "What is the primary advantage of a Sun-Synchronous Orbit (SSO)?",
+    options: [
+      { text: "It passes over any given point of the Earth's surface at the same local mean solar time", correct: true },
+      { text: "It remains permanently in sunlight, avoiding eclipses entirely", correct: false },
+      { text: "It orbits at the exact rotation rate of Earth, appearing stationary", correct: false }
+    ],
+    explanation: "Correct! SSO orbits guarantee consistent lighting conditions for Earth observation."
+  }
+];
+
+window.openDebateModal = function() {
+  GameState.isMinigameOpen = true;
+  const modal = document.getElementById('debate-modal');
+  if (!modal) return;
+  
+  openCutsceneModal('debate_intro', () => {
+    modal.classList.remove('hidden');
+    document.getElementById('debate-prompt-tag').textContent = "Debate: Lunar Resource Rights";
+    document.getElementById('debate-prompt-desc').textContent = "Should private corporations have property rights over lunar resources, or does the Moon belong to humanity as a whole?";
+    
+    const optionsWrap = document.getElementById('debate-options');
+    optionsWrap.innerHTML = '';
+    
+    const forBtn = document.createElement('button');
+    forBtn.className = 'verdict-btn';
+    forBtn.innerHTML = '<strong>FOR</strong><br/>Corporations accelerate innovation and exploration.';
+    forBtn.onclick = () => {
+      GameState.debateStance = 'pioneer';
+      modal.classList.add('hidden');
+      openCutsceneModal('debate_pivot', () => {
+        if (window.onMinigameVictory) window.onMinigameVictory('debate', 150, "You argued for Industrial Pioneering!");
+      });
+    };
+    
+    const againstBtn = document.createElement('button');
+    againstBtn.className = 'verdict-btn';
+    againstBtn.innerHTML = '<strong>AGAINST</strong><br/>The Moon belongs to humanity, not profit.';
+    againstBtn.onclick = () => {
+      GameState.debateStance = 'guardian';
+      modal.classList.add('hidden');
+      openCutsceneModal('debate_pivot', () => {
+        if (window.onMinigameVictory) window.onMinigameVictory('debate', 150, "You argued for Ethical Stewardship!");
+      });
+    };
+    
+    optionsWrap.appendChild(forBtn);
+    optionsWrap.appendChild(againstBtn);
+  });
+};
+
+const DECISIONS = {
+  decision_theatre: {
+    title: "AEROSS Theatre Improvisation",
+    desc: "The skit asks: What do you do when an astronaut forgets a wrench in zero-G?",
+    options: [
+      { text: "Wait for it to orbit back around and hit them! (+40)", correct: true },
+      { text: "Blame it on aliens. (+20)", correct: true }
+    ]
+  },
+  decision_dim3: {
+    title: "Dimension III Structural Review",
+    desc: "You are reviewing a CAD model for a Martian rover chassis.",
+    options: [
+      { text: "Suggest a honeycomb infill to reduce mass. (+40)", correct: true },
+      { text: "Make it solid titanium! (+20)", correct: true }
+    ]
+  },
+  decision_settle: {
+    title: "Settle-Me-This Colony Plan",
+    desc: "The colony needs an efficient oxygen generation system.",
+    options: [
+      { text: "Deploy hydroponic algae photobioreactors. (+40)", correct: true },
+      { text: "Import bottled oxygen from Earth. (+10)", correct: true }
+    ]
+  },
+  decision_pitch: {
+    title: "Business Power Pitch Review",
+    desc: "A startup pitches a reusable booster rocket.",
+    options: [
+      { text: "Question their marginal cost per kilogram to orbit. (+40)", correct: true },
+      { text: "Ask if they have cool merchandise. (+20)", correct: true }
+    ]
+  }
+};
+
+window.openDecisionModal = function(decisionKey) {
+  GameState.isMinigameOpen = true;
+  const d = DECISIONS[decisionKey];
+  const modal = document.getElementById('judge-modal');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+  document.getElementById('judge-modal-title').textContent = d.title;
+  document.getElementById('judge-dispute-desc').textContent = d.desc;
+  const optionsWrap = document.getElementById('judge-verdict-options');
+  optionsWrap.innerHTML = '';
+  d.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'verdict-btn';
+    btn.textContent = opt.text;
+    btn.onclick = () => {
+      modal.classList.add('hidden');
+      if (window.onMinigameVictory) window.onMinigameVictory(decisionKey, 150, "Great decision!");
+    };
+    optionsWrap.appendChild(btn);
+  });
+};
+
+window.openCutsceneModal = function(key, callback) {
+  const modal = document.getElementById('cutscene-modal');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+  
+  const speakerEl = document.getElementById('cutscene-speaker');
+  const textEl = document.getElementById('cutscene-text');
+  const btn = document.getElementById('cutscene-continue-btn');
+  
+  const charName = GameState.character ? GameState.character.name : "Student";
+  
+  if (key === 'circuit_crisis') {
+    speakerEl.textContent = "Jatin (Narrator AI)";
+    textEl.textContent = "Brilliance under pressure! You've restored the aerospace circuit emergency. The stage is yours again — but the festival isn't over. Two paths await: the Debate Booth, where logic reigns supreme, or Quizzitch, the arena of wit and speed.";
+    btn.onclick = () => {
+      speakerEl.textContent = "Aarav Anand";
+      textEl.textContent = `${charName}, the Debate Booth is heating up — ethics of autonomous flight systems. But Quizzitch is calling too — they're testing aerospace trivia at Mach speed. Your choice will shape the ending.`;
+      btn.onclick = () => {
+        modal.classList.add('hidden');
+        if (callback) callback();
+      };
+    };
+  } else if (key === 'debate_intro') {
+    speakerEl.textContent = "Aarav Anand";
+    textEl.textContent = `Welcome to the premier CelesteCon debate, ${charName}. The question: Should private corporations have property rights over lunar resources?`;
+    btn.onclick = () => {
+      modal.classList.add('hidden');
+      if (callback) callback();
+    };
+  } else if (key === 'debate_pivot') {
+    speakerEl.textContent = "Aarav Anand";
+    const stance = GameState.debateStance === 'pioneer' ? "Industrial Pioneering" : "Ethical Stewardship";
+    textEl.textContent = `You argued brilliantly for ${stance}! The crowd goes wild. This choice shifts the balance of the upcoming finale!`;
+    btn.onclick = () => {
+      modal.classList.add('hidden');
+      if (callback) callback();
+    };
+  } else {
+    modal.classList.add('hidden');
+    if (callback) callback();
+  }
+};

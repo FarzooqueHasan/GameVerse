@@ -6,8 +6,8 @@
   <title>Space Dunk — Orbital Gravity Challenge</title>
   <style>
     :root {
-      --gold: #ffd166;
-      --cyan: #00f0ff;
+      --gold: #FFDD32;
+      --cyan: #7DF9FF;
       --magenta: #ff007b;
       --green: #00ff88;
       --bg-dark: #0c1024;
@@ -60,7 +60,7 @@
       font-family: 'JetBrains Mono', 'Consolas', monospace;
     }
     .stat-box {
-      background: rgba(0, 240, 255, 0.1);
+      background: rgba(125, 249, 255, 0.1);
       border: 1px solid var(--cyan);
       padding: 6px 16px;
       border-radius: 8px;
@@ -105,7 +105,7 @@
       padding: 36px 48px;
       text-align: center;
       max-width: 500px;
-      box-shadow: 0 0 40px rgba(255, 209, 102, 0.2);
+      box-shadow: 0 0 40px rgba(255, 221, 50, 0.2);
     }
     .modal h2 {
       color: var(--gold);
@@ -127,22 +127,22 @@
       font-weight: 800;
       border-radius: 30px;
       cursor: pointer;
-      box-shadow: 0 0 20px rgba(255, 209, 102, 0.4);
+      box-shadow: 0 0 20px rgba(255, 221, 50, 0.4);
       transition: all 0.2s;
     }
     .btn:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 30px rgba(255, 209, 102, 0.7);
+      box-shadow: 0 0 30px rgba(255, 221, 50, 0.7);
     }
     .btn-secondary {
       background: transparent;
       border: 2px solid var(--cyan);
       color: var(--cyan);
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+      box-shadow: 0 0 15px rgba(125, 249, 255, 0.2);
       margin-right: 12px;
     }
     .btn-secondary:hover {
-      background: rgba(0, 240, 255, 0.1);
+      background: rgba(125, 249, 255, 0.1);
     }
     .instructions {
       position: absolute;
@@ -160,6 +160,8 @@
   </style>
 </head>
 <body>
+<div class="minigame-header" style="background: var(--deep, #060914); color: var(--gold, #FFDD32); border-bottom: 2px solid var(--dark-teal, #008B8B); padding: 8px 16px; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 1.5px; z-index: 10000; position: absolute; top: 0; left: 0; right: 0; box-shadow: 0 4px 10px rgba(0, 139, 139, 0.4);">CelesteCon — Minigame</div>
+
   <header>
     <div class="title-area">
       <span class="title-icon">🏀</span>
@@ -389,9 +391,9 @@
           if (hDist < hoop.radius) {
             score += 100;
             document.getElementById('score-val').textContent = score;
-            spawnParticles(hoop.x, hoop.y, '#ffd166', 40);
-            spawnParticles(hoop.x, hoop.y, '#00f0ff', 20);
-            addFloatingText('+100 ORBITAL DUNK!', hoop.x - 60, hoop.y - 40, '#ffd166');
+            spawnParticles(hoop.x, hoop.y, '#FFDD32', 40);
+            spawnParticles(hoop.x, hoop.y, '#7DF9FF', 20);
+            addFloatingText('+100 ORBITAL DUNK!', hoop.x - 60, hoop.y - 40, '#FFDD32');
             resetProbe();
           }
 
@@ -459,16 +461,16 @@
       ctx.translate(hoop.x, hoop.y);
       ctx.rotate(hoop.angle);
       const hGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, hoop.radius);
-      hGrad.addColorStop(0, 'rgba(0, 240, 255, 0.8)');
-      hGrad.addColorStop(0.7, 'rgba(0, 240, 255, 0.2)');
+      hGrad.addColorStop(0, 'rgba(125, 249, 255, 0.8)');
+      hGrad.addColorStop(0.7, 'rgba(125, 249, 255, 0.2)');
       hGrad.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = hGrad;
       ctx.beginPath();
       ctx.arc(0, 0, hoop.radius, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = '#00f0ff';
+      ctx.strokeStyle = '#7DF9FF';
       ctx.lineWidth = 4;
-      ctx.shadowColor = '#00f0ff';
+      ctx.shadowColor = '#7DF9FF';
       ctx.shadowBlur = 15;
       ctx.beginPath();
       ctx.arc(0, 0, hoop.radius, 0, Math.PI * 2);
@@ -483,7 +485,7 @@
         let simY = probe.y;
         let simVx = dx * 0.18;
         let simVy = dy * 0.18;
-        ctx.strokeStyle = 'rgba(255, 209, 102, 0.5)';
+        ctx.strokeStyle = 'rgba(255, 221, 50, 0.5)';
         ctx.lineWidth = 2;
         ctx.setLineDash([6, 6]);
         ctx.beginPath();
@@ -508,7 +510,7 @@
 
       // Draw Probe Trail
       probe.trail.forEach(t => {
-        ctx.fillStyle = `rgba(0, 240, 255, ${t.alpha * 0.5})`;
+        ctx.fillStyle = `rgba(125, 249, 255, ${t.alpha * 0.5})`;
         ctx.beginPath();
         ctx.arc(t.x, t.y, probe.radius * 0.6, 0, Math.PI * 2);
         ctx.fill();
@@ -516,8 +518,8 @@
 
       // Draw Probe
       ctx.save();
-      ctx.fillStyle = '#ffd166';
-      ctx.shadowColor = '#ffd166';
+      ctx.fillStyle = '#FFDD32';
+      ctx.shadowColor = '#FFDD32';
       ctx.shadowBlur = 12;
       ctx.beginPath();
       ctx.arc(probe.x, probe.y, probe.radius, 0, Math.PI * 2);

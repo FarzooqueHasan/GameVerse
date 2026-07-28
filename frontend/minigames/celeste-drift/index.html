@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Celeste Drift</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="minigame-header" style="background: var(--deep, #060914); color: var(--gold, #FFDD32); border-bottom: 2px solid var(--dark-teal, #008B8B); padding: 8px 16px; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 1.5px; z-index: 10000; position: absolute; top: 0; left: 0; right: 0; box-shadow: 0 4px 10px rgba(0, 139, 139, 0.4);">CelesteCon — Minigame</div>
+
+    <div id="game-container">
+        <!-- Main Game Canvas -->
+        <canvas id="game-canvas"></canvas>
+
+        <!-- UI Overlays -->
+        <div id="hud" class="hidden">
+            <div class="hud-top">
+                <div class="score-display">SCORE: <span id="score">0</span></div>
+                <div class="speed-display">SPEED LVL: <span id="speed-level">1</span></div>
+            </div>
+            <div class="combo-display">COMBO: x<span id="combo-multiplier">1</span> (<span id="combo-count">0</span>/5)</div>
+            <div class="drift-zone hidden" id="drift-zone-alert">DRIFT ZONE ACTIVE!</div>
+            <div class="powerup-status" id="powerup-status"></div>
+            
+            <!-- Mobile Controls Helper -->
+            <div id="mobile-controls-hint">
+                <span>&#8592; Swipe &#8594;</span>
+                <span>&#8593; Jump</span>
+                <span>&#8595; Drift</span>
+            </div>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="start-screen" class="overlay">
+            <h1 class="glitch" data-text="CELESTE DRIFT">CELESTE DRIFT</h1>
+            <p>Neon Cyberpunk Hover-Racing</p>
+            <div class="instructions">
+                <p><strong>Controls:</strong></p>
+                <p>Arrows Left/Right or Swipe: Change Lane</p>
+                <p>Arrow Up or Swipe Up: Jump (Drones)</p>
+                <p>Arrow Down or Swipe Down: Drift (Banners)</p>
+            </div>
+            <button id="start-btn" class="neon-btn">START ENGINE</button>
+            
+            <div class="leaderboard-preview">
+                <h3>Top Scores</h3>
+                <ul id="leaderboard-list-start"></ul>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="overlay hidden">
+            <h1 class="game-over-title">CRASHED!</h1>
+            <div class="final-score-display">Final Score: <span id="final-score">0</span></div>
+            <button id="restart-btn" class="neon-btn">RESTART</button>
+            
+            <div class="leaderboard-preview">
+                <h3>Leaderboard</h3>
+                <ul id="leaderboard-list-end"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

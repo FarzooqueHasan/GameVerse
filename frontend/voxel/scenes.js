@@ -25,7 +25,7 @@ export const SCENES = {
         id: 'npc_sanchit', interactName: 'Talk to Mr. Sanchit Chauhan (Teacher Coordinator)', dialogueKey: 'npc_sanchit' },
 
       // Narrator / Host
-      { type: 'person', position: [0, 0.6, -9], rotation: [0, 0, 0],
+      { type: 'person', position: [0, 0, -8], rotation: [0, 0, 0],
         params: [1.65, 0x2b6cb0, 0xd9a878, 0x1a202c], text: 'Jatin (the_blue_warrior)',
         id: 'npc_jatin', interactName: 'Talk to Jatin (CelesteCon Host & Narrator)', dialogueKey: 'npc_jatin' },
 
@@ -94,7 +94,7 @@ export const SCENES = {
     objects: [
 
       // Host NPC
-      { type: 'person', position: [0, 0.6, -6.5], rotation: [0, 0, 0],
+      { type: 'person', position: [0, 0, -6.5], rotation: [0, 0, 0],
         params: [1.65, 0x8fb996, 0xd9a878, 0x1a202c], text: 'Auditorium Host',
         id: 'npc_host', interactName: 'Talk to Auditorium Host', dialogueKey: 'npc_host' },
 

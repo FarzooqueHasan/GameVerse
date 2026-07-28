@@ -3,10 +3,10 @@
 :root {
     --bg-dark: #0c1024;
     --panel-bg: rgba(16, 20, 45, 0.85);
-    --border-color: rgba(0, 240, 255, 0.3);
-    --isro-saffron: #ffd166;
-    --isro-blue: #00f0ff;
-    --cyan-accent: #00f0ff;
+    --border-color: rgba(125, 249, 255, 0.3);
+    --isro-saffron: #FFDD32;
+    --isro-blue: #7DF9FF;
+    --cyan-accent: #7DF9FF;
     --green-badge: #06d6a0;
     --red-badge: #ff007f;
     --navy-badge: #0c1024;

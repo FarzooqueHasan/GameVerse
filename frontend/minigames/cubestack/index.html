@@ -9,13 +9,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --gold: #ffd166;
-      --cyan: #00f0ff;
+      --gold: #FFDD32;
+      --cyan: #7DF9FF;
       --magenta: #ff007b;
       --green: #00ff88;
       --bg-dark: #0c1024;
       --panel-bg: rgba(16, 20, 45, 0.85);
-      --border-glass: rgba(0, 240, 255, 0.3);
+      --border-glass: rgba(125, 249, 255, 0.3);
     }
     * {
       box-sizing: border-box;
@@ -59,7 +59,7 @@
       text-transform: uppercase;
     }
     .badge-tag {
-      background: rgba(255, 209, 102, 0.2);
+      background: rgba(255, 221, 50, 0.2);
       color: var(--gold);
       border: 1px solid var(--gold);
       padding: 2px 8px;
@@ -133,7 +133,7 @@
       max-width: 520px;
       width: 90%;
       text-align: center;
-      box-shadow: 0 0 40px rgba(255, 209, 102, 0.3);
+      box-shadow: 0 0 40px rgba(255, 221, 50, 0.3);
       animation: popIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
     }
     @keyframes popIn {
@@ -162,20 +162,20 @@
       border-radius: 10px;
       cursor: pointer;
       transition: all 0.2s ease;
-      box-shadow: 0 0 15px rgba(255, 209, 102, 0.5);
+      box-shadow: 0 0 15px rgba(255, 221, 50, 0.5);
       display: inline-block;
     }
     .btn:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(255, 209, 102, 0.8);
+      box-shadow: 0 0 25px rgba(255, 221, 50, 0.8);
     }
     .btn-cyan {
       background: linear-gradient(135deg, var(--cyan), #0080ff);
       color: #000;
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+      box-shadow: 0 0 15px rgba(125, 249, 255, 0.5);
     }
     .btn-cyan:hover {
-      box-shadow: 0 0 25px rgba(0, 240, 255, 0.8);
+      box-shadow: 0 0 25px rgba(125, 249, 255, 0.8);
     }
     .rubric-options {
       display: flex;
@@ -197,7 +197,7 @@
       text-align: left;
     }
     .rubric-btn:hover {
-      background: rgba(0, 240, 255, 0.2);
+      background: rgba(125, 249, 255, 0.2);
       border-color: var(--cyan);
     }
     .controls-hint {
@@ -226,6 +226,8 @@
   </style>
 </head>
 <body>
+<div class="minigame-header" style="background: var(--deep, #060914); color: var(--gold, #FFDD32); border-bottom: 2px solid var(--dark-teal, #008B8B); padding: 8px 16px; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 1.5px; z-index: 10000; position: absolute; top: 0; left: 0; right: 0; box-shadow: 0 4px 10px rgba(0, 139, 139, 0.4);">CelesteCon — Minigame</div>
+
   <header>
     <div class="title-area">
       <span class="title-icon">⚖️</span>
@@ -335,7 +337,7 @@
     ];
 
     const layerColors = [
-      "#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#00f0ff", "#ffd166"
+      "#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#7DF9FF", "#FFDD32"
     ];
 
     // Stack & Block structure
@@ -508,7 +510,7 @@
       ctx.fillRect(0, 0, width, height);
 
       // Draw Background Grid
-      ctx.strokeStyle = "rgba(0, 240, 255, 0.07)";
+      ctx.strokeStyle = "rgba(125, 249, 255, 0.07)";
       ctx.lineWidth = 1;
       const gridSize = 40;
       for (let x = 0; x < width; x += gridSize) {
@@ -594,7 +596,7 @@
                 currentBlock.x = topBlock.x;
                 currentBlock.w = topBlock.w;
                 repEarned += 25;
-                createSparks(currentBlock.x + currentBlock.w/2, currentBlock.y, "#ffd166", 25);
+                createSparks(currentBlock.x + currentBlock.w/2, currentBlock.y, "#FFDD32", 25);
                 playSound(659.25, 0.15, 'triangle');
               } else {
                 // Trim block width
@@ -602,8 +604,8 @@
                 currentBlock.w = overlap;
                 const loss = Math.round((diff / topBlock.w) * 40);
                 integrity = Math.max(5, integrity - loss);
-                createSparks(currentBlock.x, currentBlock.y, "#00f0ff", 15);
-                createSparks(currentBlock.x + currentBlock.w, currentBlock.y, "#00f0ff", 15);
+                createSparks(currentBlock.x, currentBlock.y, "#7DF9FF", 15);
+                createSparks(currentBlock.x + currentBlock.w, currentBlock.y, "#7DF9FF", 15);
                 playSound(329.63, 0.15, 'sawtooth');
               }
 
@@ -629,7 +631,7 @@
           ctx.strokeRect(currentBlock.x, currentBlock.y, currentBlock.w, currentBlock.h);
 
           // Crane cable
-          ctx.strokeStyle = "rgba(255, 209, 102, 0.5)";
+          ctx.strokeStyle = "rgba(255, 221, 50, 0.5)";
           ctx.lineWidth = 3;
           ctx.beginPath();
           ctx.moveTo(currentBlock.x + currentBlock.w/2, 0);
@@ -646,7 +648,7 @@
       const avatarY = refY - 80 + Math.cos(Date.now() / 250) * 8;
 
       // Antigravity thruster flames
-      ctx.fillStyle = "rgba(0, 240, 255, 0.7)";
+      ctx.fillStyle = "rgba(125, 249, 255, 0.7)";
       ctx.beginPath();
       ctx.moveTo(avatarX - 12, avatarY + 22);
       ctx.lineTo(avatarX - 18, avatarY + 40 + Math.random() * 10);
@@ -661,18 +663,18 @@
       // Holographic hover disc
       ctx.beginPath();
       ctx.ellipse(avatarX, avatarY + 22, 32, 8, 0, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(0, 240, 255, 0.35)";
+      ctx.fillStyle = "rgba(125, 249, 255, 0.35)";
       ctx.fill();
-      ctx.strokeStyle = "#00f0ff";
+      ctx.strokeStyle = "#7DF9FF";
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
       // Glowing judge aura
       ctx.beginPath();
       ctx.arc(avatarX, avatarY - 4, 28, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255, 209, 102, 0.25)";
+      ctx.fillStyle = "rgba(255, 221, 50, 0.25)";
       ctx.fill();
-      ctx.strokeStyle = "#ffd166";
+      ctx.strokeStyle = "#FFDD32";
       ctx.lineWidth = 2;
       ctx.stroke();
 
@@ -684,7 +686,7 @@
 
       // Glassmorphic Supervisory Speech Bubble
       const speechBg = state === 'GAMEOVER' ? "rgba(255, 0, 85, 0.85)" : "rgba(12, 16, 36, 0.85)";
-      const speechBorder = state === 'GAMEOVER' ? "#ff0055" : "#00f0ff";
+      const speechBorder = state === 'GAMEOVER' ? "#ff0055" : "#7DF9FF";
       let speechText = `⚖️ Judge: Verifying Layer ${stack.length} Structural Alignment...`;
       if (state === 'GAMEOVER') speechText = "🚨 Judge: Critical Structural Fault! Protocol Halted!";
       if (state === 'DROPPING') speechText = "⚖️ Judge: Calculating impact tolerance & G-loads...";

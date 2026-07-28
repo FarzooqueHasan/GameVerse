@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CelesteCon — AEROSS RPG</title>
+<title>CELESTECON COSMIC CHAOS : THE ADVENTURE OF AEROSS</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,8 +20,8 @@
 
       <div id="loading-content">
         <div class="eyebrow">AEROSS Club Presents</div>
-        <h1 class="wordmark">CELESTE<span>CON</span></h1>
-        <p class="tagline">An Aerospace RPG — Live the Campus Event of the Year</p>
+        <h1 class="wordmark" style="font-size: 2.8rem; letter-spacing: 2px;">CELESTECON COSMIC CHAOS</h1>
+        <p class="tagline" style="font-size: 1.2rem; color: var(--gold); font-weight: 600;">THE ADVENTURE OF AEROSS</p>
 
         <div id="loading-wrap">
           <div id="loading-label">Loading Campus Assets...</div>
@@ -284,11 +284,11 @@
           </div>
           <div class="hud-stat" title="Certified Aerospace Events (Win challenges to advance!)">
             <span>🚀 Certified:</span>
-            <strong id="hud-certified" style="color: #00f0ff; text-shadow: 0 0 8px rgba(0,240,255,0.6);">0 / 5</strong>
+            <strong id="hud-certified" style="color: #7DF9FF; text-shadow: 0 0 8px rgba(125, 249, 255,0.6);">0 / 5</strong>
           </div>
           <div class="hud-stat" title="Celeste Currency (Earned by winning minigames & challenges!)">
             <span>🪙 Celeste:</span>
-            <strong id="hud-rep" style="color: #ffd166; text-shadow: 0 0 8px rgba(255,209,102,0.6);">0</strong>
+            <strong id="hud-rep" style="color: #FFDD32; text-shadow: 0 0 8px rgba(255, 221, 50,0.6);">0</strong>
           </div>
           <div class="hud-stat" title="Secret Relics Found">
             <span>✨ Secret Relics:</span>
@@ -468,10 +468,55 @@
         <footer class="modal-footer" style="flex-direction: column; gap: 8px;">
           <span class="modal-hint">🚨 Resource allocation saves the event and boosts +200 🪙 Celeste!</span>
           <div style="display: flex; gap: 10px; width: 100%; justify-content: center; margin-top: 6px; flex-wrap: wrap;">
-            <button id="btn-launch-crowd" class="btn-primary" style="background: linear-gradient(135deg, #00f0ff, #0080ff); color: #000; font-weight: 800; padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; box-shadow: 0 0 15px rgba(0,240,255,0.4); font-size: 0.95rem;">🚧 Launch Crowd Control Barricades</button>
-            <button id="btn-launch-scavenger" class="btn-primary" style="background: linear-gradient(135deg, #ffd166, #ff9f1c); color: #070913; font-weight: 800; padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; box-shadow: 0 0 15px rgba(255,209,102,0.4); font-size: 0.95rem;">🔍 Launch Emergency Scavenger Hunt</button>
+            <button id="btn-launch-crowd" class="btn-primary" style="background: linear-gradient(135deg, #7DF9FF, #0080ff); color: #000; font-weight: 800; padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; box-shadow: 0 0 15px rgba(125, 249, 255,0.4); font-size: 0.95rem;">🚧 Launch Crowd Control Barricades</button>
+            <button id="btn-launch-scavenger" class="btn-primary" style="background: linear-gradient(135deg, #FFDD32, #ff9f1c); color: #070913; font-weight: 800; padding: 10px 18px; border-radius: 8px; border: none; cursor: pointer; box-shadow: 0 0 15px rgba(255, 221, 50,0.4); font-size: 0.95rem;">🔍 Launch Emergency Scavenger Hunt</button>
           </div>
         </footer>
+      </div>
+    </div>
+
+    <!-- Debate Event Modal -->
+    <div id="debate-modal" class="modal hidden">
+      <div class="modal-content debate-content">
+        <header class="modal-header debate-header">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">⚖️</span>
+            <h3 id="debate-modal-title">Debate: In Pursuit of Dispute</h3>
+          </div>
+          <button id="debate-close-btn" class="modal-close">✖ Exit Debate</button>
+        </header>
+        <div class="modal-body pad-body">
+          <div class="debate-scenario">
+            <div id="debate-timer" style="font-family: monospace; font-size: 1.5rem; color: #ff0055; text-align: center; margin-bottom: 10px;">03:00</div>
+            <h4 id="debate-prompt-tag" class="modal-tag">Debate Prompt</h4>
+            <p id="debate-prompt-desc" class="modal-desc-text">Prompt description...</p>
+          </div>
+          <div id="debate-options" class="decision-options">
+            <!-- Dynamically populated buttons -->
+          </div>
+        </div>
+        <footer class="modal-footer">
+          <span class="modal-hint">💡 Your stance shapes the future of aerospace and awards +150 🪙 Celeste!</span>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Narration / Cutscene Modal -->
+    <div id="cutscene-modal" class="modal hidden">
+      <div class="modal-content cutscene-content">
+        <header class="modal-header cutscene-header">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">🌌</span>
+            <h3 id="cutscene-modal-title">The Celestial Rift Saga</h3>
+          </div>
+        </header>
+        <div class="modal-body pad-body" style="text-align: left; padding: 2rem;">
+          <h4 id="cutscene-speaker" style="color: var(--cyan); margin-bottom: 10px; font-size: 1.2rem;">Speaker Name</h4>
+          <p id="cutscene-text" style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.5rem;">Dialogue text goes here.</p>
+          <div id="cutscene-options" class="decision-options">
+            <button id="cutscene-continue-btn" class="glow-btn">Continue</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -533,7 +578,7 @@
             <input type="text" id="ai-bot-input" placeholder="Type your technical question here (e.g. 'What is ADCS?' or 'LEO vs GEO')..." style="flex: 1; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); background: rgba(0,0,0,0.6); color: #fff; font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem;">
             <button id="ai-bot-submit-btn" class="glow-btn" style="padding: 12px 24px; font-size: 0.95rem; background: var(--cyan); color: #000; font-weight: bold;">Ask AI</button>
           </div>
-          <div id="ai-bot-response-area" style="background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.3); border-radius: 12px; padding: 1.5rem; min-height: 120px; color: #fff; font-size: 0.95rem; line-height: 1.6; display: none;">
+          <div id="ai-bot-response-area" style="background: rgba(125, 249, 255, 0.08); border: 1px solid rgba(125, 249, 255, 0.3); border-radius: 12px; padding: 1.5rem; min-height: 120px; color: #fff; font-size: 0.95rem; line-height: 1.6; display: none;">
             <!-- Populated by JS -->
           </div>
         </div>
@@ -597,7 +642,7 @@
       banner.innerHTML =
         '<div style="max-width:560px;">' +
         '<div style="font-size:2.5rem;margin-bottom:1rem;">⚠️</div>' +
-        '<h2 style="color:#ffd166;margin-bottom:0.8rem;">CelesteCon hit a loading error</h2>' +
+        '<h2 style="color:#FFDD32;margin-bottom:0.8rem;">CelesteCon hit a loading error</h2>' +
         '<p style="color:#d1cae5;margin-bottom:1rem;line-height:1.5;">' + message + '</p>' +
         detailHtml +
         '<p style="color:#7fa7c9;margin-top:1rem;font-size:0.85rem;">If you opened this file directly (double-clicked index.html), that\'s almost always the cause — this game must be served through a local server, e.g. <code>python3 -m http.server</code> or <code>npx serve</code> run from the <code>frontend</code> folder, then opened via <code>http://localhost:...</code> — not by double-clicking the file.</p>' +

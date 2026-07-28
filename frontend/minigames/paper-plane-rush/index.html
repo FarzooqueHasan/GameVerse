@@ -6,8 +6,8 @@
   <title>Paper Plane Rush — Campus Aerodynamics Challenge</title>
   <style>
     :root {
-      --gold: #ffd166;
-      --cyan: #00f0ff;
+      --gold: #FFDD32;
+      --cyan: #7DF9FF;
       --magenta: #ff007b;
       --green: #00ff88;
       --bg-dark: #0c1024;
@@ -60,7 +60,7 @@
       font-family: 'JetBrains Mono', 'Consolas', monospace;
     }
     .stat-box {
-      background: rgba(255, 209, 102, 0.1);
+      background: rgba(255, 221, 50, 0.1);
       border: 1px solid var(--gold);
       padding: 6px 16px;
       border-radius: 8px;
@@ -105,7 +105,7 @@
       padding: 36px 48px;
       text-align: center;
       max-width: 500px;
-      box-shadow: 0 0 40px rgba(0, 240, 255, 0.2);
+      box-shadow: 0 0 40px rgba(125, 249, 255, 0.2);
     }
     .modal h2 {
       color: var(--cyan);
@@ -127,22 +127,22 @@
       font-weight: 800;
       border-radius: 30px;
       cursor: pointer;
-      box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+      box-shadow: 0 0 20px rgba(125, 249, 255, 0.4);
       transition: all 0.2s;
     }
     .btn:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 30px rgba(0, 240, 255, 0.7);
+      box-shadow: 0 0 30px rgba(125, 249, 255, 0.7);
     }
     .btn-secondary {
       background: transparent;
       border: 2px solid var(--gold);
       color: var(--gold);
-      box-shadow: 0 0 15px rgba(255, 209, 102, 0.2);
+      box-shadow: 0 0 15px rgba(255, 221, 50, 0.2);
       margin-right: 12px;
     }
     .btn-secondary:hover {
-      background: rgba(255, 209, 102, 0.1);
+      background: rgba(255, 221, 50, 0.1);
     }
     .instructions {
       position: absolute;
@@ -160,6 +160,8 @@
   </style>
 </head>
 <body>
+<div class="minigame-header" style="background: var(--deep, #060914); color: var(--gold, #FFDD32); border-bottom: 2px solid var(--dark-teal, #008B8B); padding: 8px 16px; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 1.5px; z-index: 10000; position: absolute; top: 0; left: 0; right: 0; box-shadow: 0 4px 10px rgba(0, 139, 139, 0.4);">CelesteCon — Minigame</div>
+
   <header>
     <div class="title-area">
       <span class="title-icon">✈️</span>
@@ -358,8 +360,8 @@
             r.collected = true;
             score += 50;
             document.getElementById('score-val').textContent = score;
-            spawnParticles(r.x, r.y, '#00f0ff', 25);
-            addFloatingText('+50 BOOST!', plane.x, plane.y - 30, '#00f0ff');
+            spawnParticles(r.x, r.y, '#7DF9FF', 25);
+            addFloatingText('+50 BOOST!', plane.x, plane.y - 30, '#7DF9FF');
           }
         });
         rings = rings.filter(r => r.x > -100 && !r.collected);
@@ -371,8 +373,8 @@
             c.collected = true;
             score += 20;
             document.getElementById('score-val').textContent = score;
-            spawnParticles(c.x, c.y, '#ffd166', 15);
-            addFloatingText('+20 COIN!', plane.x, plane.y - 30, '#ffd166');
+            spawnParticles(c.x, c.y, '#FFDD32', 15);
+            addFloatingText('+20 COIN!', plane.x, plane.y - 30, '#FFDD32');
           }
         });
         coins = coins.filter(c => c.x > -50 && !c.collected);
@@ -434,7 +436,7 @@
 
       // Draw wind lines
       windLines.forEach(w => {
-        ctx.strokeStyle = `rgba(0, 240, 255, ${w.alpha})`;
+        ctx.strokeStyle = `rgba(125, 249, 255, ${w.alpha})`;
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(w.x, w.y);
@@ -459,9 +461,9 @@
       rings.forEach(r => {
         ctx.save();
         ctx.translate(r.x, r.y);
-        ctx.strokeStyle = '#00f0ff';
+        ctx.strokeStyle = '#7DF9FF';
         ctx.lineWidth = 5;
-        ctx.shadowColor = '#00f0ff';
+        ctx.shadowColor = '#7DF9FF';
         ctx.shadowBlur = 15;
         ctx.beginPath();
         ctx.ellipse(0, 0, r.radius, r.radius * 0.4, 0, 0, Math.PI * 2);
@@ -473,8 +475,8 @@
       coins.forEach(c => {
         ctx.save();
         ctx.translate(c.x, c.y);
-        ctx.fillStyle = '#ffd166';
-        ctx.shadowColor = '#ffd166';
+        ctx.fillStyle = '#FFDD32';
+        ctx.shadowColor = '#FFDD32';
         ctx.shadowBlur = 10;
         ctx.beginPath();
         ctx.arc(0, 0, c.radius, 0, Math.PI * 2);
@@ -502,7 +504,7 @@
       ctx.translate(plane.x, plane.y);
       ctx.rotate(plane.angle);
       ctx.fillStyle = '#fff';
-      ctx.shadowColor = '#00f0ff';
+      ctx.shadowColor = '#7DF9FF';
       ctx.shadowBlur = 10;
       ctx.beginPath();
       ctx.moveTo(25, 0);
